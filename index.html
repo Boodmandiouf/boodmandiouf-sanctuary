@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BoodmanDiouf | Vault</title>
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="particles-js"></div>
+<!-- NUAGES COSMIQUES MENAÇANTS -->
+<div class="cosmic-clouds" aria-hidden="true"></div>
     <header>
-        <div class="logo-area nav-link" data-target="home" style="cursor: pointer;">
+        <div class="logo-area" data-target="home" style="cursor: pointer;">
             <img src="img/logo.jpg" alt="Logo" class="logo-img">
             <span class="brand">BoodmanDiouf</span>
         </div>
@@ -45,26 +48,74 @@
             <h2>WELCOME TO THE SANCTUARY</h2>
             <p style="color: var(--text-muted);">Accès sécurisé par jetons cryptographiques.</p>
         </div>
-        <div class="carousel-container">
-            <button class="carousel-btn prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
-            <div class="carousel-slide active"><i class="fab fa-soundcloud"></i><h3>Audio Hub</h3><p>Soundcloud synchronisé.</p></div>
-            <div class="carousel-slide"><i class="fas fa-code"></i><h3>Dev Vault</h3><p>Notes d'architecture privées.</p></div>
-            <div class="carousel-slide"><i class="fas fa-gamepad"></i><h3>Gaming Curator</h3><p>Données de salons nettoyées.</p></div>
-            <button class="carousel-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+                <div class="carousel-container">
+    <button class="carousel-btn prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+    
+    <!-- SLIDE 1 : SOUNDCLOUD -->
+    <div class="carousel-slide active">
+        <div class="carousel-content">
+            <i class="fab fa-soundcloud animate-icon"></i>
+            <h3>AUDIO ARCHIVES</h3>
+            <p>Explore mes productions, tracks et expérimentations de MAO directement sur ma plateforme.</p>
+            <a href="https://soundcloud.com/boodman-diouf" target="_blank" class="carousel-link">
+                INITIALISER LA LECTURE <i class="fas fa-external-link-alt btn-icon"></i>
+            </a>
         </div>
+    </div>
+
+    <!-- SLIDE 2 : DISCORD PERSO -->
+    <div class="carousel-slide">
+        <div class="carousel-content">
+            <i class="fab fa-discord animate-icon" style="color: #5865F2;"></i>
+            <h3>LE SANCTUAIRE (DISCORD)</h3>
+            <p>Mon espace privé pour échanger et partager mes retours d'expérience.</p>
+            <a href="https://discord.gg/XHxMb6N6" target="_blank" class="carousel-link link-discord">
+                REJOINDRE LE SERVEUR <i class="fas fa-sign-in-alt btn-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- SLIDE 3 : DISCORD COMMUNAUTAIRE STEMON -->
+    <div class="carousel-slide">
+        <div class="carousel-content">
+            <i class="fas fa-users animate-icon" style="color: #26de81;"></i>
+            <h3>COMMUNAUTÉ ST3MON</h3>
+            <p>Retrouve-moi aussi sur le serveur Discord communautaire du streamer Twitch Stemon pour les sessions multi-mondes.</p>
+            <a href="https://discord.gg/uMT5uWZTZ" target="_blank" class="carousel-link link-stemon">
+                REJOINDRE LA COMMUNAUTÉ <i class="fas fa-headset btn-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- SLIDE 4 : GITHUB DEV -->
+    <div class="carousel-slide">
+        <div class="carousel-content">
+            <i class="fab fa-github animate-icon" style="color: #fff;"></i>
+            <h3>DEV TERMINAL (GITHUB)</h3>
+            <p>Consulte mes dépôts publics, le code source de mes trakers Archipelago et mes architectures front-end.</p>
+            <a href="https://github.com/Boodmandiouf" target="_blank" class="carousel-link link-github">
+                EXPLORER LE CODE <i class="fas fa-code btn-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <button class="carousel-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+</div>
     </section>
 
     <section id="musique" class="page-section">
         <h2 class="section-title">AUDIO ARCHIVES</h2>
         <div class="sc-container">
-            <iframe 
-                width="100%" 
-                height="450" 
-                scrolling="no" 
-                frameborder="no" 
-                allow="autoplay" 
-                src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/boodman-diouf&color=%23df162b&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=true&show_teaser=true&visual=false">
-            </iframe>
+            <div class="sc-container">
+                <iframe 
+                    width="100%" 
+                    height="450" 
+                    scrolling="no" 
+                    frameborder="no" 
+                    allow="autoplay" 
+                    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/boodman-diouf&color=%23df162b&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true">
+                </iframe>
+            </div>
         </div>
     </section>
 
@@ -262,8 +313,22 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 <span>BoodmanDiouf</span>. Tous droits réservés.</p>
-    </footer>
+    <div class="footer-container" style="display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center;">
+        <div class="footer-status" style="font-family: var(--font-cyber); font-size: 0.8rem; letter-spacing: 2px;">
+            <span style="color: #26de81;"><i class="fas fa-circle" style="font-size: 0.6rem; margin-right: 5px; animation: blink 1.5s infinite;"></i> STATUS: OPERATIONAL</span>
+            <span style="color: var(--text-muted); margin: 0 15px;">|</span>
+            <span style="color: var(--text-muted);">CORE: v2.4.0</span>
+        </div>
+
+        <div class="footer-socials" style="display: flex; gap: 20px; font-size: 1.2rem; margin: 5px 0;">
+            <a href="https://github.com/Boodmandiouf" target="_blank" style="color: var(--text-muted); transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-muted)'"><i class="fab fa-github"></i></a>
+            <a href="https://soundcloud.com/boodman-diouf" target="_blank" style="color: var(--text-muted); transition: color 0.3s;" onmouseover="this.style.color='#df162b'" onmouseout="this.style.color='var(--text-muted)'"><i class="fab fa-soundcloud"></i></a>
+            <a href="https://discord.gg/XHxMb6N6" target="_blank" style="color: var(--text-muted); transition: color 0.3s;" onmouseover="this.style.color='#5865F2'" onmouseout="this.style.color='var(--text-muted)'"><i class="fab fa-discord"></i></a>
+        </div>
+
+        <p style="margin: 0; font-size: 0.9rem;">&copy; 2026 <span style="color: var(--accent-red); font-weight: 700;">BoodmanDiouf</span>. Tous droits réservés.</p>
+    </div>
+</footer>
 
     <script src="js/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
