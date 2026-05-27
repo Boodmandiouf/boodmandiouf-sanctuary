@@ -191,36 +191,38 @@
         // --- CONFIGURATION HACHÉE SÉCURISÉE NATIVE ---
         const EXPECTED_USER = "admin";
         
-        // L'empreinte SHA-256 exacte de ton mot de passe "uDg7Ck290wjH1Oul"
+        // Empreinte SHA-256 stricte pour "uDg7Ck290wjH1Oul"
         const EXPECTED_PASSWORD_HASH = "8c66ea8f9f6e6da98bc839d39b83b9f36f6d634db84ba7e954be91eb53df5e95";
 
-        // Fonction native pour hacher en SHA-256 (plus besoin de CryptoJS)
+        // Fonction de hachage
         async function sha256(message) {
             const msgBuffer = new TextEncoder().encode(message);                    
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
         // --- LOGIQUE LOGIN ---
         async function checkLogin() {
-            const user = document.getElementById('vault-user').value;
-            const pass = document.getElementById('vault-key').value;
+            // .trim() supprime automatiquement les espaces indésirables avant et après
+            const user = document.getElementById('vault-user').value.trim();
+            const pass = document.getElementById('vault-key').value.trim();
             const errorMsg = document.getElementById('lock-error');
 
-            // Calcul de l'empreinte avec l'API native du navigateur
             const inputHash = await sha256(pass);
 
-            if (user === EXPECTED_USER && inputHash === EXPECTED_PASSWORD_HASH) {
-                // Masquage de l'écran de verrouillage
+            // TRÈS IMPORTANT : On affiche la comparaison en cachette dans la console F12
+            console.log("User entré:", user, " | Attendu:", EXPECTED_USER);
+            console.log("Hash généré:", inputHash);
+            console.log("Hash attendu:", EXPECTED_PASSWORD_HASH);
+
+            if (user.toLowerCase() === EXPECTED_USER && inputHash === EXPECTED_PASSWORD_HASH) {
                 document.getElementById('lockscreen').style.transition = "0.5s ease";
                 document.getElementById('lockscreen').style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById('lockscreen').style.display = "none";
                 }, 500);
             } else {
-                errorMsg.style.with = "block";
                 errorMsg.style.display = "block";
                 document.getElementById('vault-key').value = "";
             }
