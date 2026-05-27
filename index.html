@@ -6,7 +6,6 @@
     <title>BoodmanDiouf | Vault</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     
     <style>
         :root {
@@ -188,32 +187,40 @@
         </div>
     </section>
 
-    <script>
-        // --- CONFIGURATION HACHÉE SÉCURISÉE ---
-        // L'identifiant attendu (toujours "admin")
+   <script>
+        // --- CONFIGURATION HACHÉE SÉCURISÉE NATIVE ---
         const EXPECTED_USER = "admin";
         
-        // Empreinte SHA-256 exacte correspondant au mot de passe "uDg7Ck290wjH1Oul"
-        // Personne ne peut retrouver le mot de passe original à partir de cette chaîne sur GitHub !
+        // L'empreinte SHA-256 exacte de ton mot de passe "uDg7Ck290wjH1Oul"
         const EXPECTED_PASSWORD_HASH = "8c66ea8f9f6e6da98bc839d39b83b9f36f6d634db84ba7e954be91eb53df5e95";
 
-        function checkLogin() {
+        // Fonction native pour hacher en SHA-256 (plus besoin de CryptoJS)
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);                    
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            return hashHex;
+        }
+
+        // --- LOGIQUE LOGIN ---
+        async function checkLogin() {
             const user = document.getElementById('vault-user').value;
             const pass = document.getElementById('vault-key').value;
             const errorMsg = document.getElementById('lock-error');
 
-            // Conversion instantanée du texte entré en empreinte SHA-256
-            const inputHash = CryptoJS.SHA256(pass).toString(CryptoJS.enc.Hex);
+            // Calcul de l'empreinte avec l'API native du navigateur
+            const inputHash = await sha256(pass);
 
-            // Comparaison des deux empreintes
             if (user === EXPECTED_USER && inputHash === EXPECTED_PASSWORD_HASH) {
-                // Masquage fluide de l'écran de verrouillage
+                // Masquage de l'écran de verrouillage
                 document.getElementById('lockscreen').style.transition = "0.5s ease";
                 document.getElementById('lockscreen').style.opacity = "0";
                 setTimeout(() => {
                     document.getElementById('lockscreen').style.display = "none";
                 }, 500);
             } else {
+                errorMsg.style.with = "block";
                 errorMsg.style.display = "block";
                 document.getElementById('vault-key').value = "";
             }
