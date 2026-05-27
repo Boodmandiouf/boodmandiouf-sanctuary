@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoodmanDiouf | Vault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <header>
+        <div class="logo-area nav-link" data-target="home" style="cursor: pointer;">
+            <img src="img/logo.jpg" alt="Logo" class="logo-img">
+            <span class="brand">BoodmanDiouf</span>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a class="nav-link active" data-target="home">Accueil</a></li>
+                <li><a class="nav-link" data-target="musique">Musique</a></li>
+                <li><a class="nav-link" data-target="dev">Dev</a></li>
+                <li><a class="nav-link" data-target="jeux">Jeux</a></li>
+                <li><a class="nav-link" data-target="cv">CV</a></li>
+                <li><a class="nav-link" data-target="contact">Contact</a></li>
+                <li>
+                    <a id="theme-toggle" onclick="toggleTheme()" style="cursor: pointer;">
+                        <i class="fas fa-sun" id="theme-icon"></i>
+                    </a>
+                </li>
+                <li><a id="admin-lock-btn" onclick="openLoginModal()"><i class="fas fa-lock"></i></a></li>
+                <li id="admin-nav-item" style="display: none;"><a class="nav-link" data-target="admin">Admin</a></li>
+            </ul>
+            <div class="burger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="page-section active">
+        <div class="hero">
+            <div class="banner-placeholder"></div>
+            <h2>WELCOME TO THE SANCTUARY</h2>
+            <p style="color: var(--text-muted);">Accès sécurisé par jetons cryptographiques.</p>
+        </div>
+        <div class="carousel-container">
+            <button class="carousel-btn prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <div class="carousel-slide active"><i class="fab fa-soundcloud"></i><h3>Audio Hub</h3><p>Soundcloud synchronisé.</p></div>
+            <div class="carousel-slide"><i class="fas fa-code"></i><h3>Dev Vault</h3><p>Notes d'architecture privées.</p></div>
+            <div class="carousel-slide"><i class="fas fa-gamepad"></i><h3>Gaming Curator</h3><p>Données de salons nettoyées.</p></div>
+            <button class="carousel-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <section id="musique" class="page-section">
+        <h2 class="section-title">AUDIO ARCHIVES</h2>
+        <div class="sc-container">
+            <iframe 
+                width="100%" 
+                height="450" 
+                scrolling="no" 
+                frameborder="no" 
+                allow="autoplay" 
+                src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/boodman-diouf&color=%23df162b&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=true&show_teaser=true&visual=false">
+            </iframe>
+        </div>
+    </section>
+
+    <section id="dev" class="page-section">
+        <h2 class="section-title">DEVELOPMENT HUB</h2>
+        <div class="grid-container">
+            <div class="card">
+                <h3>Gestionnaire HTML/CSS</h3>
+                <p>Création d'interfaces modulaires, boutons customisés et gestion des configurations utilisateurs avant export JSON.</p>
+                <span class="tag">Front-End</span>
+            </div>
+            <div class="card">
+                <h3>Discord Share Tool</h3>
+                <p>Idée : Développer un webhook ou une mini-app pour pousser proprement des templates de listes.</p>
+                <span class="tag">Idée / R&D</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="jeux" class="page-section">
+        <h2 class="section-title">GAMING ROOM</h2>
+        <div class="grid-container">
+            <div class="card game-card">
+                <div class="card-icon"><i class="fas fa-gamepad"></i></div>
+                <h3>Archipelago Classic</h3>
+                <p>Suivi et tracking de vos sessions multi-mondes pour l'expérience Archipelago standard.</p>
+                <span class="tag">Tracker</span>
+                <a href="https://boodmandiouf.github.io/archipelago-classic/" target="_blank" class="card-link">
+                    Lancer l'application <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+            <div class="card game-card">
+                <div class="card-icon"><i class="fab fa-twitch"></i></div>
+                <h3>Archipelago Stemon</h3>
+                <p>Version optimisée et personnalisée pour l'intégration avec les streams Twitch (st3mon édition).</p>
+                <span class="tag">Stream Edition</span>
+                <a href="https://boodmandiouf.github.io/archipelago-stemon/" target="_blank" class="card-link">
+                    Lancer l'application <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+            <div class="card game-card">
+                <div class="card-icon"><i class="fas fa-crosshairs"></i></div>
+                <h3>Archipelago One Choice</h3>
+                <p>Variante spécifique du tracker configurée pour les règles et restrictions de type "One Choice".</p>
+                <span class="tag">Special Rules</span>
+                <a href="https://boodmandiouf.github.io/archipelago-classic-onechoice/" target="_blank" class="card-link">
+                    Lancer l'application <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="cv" class="page-section">
+        <h2 class="section-title">CURRICULUM VITAE</h2>
+        <div class="cv-container">
+            <div class="cv-header-block">
+                <div class="cv-intro">
+                    <h3>Lionel PICARD</h3>
+                    <p class="cv-tagline">Technicien d'exploitation informatique & Développeur Web</p>
+                    <p class="cv-about">Technicien d'exploitation informatique avec une expérience dans la supervision, l'exploitation, le développement et la gestion de projets. Passionné par l'administration de systèmes, le développement web et l'amélioration continue des services.</p>
+                </div>
+                <div class="cv-contact-info">
+                    <p><i class="fas fa-envelope"></i> l.picard974@laposte.net</p>
+                    <p><i class="fas fa-phone"></i> 07 50 88 67 35</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 85440 Avrillé</p>
+                    <p><i class="fas fa-car"></i> Permis B + Véhicule</p>
+                </div>
+            </div>
+            <div class="cv-grid">
+                <div class="cv-main-col">
+                    <h3 class="cv-sub-title"><i class="fas fa-briefcase"></i> Expériences Professionnelles</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h3>TECHNICIEN RÉFÉRENT AMO (Assistant à Maitrise d'Ouvrage)</h3>
+                            <span class="cv-date">Août 2023 - Août 2024</span>
+                            <span class="cv-company">Mairie LSOA, Les Sables d'Olonne et Agglo (85)</span>
+                            <p>Reprise du service applicatif et gestion de projets (Jeunesse, Police Municipale, refonte de la partie GLPI, amélioration des outils internes, mise en place des API sur une GRU, gestion de projets logiciels métiers). Gestion de la messagerie Zimbra, suite O365, suite Adobe, WinSCP, Keepass, Webex. Gestion du budget annuel, support aux agents (tickets, hotline) et formations sur les outils internes.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h3>TECHNICIEN / ANALYSTE D'EXPLOITATION</h3>
+                            <span class="cv-date">Février 2019 - Février 2023</span>
+                            <span class="cv-company">INETUM (ex-GFI), La Chapelle-sur-Erdre (44)</span>
+                            <p>Suivi d'un plan de production, supervision des infrastructures et du patrimoine applicatif. Résolution ou escalade des incidents, gestion des sauvegardes et des données. Étude de l'existant, mise à jour des documentations/référentiels et transitions vers d'autres clients.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h3>DÉVELOPPEUR WEB FRONT/BACK (PHP / ZEND)</h3>
+                            <span class="cv-date">Février 2017 - Août 2017</span>
+                            <span class="cv-company">Nantes (44)</span>
+                            <p>Stage au sein d'une start-up spécialisée dans la communication et le E-Commerce dans le cadre de l'obtention du diplôme.</p>
+                        </div>
+                    </div>
+                    <h3 class="cv-sub-title"><i class="fas fa-graduation-cap"></i> Diplômes & Formations</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h3>BAC +3 Développeur Web PHP / Symfony</h3>
+                            <span class="cv-date">2017</span>
+                            <span class="cv-company">Wild Code School, La Loupe (28)</span>
+                        </div>
+                        <div class="timeline-item">
+                            <h3>Certifications Professionnelles</h3>
+                            <span class="cv-date">2016</span>
+                            <span class="cv-company">Openclassrooms.com / SoloLearn</span>
+                            <p>Développement, DATA, Systèmes et Réseaux.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h3>CAP Menuiserie</h3>
+                            <span class="cv-date">2011</span>
+                            <span class="cv-company">EREA François Truffaut, Mainvilliers (28)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cv-side-col">
+                    <h3 class="cv-sub-title"><i class="fas fa-cogs"></i> Stack Technique</h3>
+                    <div class="skill-category">
+                        <h4>Supervision & Prod</h4>
+                        <div class="skill-tags">
+                            <span>NAGIOS</span><span>CENTREON</span><span>ZABBIX</span><span>DYNATRACE</span><span>CONTROL M</span><span>AUTOMATOR</span><span>ITM</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Développement</h4>
+                        <div class="skill-tags">
+                            <span>HTML5</span><span>CSS3</span><span>JAVASCRIPT</span><span>PHP</span><span>SYMFONY</span><span>ZEND</span><span>PYTHON</span><span>DJANGO</span><span>SQL</span><span>GIT</span><span>JQUERY</span><span>WORDPRESS</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Administration & Outils</h4>
+                        <div class="skill-tags">
+                            <span>WINDOWS</span><span>LINUX</span><span>UNIX</span><span>MVS</span><span>Z/OS</span><span>IBM MAINFRAME</span><span>POWERSHELL</span><span>PUTTY</span><span>WAPT</span><span>GLPI</span><span>EASYVISTA</span><span>REDMINE</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Logiciels Métiers & Applicatifs</h4>
+                        <div class="skill-tags">
+                            <span>GRAFANA</span><span>NETBACKUP</span><span>SUITE O365</span><span>SUITE ADOBE</span><span>ZIMBRA</span><span>CIRIL</span><span>CITRIX</span><span>MAINTI4</span><span>CONCERTO</span><span>TREND</span>
+                        </div>
+                    </div>
+                    <h3 class="cv-sub-title"><i class="fas fa-heart"></i> Intérêts</h3>
+                    <div class="skill-category">
+                        <div class="skill-tags interests-tags">
+                            <span><i class="fas fa-code"></i> Programmation</span>
+                            <span><i class="fas fa-music"></i> MAO & Théorie</span>
+                            <span><i class="fas fa-gamepad"></i> Culture Geek</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="page-section">
+        <h2 class="section-title">CONNECT TO THE VAULT</h2>
+        <div class="contact-container">
+            <p class="contact-subtitle">Une question, un projet ou besoin d'une collaboration ? Laisse un message.</p>
+            <form action="https://formsubmit.co/l.picard974@laposte.net" method="POST" class="contact-form">
+                <input type="hidden" name="_next" value="https://boodmandiouf.github.io/boodmandiouf-sanctuary/">
+                <input type="hidden" name="_captcha" value="false">
+                <div class="form-group">
+                    <label for="name">Identifiant / Nom</label>
+                    <input type="text" id="name" name="name" required placeholder="Ex: John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="email">Adresse Email</label>
+                    <input type="email" id="email" name="email" required placeholder="Ex: john.doe@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" required placeholder="Votre transmission ici..."></textarea>
+                </div>
+                <button type="submit" class="contact-btn">TRANSMETTRE</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="login-modal" class="modal-overlay" style="display: none;">
+        <div class="lock-box">
+            <h2 style="color: #fff; margin-bottom: 25px; font-size: 1.2rem; font-family: 'Orbitron';">SÉCURISATION TERMINAL</h2>
+            <input type="text" id="vault-user" class="lock-input" placeholder="IDENTIFIANT">
+            <input type="password" id="vault-key" class="lock-input" placeholder="MOT DE PASSE" onkeypress="if(event.key === 'Enter') checkLogin()">
+            <button onclick="checkLogin()" class="lock-btn">AUTHENTICATION</button>
+            <button onclick="closeLoginModal()" class="lock-btn-cancel">ANNULER</button>
+            <p id="lock-error" style="color: #df162b; margin-top: 15px; font-size: 0.9rem; display: none; font-weight: bold; font-family: 'Orbitron'">ACCESS DENIED</p>
+        </div>
+    </div>
+
+    <section id="admin" class="page-section">
+        <h2 class="section-title">ADMIN TERMINAL</h2>
+        <div class="grid-container">
+            <div class="card" style="border-color: #df162b;">
+                <h3>Console de Contrôle</h3>
+                <p>Bienvenue dans ton espace privé. Ici, tu pourras ajouter tes futurs scripts de configuration, tes logs personnels ou tes liens de déploiement back-end.</p>
+                <span class="tag" style="background: rgba(223,22,43,0.3);">Jeton Actif</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 <span>BoodmanDiouf</span>. Tous droits réservés.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <!-- BOUTON RETOUR EN HAUT -->
+<div id="scroll-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></div>
+</body>
+</html>
