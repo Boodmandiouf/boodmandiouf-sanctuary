@@ -291,3 +291,197 @@ if (typeof autoSlideTimer !== 'undefined') {
 autoSlideTimer = setInterval(() => {
     changeSlide(1);
 }, 5000); // 5000ms = 5 secondes par slide
+
+// --- SCRIPT D'IMMERSION CONSOLE ADMIN ---
+document.addEventListener("DOMContentLoaded", () => {
+    const logFeed = document.getElementById('logFeed');
+    if (!logFeed) return; // Sécurité si l'élément n'est pas sur la page
+
+    const initialLogs = [
+        { type: 'info', msg: 'Connecting to main network backbone...' },
+        { type: 'info', msg: 'Handshake complete. Credentials verified under token st3mon_ed.' },
+        { type: 'warn', msg: 'Streaming APIs running close to daily quota limits.' },
+        { type: 'crit', msg: 'Unauthorized sync block dropped successfully from subnet.' }
+    ];
+
+    function pushLog(type, message) {
+        const timeStr = new Date().toTimeString().split(' ')[0];
+        let tag = type === 'crit' ? '<span class="crit">[CRIT]</span>' : (type === 'warn' ? '<span class="warn">[WARN]</span>' : '<span class="info">[INFO]</span>');
+        
+        const row = document.createElement('div');
+        row.innerHTML = `<span class="time">[${timeStr}]</span> ${tag} ${message}`;
+        logFeed.appendChild(row);
+        logFeed.scrollTop = logFeed.scrollHeight;
+    }
+
+    // Charger l'historique de log initial
+    initialLogs.forEach((l, i) => setTimeout(() => pushLog(l.type, l.msg), i * 600));
+
+    // Boucle d'activité constante (fausses requêtes d'exploitation)
+    setInterval(() => {
+        const liveMsgs = [
+            { type: 'info', msg: 'Gateway health-check: 200 OK.' },
+            { type: 'info', msg: 'Synchronizing DOM style variables with active theme.' },
+            { type: 'warn', msg: 'Minor latency detected on media assets pipeline.' }
+        ];
+        const picked = liveMsgs[Math.floor(Math.random() * liveMsgs.length)];
+        pushLog(picked.type, picked.picked || picked.msg);
+    }, 8000);
+});
+
+// Gestion des clics sur les interrupteurs du terminal
+function triggerAction(actionName) {
+    const logFeed = document.getElementById('logFeed');
+    if (!logFeed) return;
+    const timeStr = new Date().toTimeString().split(' ')[0];
+    
+    logFeed.innerHTML += `<div><span class="time">[${timeStr}]</span> <span class="crit">[EXEC]</span> EXECUTION_REQUEST: [${actionName}] dispatch down to main thread.</div>`;
+    logFeed.scrollTop = logFeed.scrollHeight;
+}
+
+// --- COMPTEUR DE VISITES RÉEL (COUNTAPI) ---
+function initVisitCounter() {
+    // Clé unique basée sur ton projet pour éviter les conflits avec d'autres sites
+    const namespace = "boodmandiouf-sanctuary";
+    const key = "visits";
+    
+    const counterElement = document.getElementById('visit-count');
+    if (!counterElement) return;
+
+    // URL de l'API : "hit" permet d'incrémenter de +1 à chaque chargement de page
+    const apiUrl = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erreur de communication avec le serveur de comptage.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            // On injecte le vrai chiffre renvoyé par l'API dans le HTML
+            counterElement.innerText = data.value;
+            
+            // On ajoute une ligne de log réelle dans le flux du terminal si l'élément existe
+            const logFeed = document.getElementById('logFeed');
+            if (logFeed) {
+                const timeStr = new Date().toTimeString().split(' ')[0];
+                logFeed.innerHTML += `<div><span class="time">[${timeStr}]</span> <span class="info">[INFO]</span> TELEMETRY: Metric [VAULT_VISITS] updated successfully to value: ${data.value}</div>`;
+            }
+        })
+        .catch(error => {
+            console.error("Erreur compteur:", error);
+            counterElement.innerText = "OFFLINE";
+            counterElement.style.color = "#df162b"; // Rouge en cas d'erreur
+        });
+}
+
+// Lancer le compteur dès que la page est prête
+document.addEventListener("DOMContentLoaded", () => {
+    initVisitCounter();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    // ==========================================
+    // GESTION DU BLOC-NOTES PERSISTANT
+    // ==========================================
+    const notesArea = document.getElementById('admin-notes');
+    
+    if (notesArea) {
+        // Charger la note sauvegardée lors du dernier passage
+        const savedNotes = localStorage.getItem('st3mon_admin_notes');
+        if (savedNotes) {
+            notesArea.value = savedNotes;
+        }
+
+        // Écouter la saisie clavier pour sauvegarder automatiquement
+        notesArea.addEventListener('input', () => {
+            localStorage.setItem('st3mon_admin_notes', notesArea.value);
+        });
+    }
+
+    // ==========================================
+    // ANIMATION GRAPHIQUE OSCILLANTE (CANVAS)
+    // ==========================================
+    const canvas = document.getElementById('networkCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+
+    // Ajuster la résolution interne du canvas à sa taille d'affichage
+    function resizeCanvas() {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    let offset = 0;
+
+    function drawGraph() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // 1. Dessiner la grille de fond style radar
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+        ctx.lineWidth = 1;
+        const gridSize = 20;
+        
+        for (let x = 0; x < canvas.width; x += gridSize) {
+            ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += gridSize) {
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+        }
+
+        // 2. Onde Principale (Vert Flux Réseau)
+        ctx.beginPath();
+        ctx.strokeStyle = document.body.classList.contains('light') ? '#00aa44' : '#00ff66';
+        ctx.lineWidth = 2;
+        
+        for (let i = 0; i < canvas.width; i++) {
+            const y = canvas.height / 2 + 
+                      Math.sin(i * 0.015 + offset) * 20 + 
+                      Math.cos(i * 0.03 - offset) * 8;
+            if (i === 0) ctx.moveTo(i, y);
+            else ctx.lineTo(i, y);
+        }
+        ctx.stroke();
+
+        // 3. Onde Secondaire (Rouge d'Alerte Fréquence)
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(223, 22, 43, 0.4)';
+        ctx.lineWidth = 1;
+        
+        for (let i = 0; i < canvas.width; i++) {
+            const y = canvas.height / 2 + 
+                      Math.cos(i * 0.02 + offset * 1.5) * 15 + 
+                      Math.sin(i * 0.005 - offset) * 12;
+            if (i === 0) ctx.moveTo(i, y);
+            else ctx.lineTo(i, y);
+        }
+        ctx.stroke();
+
+        offset += 0.04; // Vitesse de défilement des ondes
+        animationFrameId = requestAnimationFrame(drawGraph);
+    }
+    
+    drawGraph();
+});
+
+// Fonction pour effacer le bloc-notes proprement via le bouton d'override
+function clearNotes() {
+    const notesArea = document.getElementById('admin-notes');
+    if (notesArea) {
+        notesArea.value = '';
+        localStorage.removeItem('st3mon_admin_notes');
+        
+        // Notification dans les logs
+        const logFeed = document.getElementById('logFeed');
+        if (logFeed) {
+            const timeStr = new Date().toTimeString().split(' ')[0];
+            logFeed.innerHTML += `<div><span class="time">[${timeStr}]</span> <span class="warn">[WARN]</span> LOGBOOK: Storage cache has been purged manually.</div>`;
+            logFeed.scrollTop = logFeed.scrollHeight;
+        }
+    }
+}
