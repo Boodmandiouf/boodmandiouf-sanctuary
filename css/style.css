@@ -14,6 +14,96 @@
 }
 
 /* ==========================================================================
+   PERSONNALISATION DE LA SCROLLBAR (DA VAULT)
+   ========================================================================== */
+
+/* --- Configuration pour Chrome, Edge, Safari et Opera --- */
+/* Taille de la barre verticale */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Taille de la barre horizontale (si jamais elle apparaît) */
+::-webkit-scrollbar-horizontal {
+    height: 10px;
+}
+
+/* Fond de la barre (Track) - Mode Sombre par défaut */
+::-webkit-scrollbar-track {
+    background: #0d0d13; /* Un noir ultra-profond raccord avec ton theme dark */
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* La poignée qui défile (Thumb) - Mode Sombre par défaut */
+::-webkit-scrollbar-thumb {
+    background: var(--accent-red, #df162b); /* Ta couleur rouge fétiche */
+    border: 2px solid #0d0d13; /* Crée un effet de bordure isolée très propre */
+    border-radius: 4px;
+}
+
+/* Effet au survol de la poignée */
+::-webkit-scrollbar-thumb:hover {
+    background: #ff2a3b; /* Rouge plus vif/lumineux au survol */
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.5); /* Effet néon soft */
+}
+
+/* --- Adaptation pour le Thème Light --- */
+/* On applique les styles dès que la classe .light-theme (ou ton équivalent) est active */
+body.light-theme ::-webkit-scrollbar-track {
+    background: #f0f0f5;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme ::-webkit-scrollbar-thumb {
+    background: #df162b; /* Reste rouge pour le rappel de marque, ou une version plus douce */
+    border: 2px solid #f0f0f5;
+}
+
+body.light-theme ::-webkit-scrollbar-thumb:hover {
+    background: #b30f1e; /* Rouge plus sombre au survol en light mode pour le contraste */
+}
+
+
+/* --- Configuration Standard pour Firefox --- */
+/* Firefox gère ça différemment avec des propriétés standards */
+@supports (scrollbar-color: auto) {
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--accent-red, #df162b) #0d0d13;
+    }
+    
+    html.light-theme, body.light-theme {
+        scrollbar-color: #df162b #f0f0f5;
+    }
+}
+
+/* --- Gestion du Responsive (Mobile & Tablettes) --- */
+/* Sur les écrans tactiles, les grosses scrollbars fixes coupent le contenu et nuisent à l'expérience. 
+   On la rend plus fine ou transparente pour laisser le geste tactile naturel. */
+@media (max-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 4px; /* Très fine sur mobile pour ne pas empiéter sur l'écran */
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: transparent; /* On cache le fond sur mobile */
+        border: none;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(223, 22, 43, 0.5); /* Rouge transparent discret */
+        border: none;
+        border-radius: 2px;
+    }
+    
+    @supports (scrollbar-color: auto) {
+        html {
+            scrollbar-width: none; /* Cache complètement la barre sur Firefox mobile si tactile */
+        }
+    }
+}
+
+/* ==========================================================================
    RESET & CONFIGURATION DE BASE
    ========================================================================== */
 * {
