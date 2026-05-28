@@ -132,6 +132,32 @@ header {
     transition: background 0.4s ease, border-color 0.4s ease;
 }
 
+/* --- Effet de cadre sur la zone logo (Image + Titre) --- */
+header .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+/* Au survol : On affiche le cadre néon cyberpunk */
+header .logo-area:hover {
+    border-color: var(--accent-red, #df162b);
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.3), inset 0 0 5px rgba(223, 22, 43, 0.2);
+    background: rgba(223, 22, 43, 0.05);
+}
+
+/* Style de transition pour la marque à l'intérieur */
+header .logo-area .brand {
+    transition: color 0.3s ease;
+}
+
+header .logo-area:hover .brand {
+    color: #ffffff; /* S'assure que le texte brille au survol */
+}
 /* Correction ciblée pour annuler l'impact de .nav-link sur le bloc logo */
 .logo-area {
     display: flex;
