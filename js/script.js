@@ -140,6 +140,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+// Relance la rotation automatique du carrousel toutes les 5000ms (5 secondes)
+let autoSlideInterval = setInterval(() => {
+    changeSlide(1);
+}, 5000);
+
+// Optionnel : Arrête le défilement auto si l'utilisateur clique sur Précédent/Suivant
+// pour éviter que ça passe deux slides d'un coup
+const carouselContainer = document.querySelector('.carousel-container');
+if (carouselContainer) {
+    carouselContainer.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+    carouselContainer.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+    });
+}
 
 // ==========================================================================
 // LOGIQUE DU MENU BURGER MOBILE
