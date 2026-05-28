@@ -284,3 +284,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+// Forcer le lancement du défilement automatique à l'allumage du site
+if (typeof autoSlideTimer !== 'undefined') {
+    clearInterval(autoSlideTimer);
+}
+autoSlideTimer = setInterval(() => {
+    changeSlide(1);
+}, 5000); // 5000ms = 5 secondes par slide
