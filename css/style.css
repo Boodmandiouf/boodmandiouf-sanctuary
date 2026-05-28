@@ -423,11 +423,13 @@ nav {
     letter-spacing: 1.5px;
     text-transform: uppercase;
     text-decoration: none;
-    color: #fff !important;
+    color: var(--accent-red) !important
     background: transparent !important;
     border: 1px solid var(--accent-red) !important;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
+
 
 .carousel-link .btn-icon {
     font-size: 0.85rem !important;
@@ -542,7 +544,7 @@ nav {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #1DB954;
     background: transparent;
     padding: 12px 20px;
     border-radius: 4px;
@@ -552,8 +554,31 @@ nav {
     letter-spacing: 1px;
 }
 
+/* Force la couleur du texte en mode clair */
+.light-mode .mon-bouton {
+    color: #df162b !important; /* Rouge comme ta bordure, ou #1a1a1a pour du noir/gris sombre */
+    background-color: transparent; /* Pour être sûr qu'aucun fond sombre ne reste */
+}
+
+/* Optionnel : Ce qui se passe au survol/clic en mode clair */
+.light-mode .mon-bouton:hover {
+    background-color: #df162b;
+    color: #ffffff !important; /* Le texte repasse en blanc si le fond devient rouge */
+}
+
+@media (max-width: 768px) {
+    /* ... tes styles mobiles existants ... */
+
+    /* Si on est sur mobile ET en light mode */
+    .light-mode .mon-bouton {
+        color: #df162b !important;
+        background-color: #ffffff; /* Ou transparent */
+    }
+}
+
 .music-btn-soundcloud {
     border: 1px solid var(--accent-red, #df162b);
+    color: var(--accent-red) !important;
 }
 
 .music-btn-soundcloud:hover {
@@ -871,6 +896,9 @@ nav {
 .skill-category { margin-bottom: 25px; }
 .skill-category h4 { font-family: var(--font-cyber); font-size: 0.9rem; margin-bottom: 10px; color: var(--text-main); }
 .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.light-mode .skill-tags span {
+    background: #fff; !important
+}
 .skill-tags span { background: #1a1a24; border: 1px solid var(--border-color); padding: 4px 10px; font-size: 0.85rem; color: var(--text-muted); }
 .interests-tags span i { color: var(--accent-red); margin-right: 5px; }
 
@@ -907,6 +935,14 @@ nav {
     font-family: var(--font-cyber);
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.light-mode .contact-btn {
+    color: #000;
+}
+
+.light-mode .contact-btn:hover {
+    color: rgba(0,0,0,0.85));
 }
 .contact-btn:hover { background: var(--accent-red); box-shadow: 0 0 15px var(--accent-red-glow); }
 
@@ -1106,21 +1142,23 @@ body.light-mode .carousel-btn:hover {
     color: #fff !important;
     box-shadow: none;
 }
-body.light-mode .carousel-link {
+
+/* --- FIX EXACT BOUTONS CAROUSEL LIGHT MODE (GLOBAL PC) --- */
+body.light-mode .carousel-container .carousel-link {
     color: var(--accent-red) !important;
     border-color: var(--accent-red) !important;
     background: transparent !important;
 }
-body.light-mode .carousel-link:hover {
+body.light-mode .carousel-container .carousel-link:hover {
     background: var(--accent-red) !important;
     color: #fff !important;
     box-shadow: 0 5px 15px rgba(223, 22, 43, 0.3);
 }
-body.light-mode .carousel-link.link-github {
+body.light-mode .carousel-container .carousel-link.link-github {
     color: #2f3640 !important;
     border-color: #2f3640 !important;
 }
-body.light-mode .carousel-link.link-github:hover {
+body.light-mode .carousel-container .carousel-link.link-github:hover {
     background: #2f3640 !important;
     color: #fff !important;
 }
@@ -1140,7 +1178,7 @@ body.light .log-feed { background: #fafafa; border-color: rgba(0, 0, 0, 0.08); }
 body.light .terminal-textarea { background: #ffffff; color: #333; border-color: rgba(0, 0, 0, 0.15); }
 
 /* ==========================================================================
-   15. TOUS LES COMPOSANTS EN RESPONSIVE (MEDIA QUERY UNIQUE MIGRÉE EN BAS)
+   15. TOUS LES COMPOSANTS EN RESPONSIVE
    ========================================================================== */
 @media screen and (max-width: 768px) {
     /* --- Structure Générale Mobile --- */
@@ -1257,6 +1295,17 @@ body.light .terminal-textarea { background: #ffffff; color: #333; border-color: 
     .carousel-btn.prev { left: 5px !important; }
     .carousel-btn.next { right: 5px !important; }
 
+    /* --- FIX EXACT BOUTONS CAROUSEL EN LIGHT MODE SUR MOBILE --- */
+    body.light-mode .carousel-container .carousel-link {
+        color: var(--accent-red) !important;
+        border-color: var(--accent-red) !important;
+        background: transparent !important;
+    }
+    body.light-mode .carousel-container .carousel-link.link-github {
+        color: #2f3640 !important;
+        border-color: #2f3640 !important;
+    }
+
     /* --- Musique Mobile --- */
     .music-stack { gap: 20px; padding: 0 10px; }
     .music-card { padding: 15px; }
@@ -1276,8 +1325,9 @@ body.light .terminal-textarea { background: #ffffff; color: #333; border-color: 
 
     /* --- Light Mode Interne Mobile --- */
     body.light-mode nav .nav-links { background: rgba(245, 246, 250, 0.98) !important; }
-    body.light-mode .nav-link { color: #2f3640 !important; background: rgba(0, 0, 0, 0.02) !important; }
+    body.light-mode .nav-link { color: #2f3640 !important; }
     body.light-mode .nav-link:hover, body.light-mode .nav-link.active { color: var(--accent-red) !important; background: linear-gradient(90deg, rgba(223, 22, 43, 0.08) 0%, transparent 100%) !important; }
     body.light-mode #theme-toggle, body.light-mode #admin-lock-btn { background: rgba(0, 0, 0, 0.03) !important; border-color: rgba(0, 0, 0, 0.15) !important; }
     body.light-mode #theme-toggle i { color: #2f3640 !important; text-shadow: none; }
 }
+/* FIN DU FICHIER CLEAN ET CORRIGÉ */

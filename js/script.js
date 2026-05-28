@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Relance la rotation automatique du carrousel toutes les 5000ms (5 secondes)
 let autoSlideInterval = setInterval(() => {
     changeSlide(1);
-}, 5000);
+}, 17000);
 
 // Optionnel : Arrête le défilement auto si l'utilisateur clique sur Précédent/Suivant
 // pour éviter que ça passe deux slides d'un coup
