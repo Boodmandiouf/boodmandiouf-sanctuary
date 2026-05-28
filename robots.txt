@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /config/
+Disallow: /secret/
+
+# Déclaration officielle du sitemap pour les robots :
+Sitemap: https://boodmandiouf.github.io/boodmandiouf-sanctuary/sitemap.xml

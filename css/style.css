@@ -316,6 +316,8 @@ nav {
 }
 
 /* ACCUEIL HERO BANNER & CAROUSEL */
+
+
 .hero {
     text-align: center;
     margin-bottom: 50px;
@@ -336,6 +338,28 @@ nav {
     font-size: 2.2rem;
     margin-bottom: 15px;
     color: #fff;
+}
+
+/* --- Style du titre principal H1 --- */
+.hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem; /* Ajuste la taille si nécessaire pour ton design */
+    font-weight: 700;
+    color: var(--text-main, #ffffff);
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    
+    /* Optionnel : si tu avais un effet d'ombre/lueur néon sur ton h2, il s'applique ici */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); 
+}
+
+/* Version responsive pour les écrans mobiles */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 1.8rem; /* Plus compact sur smartphone */
+        letter-spacing: 1px;
+    }
 }
 
 /* ==========================================================================
