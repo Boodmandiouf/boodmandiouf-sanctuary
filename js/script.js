@@ -153,7 +153,7 @@ if (carouselContainer) {
     carouselContainer.addEventListener('mouseleave', () => {
         autoSlideInterval = setInterval(() => {
             changeSlide(1);
-        }, 5000);
+        }, 10000);
     });
 }
 
@@ -290,7 +290,7 @@ if (typeof autoSlideTimer !== 'undefined') {
 }
 autoSlideTimer = setInterval(() => {
     changeSlide(1);
-}, 5000); // 5000ms = 5 secondes par slide
+}, 10000); // 5000ms = 5 secondes par slide
 
 // --- SCRIPT D'IMMERSION CONSOLE ADMIN ---
 document.addEventListener("DOMContentLoaded", () => {
