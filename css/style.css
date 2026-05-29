@@ -410,23 +410,23 @@ nav {
 .carousel-btn.next { right: 15px; }
 
 .carousel-link {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px auto 0 auto !important;
-    width: max-content !important;
-    padding: 8px 16px !important;
-    font-size: 0.75rem !important;
-    font-family: var(--font-cyber);
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--accent-red) !important
-    background: transparent !important;
-    border: 1px solid var(--accent-red) !important;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto 0 auto !important;
+  width: max-content !important;
+  padding: 8px 16px !important;
+  font-size: 0.75rem !important;
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff !important;
+  background: transparent !important;
+  border: 1px solid var(--accent-red) !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 
