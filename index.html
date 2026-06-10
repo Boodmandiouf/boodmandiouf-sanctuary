@@ -32,7 +32,7 @@
                         <i class="fas fa-sun" id="theme-icon"></i>
                     </a>
                 </li>
-                <li><a id="admin-lock-btn" onclick="openLoginModal()"><i class="fas fa-lock"></i></a></li>
+                <li><a href="admin.html" target="_blank" rel="noopener noreferrer" id="admin-lock-btn"><i class="fas fa-lock"></i></a></li>
                 <li id="admin-nav-item" style="display: none;"><a class="nav-link" data-target="admin">Admin</a></li>
             </ul>
             <div class="burger" onclick="toggleMenu()">
@@ -353,73 +353,6 @@
             <p id="lock-error" style="color: #df162b; margin-top: 15px; font-size: 0.9rem; display: none; font-weight: bold; font-family: 'Orbitron'">ACCESS DENIED</p>
         </div>
     </div>
-
-    <section id="admin" class="page-section">
-        <h2 class="section-title">CENTRAL CORE OVERRIDE</h2>
-        
-        <div class="admin-terminal">
-            <div class="terminal-header">
-                <div class="terminal-dots">
-                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                </div>
-                <div class="terminal-title-text">ST3MON // CENTRAL_CORE_v2.4.0</div>
-                <div class="terminal-status"><i class="fas fa-lock"></i> SECURE_SESSION</div>
-            </div>
-
-            <di<div class="admin-grid">
-                
-                <div class="panel-box">
-                    <h3 class="panel-title">
-                        <span><i class="fas fa-server"></i> HOST_STATUS</span> 
-                        <span class="status-online">ONLINE</span>
-                    </h3>
-                    <div class="panel-content">
-                        <p><span class="label">TARGET_URL:</span> boodmandiouf.github.io</p>
-                        <p><span class="label">SERVER_GATE:</span> GitHub Pages Proxy</p>
-                        <p><span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)</p>
-                        <p><span class="label">ENVIRONMENT:</span> PRODUCTION_ENV</p>
-                        <p><span class="label">VAULT_VISITS:</span> <span id="visit-count" style="color: #ffffff; font-weight: bold;">CHARGEMENT...</span></p>
-                    </div>
-                </div>
-
-                <div class="panel-box">
-                    <h3 class="panel-title"><span><i class="fas fa-edit"></i> WORKFLOW_LOGBOOK</span> <span style="color: var(--accent-red); font-size: 0.75rem;">AUTO_SAVE</span></h3>
-                    <div class="panel-content" style="height: calc(100% - 30px); display: flex; flex-direction: column;">
-                        <textarea id="admin-notes" class="terminal-textarea" placeholder="[Saisir vos directives, ID de tracks ou mémos système...]"></textarea>
-                    </div>
-                </div>
-
-                <div class="panel-box">
-                    <h3 class="panel-title"><span><i class="fas fa-sliders-h"></i> CORE_OVERRIDES</span></h3>
-                    <div class="panel-content actions-flex">
-                        <button class="console-btn" onclick="triggerAction('PURGE_CACHE')">FLUSH CACHE</button>
-                        <button class="console-btn btn-danger" onclick="triggerAction('EMERGENCY_LOCK')">LOCKDOWN</button>
-                        <button class="console-btn" style="border-color: #ffb300; color: #ffb300;" onclick="clearNotes()">CLEAR LOGBOOK</button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="panel-box matrix-graph-section" style="margin: 0 20px 20px 20px;">
-                <h3 class="panel-title"><span><i class="fas fa-wave-square"></i> NETWORK_FLOW_MONITORING</span> <span id="fps-counter" style="color: #00ff66; font-size: 0.75rem;">GRID: ACTIVE</span></h3>
-                <div class="canvas-container">
-                    <canvas id="networkCanvas"></canvas>
-                </div>
-            </div>
-
-            <div class="panel-box terminal-logs-section" style="margin: 0 20px 20px 20px;">
-                <h3 class="panel-title"><span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span></h3>
-                <div class="log-feed" id="logFeed">
-                    </div>
-            </div>
-
-            <div class="panel-box terminal-logs-section">
-                <h3 class="panel-title"><span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span></h3>
-                <div class="log-feed" id="logFeed">
-                    </div>
-            </div>
-        </div>
-    </section>
 
 <footer>
     <div class="footer-container" style="display: flex; flex-direction: column; gap: 15px; align-items: center; justify-content: center;">

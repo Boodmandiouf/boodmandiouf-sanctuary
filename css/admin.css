@@ -1,0 +1,326 @@
+/* ==========================================================================
+   DA CYBERPUNK - CENTRAL CORE OVERRIDE (ADMIN SECTION)
+   ========================================================================== */
+
+.admin-terminal {
+    background: rgba(5, 5, 10, 0.95);
+    border: 1px solid #df162b;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(223, 22, 43, 0.15);
+    font-family: 'Orbitron', sans-serif;
+    margin: 20px auto;
+    max-width: 1200px;
+    overflow: hidden;
+}
+
+.terminal-header {
+    background: #111;
+    border-bottom: 1px solid rgba(223, 22, 43, 0.3);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.terminal-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #df162b;
+    opacity: 0.6;
+}
+
+.terminal-title-text {
+    color: #fff;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.terminal-status {
+    color: #ffb300;
+    font-size: 0.8rem;
+}
+
+/* Grilles & Conteneurs de Panneaux */
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.panel-box {
+    background: rgba(10, 10, 15, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 3px solid #df162b;
+    padding: 15px;
+    position: relative;
+}
+
+.panel-title {
+    font-size: 0.9rem;
+    color: #df162b;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(223, 22, 43, 0.1);
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    letter-spacing: 1px;
+}
+
+.panel-content p {
+    margin: 8px 0;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: #a4b0be;
+}
+
+.panel-content .label {
+    color: #df162b;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    margin-right: 5px;
+}
+
+.status-online {
+    color: #00ff66;
+    font-size: 0.75rem;
+    text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
+}
+
+/* Éléments Interactifs de la Console */
+.terminal-textarea {
+    width: 100%;
+    height: 120px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(223, 22, 43, 0.2);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.05rem;
+    padding: 10px;
+    resize: none;
+    outline: none;
+    border-radius: 2px;
+    box-sizing: border-box;
+}
+
+.terminal-textarea:focus {
+    border-color: #df162b;
+    box-shadow: 0 0 5px rgba(223, 22, 43, 0.3);
+}
+
+.actions-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.console-btn {
+    background: transparent;
+    border: 1px solid #df162b;
+    color: #df162b;
+    font-family: 'Orbitron', sans-serif;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.console-btn:hover {
+    background: #df162b;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.4);
+}
+
+.console-btn.btn-danger {
+    background: rgba(223, 22, 43, 0.1);
+}
+
+.console-btn.btn-danger:hover {
+    background: #df162b;
+}
+
+/* Monitoring Réseau & Zone de Logs */
+.canvas-container {
+    width: 100%;
+    height: 150px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+#networkCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.log-feed {
+    height: 150px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #00ff66;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border: 1px solid rgba(0, 255, 102, 0.1);
+}
+
+.log-item {
+    line-height: 1.4;
+    animation: fadeInLog 0.2s ease-out;
+}
+
+.log-time {
+    color: #a4b0be;
+    margin-right: 8px;
+}
+
+.log-warning {
+    color: #ffb300;
+}
+
+.log-danger {
+    color: #df162b;
+}
+
+/* Personnalisation Scrollbar pour les Logs */
+.log-feed::-webkit-scrollbar {
+    width: 4px;
+}
+.log-feed::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+.log-feed::-webkit-scrollbar-thumb {
+    background: #df162b;
+}
+
+@keyframes fadeInLog {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+    .matrix-graph-section, .terminal-logs-section {
+        margin: 0 10px 10px 10px !important;
+    }
+}
+/* Styles de la barrière de déchiffrement */
+        .vault-auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0a0a0c;
+            padding: 20px;
+        }
+
+        .crypto-modal {
+            background: #111115;
+            border: 1px solid #df162b;
+            box-shadow: 0 0 20px rgba(223, 22, 43, 0.2);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .crypto-modal h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #f1f2f6;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .crypto-input-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .crypto-input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a4b0be;
+        }
+
+        .crypto-input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            background: #0d0d13;
+            border: 1px solid #22222a;
+            color: #f1f2f6;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .crypto-input:focus {
+            outline: none;
+            border-color: #df162b;
+            box-shadow: 0 0 10px rgba(223, 22, 43, 0.3);
+        }
+
+        .btn-decrypt {
+            background: transparent;
+            border: 1px solid #df162b;
+            border-radius: 0px !important;
+            font-family: 'Orbitron', sans-serif;
+            color: #df162b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 35px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-decrypt:hover {
+            background-color: #df162b;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(223, 22, 43, 0.4);
+        }
+
+        .error-msg {
+            color: #df162b;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            margin-top: 15px;
+            display: none;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Thème Light adaptatif automatique pour l'écran de verrouillage */
+        body.light-mode .vault-auth-container { background-color: #f5f6fa; }
+        body.light-mode .crypto-modal { background: #ffffff; border-color: #E30613; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        body.light-mode .crypto-modal h3 { color: #2f3640; }
+        body.light-mode .crypto-input { background: #f1f2f6; border-color: rgba(0,0,0,0.1); color: #2f3640; }
+        body.light-mode .btn-decrypt { border-color: #E30613; color: #E30613; }
+        body.light-mode .btn-decrypt:hover { background-color: #E30613; color: #ffffff; }

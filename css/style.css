@@ -116,6 +116,8 @@ header {
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px var(--accent-red-glow);
 }
 
 .logo-container-site {
@@ -803,17 +805,23 @@ body.light-mode .status-monitoring::before {
 }
 
 .card-link {
-    display: block;
-    margin-top: 15px;
-    text-decoration: none;
-    color: #fff;
-    background: transparent;
-    border: 1px solid var(--accent-red);
-    padding: 10px;
-    text-align: center;
-    font-family: var(--font-cyber);
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto 0 auto !important;
+  width: max-content !important;
+  padding: 15px 16px !important;
+  font-size: 0.75rem !important;
+  font-family: var(--font-cyber);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fff !important;
+  background: transparent !important;
+  border: 1px solid var(--accent-red) !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .card-link:hover {
@@ -1350,5 +1358,8 @@ body.light .terminal-textarea { background: #ffffff; color: #333; border-color: 
     body.light-mode #theme-toggle, body.light-mode #admin-lock-btn { background: rgba(0, 0, 0, 0.03) !important; border-color: rgba(0, 0, 0, 0.15) !important; }
     body.light-mode #theme-toggle i { color: #2f3640 !important; text-shadow: none; }
 }
+
+
 /* FIN DU FICHIER CLEAN ET CORRIGÉ */
+
 
