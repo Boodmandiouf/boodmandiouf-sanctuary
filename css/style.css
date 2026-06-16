@@ -1543,17 +1543,14 @@ body.light .terminal-textarea { background: #ffffff; color: #333; border-color: 
 /* ==========================================================================
    HUB DE DÉVELOPPEMENT UNIFORMISÉ (LOGIQUE CYBER)
    ========================================================================== */
-.cyber-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
+   
 .cyber-tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
+    /* Aligne 3 éléments de front au maximum comme la page jeux, bascule seul si manque de place */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 30px; /* Aligné sur l'espacement de la Gaming Room */
     margin-top: 30px;
+    width: 100%;
 }
 
 /* --- MODE SOMBRE PAR DÉFAUT --- */
