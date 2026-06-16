@@ -46,32 +46,61 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-
-    <template id="raw-admin-template">
+<template id="raw-admin-template">
         <section id="admin" class="page-section">
+
+            <nav class="admin-mini-nav">
+                <div class="nav-brand-status">
+                    <!-- LED de la Navbar bien isolée -->
+                    <span class="status-online"></span>
+                    <span class="nav-core-title">SECURE_CORE // ADMIN</span>
+                </div>
+                
+                <div class="nav-actions">
+                    <!-- Bouton parfaitement structuré avec son ID -->
+                    <button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">
+                        <i id="theme-icon" class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="admin-cyber-bg" aria-hidden="true">
+                <div class="cyber-grid"></div>
+                <div class="laser-scan"></div>
+            </div>
+
             <h2 class="section-title">CENTRAL CORE OVERRIDE</h2>
+
             <div class="admin-terminal">
                 <div class="terminal-header">
                     <div class="terminal-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
                     <div class="terminal-title-text">ST3MON // CENTRAL_CORE_v2.4.0</div>
                     <div class="terminal-status"><i class="fas fa-lock"></i> SECURE_SESSION</div>
                 </div>
+
                 <div class="admin-grid">
                     <div class="panel-box">
-                        <h3 class="panel-title"><span><i class="fas fa-server"></i> HOST_STATUS</span> <span class="status-online">ONLINE</span></h3>
+                        <!-- ID unique ajouté ici pour l'alignement précis de la LED de statut de l'hôte -->
+                        <h3 class="panel-title" id="host-status-container">
+                            <span><i class="fas fa-server"></i> HOST_STATUS</span> 
+                            <span id="host-status-led" class="status-online"></span> ONLINE
+                        </h3>
                         <div class="panel-content">
                             <p><span class="label">TARGET_URL:</span> boodmandiouf.github.io</p>
-                            <p><span class="label">SERVER_GATE:</span> GitHub Pages Proxy</p><p><span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)</p>
+                            <p><span class="label">SERVER_GATE:</span> GitHub Pages Proxy</p>
+                            <p><span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)</p>
                             <p><span class="label">ENVIRONMENT:</span> PRODUCTION_ENV</p>
                             <p><span class="label">VAULT_VISITS:</span> <span id="visit-count" style="color: #ffffff; font-weight: bold;">CHARGEMENT...</span></p>
                         </div>
                     </div>
+
                     <div class="panel-box">
                         <h3 class="panel-title"><span><i class="fas fa-edit"></i> WORKFLOW_LOGBOOK</span> <span style="color: #df162b; font-size: 0.75rem;">AUTO_SAVE</span></h3>
                         <div class="panel-content" style="height: calc(100% - 30px); display: flex; flex-direction: column;">
                             <textarea id="admin-notes" class="terminal-textarea" placeholder="[Saisir vos directives, ID de tracks ou mémos système...]"></textarea>
                         </div>
                     </div>
+
                     <div class="panel-box">
                         <h3 class="panel-title"><span><i class="fas fa-sliders-h"></i> CORE_OVERRIDES</span></h3>
                         <div class="panel-content actions-flex">
@@ -81,10 +110,12 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="panel-box matrix-graph-section" style="margin: 0 20px 20px 20px;">
                     <h3 class="panel-title"><span><i class="fas fa-wave-square"></i> NETWORK_FLOW_MONITORING</span> <span id="fps-counter" style="color: #00ff66; font-size: 0.75rem;">GRID: ACTIVE</span></h3>
                     <div class="canvas-container"><canvas id="networkCanvas"></canvas></div>
                 </div>
+
                 <div class="panel-box terminal-logs-section" style="margin: 0 20px 20px 20px;">
                     <h3 class="panel-title"><span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span></h3>
                     <div class="log-feed" id="logFeed"></div>
@@ -93,70 +124,76 @@
         </section>
     </template>
 
+<!-- ÉCRAN D'ACCÈS AU TERMINAL CENTRAL (Unique et propre) -->
+    <!-- ==========================================================================
+         ÉCRAN D'ACCÈS AU TERMINAL CENTRAL (RESTORED CYBERPUNK DESIGN)
+         ========================================================================== -->
     <div id="auth-screen" class="vault-auth-container">
         <div class="crypto-modal">
             <h3><i class="fas fa-terminal"></i> CENTRAL CORE OVERRIDE</h3>
             <div class="crypto-input-wrapper">
                 <i class="fas fa-key"></i>
-                <input type="password" id="vault-key" class="crypto-input" placeholder="ENTER ACCESS KEY" onkeydown="if(event.key === 'Enter') unlockVault()">
+                <!-- Changement des classes pour se reconnecter à style.css -->
+                <input type="password" id="vault-key" class="vault-input" placeholder="ENTER ACCESS KEY" onkeydown="if(event.key === 'Enter') unlockVault()">
             </div>
-            <button class="btn-decrypt" onclick="unlockVault()">
+            <!-- Restauration de la classe du bouton d'origine -->
+            <button class="btn-vault" onclick="unlockVault()">
                 INITIALIZE OVERRIDE <span>➔]</span>
             </button>
-            <div id="error-box" class="error-msg">⚠️ ACCESS DENIED // KEY CORRUPTED</div>
+            <div id="error-box" class="error-msg" style="display: none;">⚠️ ACCESS DENIED // KEY CORRUPTED</div>
         </div>
     </div>
 
-<div id="admin-vault-slot" style="display: block !important; visibility: visible !important; opacity: 1 !important; background: #0a0a0c !important; color: #ffffff !important; min-height: 100vh; padding: 20px;"></div>
+    <!-- Le slot d'injection (masqué au départ, il s'ouvrira avec unlockVault()) -->
+    <div id="admin-vault-slot" style="display: none; background: #0a0a0c; color: #ffffff; min-height: 100vh; padding: 20px;"></div>
+    <script src="js/admin.js"></script>
     <script>
     const SECRET_PASSPHRASE = "2JsFgyosx0mq9Fzrte2a8UMXML2Y5e3y";
 
     function unlockVault() {
-        const inputKey = document.getElementById('vault-key').value;
-        const errorBox = document.getElementById('error-box');
+    const inputKey = document.getElementById('vault-key').value;
+    const errorBox = document.getElementById('error-box');
+    const SECRET_PASSPHRASE = "2JsFgyosx0mq9Fzrte2a8UMXML2Y5e3y";
 
-        if (inputKey === SECRET_PASSPHRASE) {
-            errorBox.style.display = 'none';
-            
-            const template = document.getElementById('raw-admin-template');
-            const slot = document.getElementById('admin-vault-slot');
-            
-            if (!template) {
-                console.error("ERREUR : Template introuvable !");
-                return;
-            }
-
-            // 1. Masquer le login
-            document.getElementById('auth-screen').style.display = 'none';
-            
-            // 2. Injecter le contenu
-            slot.innerHTML = template.innerHTML;
-            
-            // 3. FORCE l'affichage visuel (anti-page blanche)
-            slot.style.setProperty('display', 'block', 'important');
-            slot.style.setProperty('opacity', '1', 'important');
-            slot.style.setProperty('visibility', 'visible', 'important');
-
-            // Force aussi la section admin elle-même à être visible au cas où le CSS l'efface
-            const adminSection = slot.querySelector('#admin');
-            if (adminSection) {
-                adminSection.style.setProperty('opacity', '1', 'important');
-                adminSection.style.setProperty('display', 'block', 'important');
-            }
-
-            // 4. Lancer les scripts d'animation (canvas, logs...)
-            setTimeout(loadAdminScripts, 50);
-        } else {
-            errorBox.style.display = 'block';
+    if (inputKey === SECRET_PASSPHRASE) {
+        errorBox.style.display = 'none';
+        
+        const template = document.getElementById('raw-admin-template');
+        const slot = document.getElementById('admin-vault-slot');
+        const authScreen = document.getElementById('auth-screen');
+        
+        if (!template) {
+            console.error("ERREUR : Template introuvable !");
+            return;
         }
-    }
 
-    function loadAdminScripts() {
-        const script = document.createElement('script');
-        script.src = 'js/admin.js?v=' + Date.now();
-        script.defer = true;
-        document.body.appendChild(script);
+        // 1. Masquer l'écran de login en forçant le !important
+        if (authScreen) {
+            authScreen.style.setProperty('display', 'none', 'important');
+        }
+        
+        // 2. Injecter le contenu de l'admin
+        slot.innerHTML = template.innerHTML;
+        
+        // 3. Forcer l'affichage du conteneur de l'admin
+        slot.style.setProperty('display', 'block', 'important');
+        slot.style.setProperty('opacity', '1', 'important');
+        slot.style.setProperty('visibility', 'visible', 'important');
+
+        // 4. Forcer l'affichage de la section interne #admin
+        const adminSection = slot.querySelector('#admin');
+        if (adminSection) {
+            adminSection.style.setProperty('display', 'block', 'important');
+            adminSection.style.setProperty('opacity', '1', 'important');
+            adminSection.style.setProperty('visibility', 'visible', 'important');
+        }
+
+        // 5. Lancer les scripts d'animation (canvas, etc.)
+        setTimeout(loadAdminScripts, 50);
+    } else {
+        errorBox.style.display = 'block';
     }
-</script>
+}
+    </script>
 </body>
 </html>

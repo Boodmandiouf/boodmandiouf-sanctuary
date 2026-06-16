@@ -485,6 +485,187 @@ body.light-mode .status-monitoring::before {
 }
 
 /* ==========================================================================
+   INDICATEURS TEMPORELS DYNAMIQUES (PROGRESSIVE DOTS) - FIX SYNC
+   ========================================================================== */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    position: relative;
+    z-index: 5;
+}
+
+.carousel-dot {
+    width: 35px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* La jauge interne */
+.carousel-dot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%; /* Piloté dynamiquement par le JS désormais */
+    height: 100%;
+    background: var(--accent-red);
+    box-shadow: 0 0 8px var(--accent-red-glow);
+}
+
+.carousel-dot.active {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.2);
+}
+
+/* Adaptation Light Mode */
+body.light-mode .carousel-dot {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(47, 54, 64, 0.2);
+}
+body.light-mode .carousel-dot::before {
+    background: #2f3640;
+    box-shadow: none;
+}
+body.light-mode .carousel-dot.active {
+    border-color: #2f3640;
+}
+
+/* ==========================================================================
+   INDICATEURS TEMPORELS DYNAMIQUES (PROGRESSIVE DOTS) - FIX DÉFINITIF
+   ========================================================================== */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    position: relative;
+    z-index: 5;
+}
+
+.carousel-dot {
+    width: 35px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* La jauge interne que le JS va faire grandir */
+.carousel-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%; /* Piloté par le JS */
+    height: 100%;
+    background: var(--accent-red);
+    box-shadow: 0 0 8px var(--accent-red-glow);
+}
+
+/* Style de la capsule active */
+.carousel-dot.active {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.2);
+}
+
+/* Adaptation Light Mode */
+body.light-mode .carousel-dot {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(47, 54, 64, 0.2);
+}
+body.light-mode .carousel-progress {
+    background: #2f3640;
+    box-shadow: none;
+}
+body.light-mode .carousel-dot.active {
+    border-color: #2f3640;
+}
+
+/* ==========================================================================
+   INDICATEURS TEMPORELS DYNAMIQUES (PROGRESSIVE DOTS) - FIX SYNC
+   ========================================================================== */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+    position: relative;
+    z-index: 5;
+}
+
+.carousel-dot {
+    width: 35px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* La jauge interne */
+.carousel-dot::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%; /* Piloté dynamiquement par le JS désormais */
+    height: 100%;
+    background: var(--accent-red);
+    box-shadow: 0 0 8px var(--accent-red-glow);
+}
+
+.carousel-dot.active {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.2);
+}
+
+/* Adaptation Light Mode */
+body.light-mode .carousel-dot {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(47, 54, 64, 0.2);
+}
+body.light-mode .carousel-dot::before {
+    background: #2f3640;
+    box-shadow: none;
+}
+body.light-mode .carousel-dot.active {
+    border-color: #2f3640;
+}
+
+/* Style de la capsule active */
+.carousel-dot.active {
+    border-color: var(--accent-red);
+    box-shadow: 0 0 10px rgba(223, 22, 43, 0.2);
+}
+
+/* Adaptation pour le Light Mode */
+body.light-mode .carousel-dot {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(47, 54, 64, 0.2);
+}
+body.light-mode .carousel-dot::before {
+    background: #2f3640;
+    box-shadow: none;
+}
+body.light-mode .carousel-dot.active {
+    border-color: #2f3640;
+}
+
+/* ==========================================================================
    8. HUB MUSIQUE & PLAYERS AUDIO (SOUNDCLOUD / SPOTIFY)
    ========================================================================== */
 .music-stack {
@@ -907,7 +1088,7 @@ body.light-mode .status-monitoring::before {
 .timeline-item::before {
     content: '';
     position: absolute;
-    left: -27px;
+    left: -28.1px;
     top: 5px;
     width: 12px;
     height: 12px;
@@ -1359,7 +1540,168 @@ body.light .terminal-textarea { background: #ffffff; color: #333; border-color: 
     body.light-mode #theme-toggle i { color: #2f3640 !important; text-shadow: none; }
 }
 
+/* ==========================================================================
+   HUB DE DÉVELOPPEMENT UNIFORMISÉ (LOGIQUE CYBER)
+   ========================================================================== */
+.cyber-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.cyber-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+}
+
+/* --- MODE SOMBRE PAR DÉFAUT --- */
+.cyber-tool-card {
+    background: rgba(20, 20, 25, 0.85) !important;
+    border: 1px solid rgba(223, 22, 43, 0.25) !important;
+    border-radius: 4px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.cyber-tool-card:hover {
+    transform: translateY(-3px);
+    border-color: #df162b !important;
+    box-shadow: 0 8px 25px rgba(223, 22, 43, 0.2);
+}
+
+.card-glitch-line {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: #df162b;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.cyber-tool-card:hover .card-glitch-line { opacity: 1; }
+
+.cyber-tool-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+
+.cyber-tool-icon {
+    width: 42px; height: 42px;
+    background: rgba(223, 22, 43, 0.08);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    color: #df162b;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+}
+
+.cyber-tool-title { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: #ffffff; margin: 0; }
+.cyber-tool-description { font-size: 0.85rem; color: #b3b3b3; line-height: 1.5; margin: 0 0 15px 0; text-align: left; }
+
+.cyber-tool-status { font-family: monospace; font-size: 0.65rem; color: #00ff66; display: flex; align-items: center; gap: 5px; }
+.cyber-tool-status .status-dot { width: 5px; height: 5px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 5px #00ff66; }
+.cyber-tool-status.pipeline { color: #ffb834; }
+.cyber-tool-status.pipeline .status-dot { background: #ffb834; box-shadow: 0 0 5px #ffb834; }
+
+.cyber-tool-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.cyber-badge { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #999; font-family: monospace; font-size: 0.7rem; padding: 2px 6px; border-radius: 2px; }
+
+/* --- FOOTER & BOUTON DES CARTES OUTILS --- */
+.cyber-tool-footer {
+    border-top: 1px dashed rgba(223, 22, 43, 0.15);
+    padding-top: 15px;
+    margin-top: 15px;
+    text-align: left;
+}
+
+body.light-mode .cyber-tool-footer {
+    border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+.cyber-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%; /* Prend toute la largeur de la carte */
+    padding: 10px 15px;
+    background: rgba(223, 22, 43, 0.05);
+    border: 1px solid rgba(223, 22, 43, 0.4);
+    color: #ffffff !important;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+}
+
+/* Effets au survol (Hover) */
+.cyber-tool-btn:hover {
+    background: #df162b;
+    color: #ffffff !important;
+    border-color: #df162b;
+    box-shadow: 0 0 12px rgba(223, 22, 43, 0.4);
+}
+
+/* Petite animation sur la flèche du bouton */
+.cyber-tool-btn .btn-arrow {
+    transition: transform 0.3s ease;
+}
+.cyber-tool-btn:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+/* --- ADAPTATION LIGHT MODE POUR LE BOUTON --- */
+body.light-mode .cyber-tool-btn {
+    background: rgba(223, 22, 43, 0.03);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    color: #df162b !important;
+}
+
+body.light-mode .cyber-tool-btn:hover {
+    background: #df162b;
+    color: #ffffff !important;
+    border-color: #df162b;
+}
+/* Carte Standby Sombre */
+.standby-card { opacity: 0.5; border-style: dashed !important; background: rgba(15, 15, 20, 0.4) !important; }
+.standby-card .cyber-tool-icon { background: transparent; border-style: dashed; color: #555; }
+
+
+/* --- ☀️ CORRECTIF SÉCURISÉ POUR LE LIGHT MODE ☀️ --- */
+body.light-mode .cyber-tool-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+body.light-mode .cyber-tool-card:hover {
+    border-color: #df162b !important;
+    box-shadow: 0 8px 20px rgba(223, 22, 43, 0.15);
+}
+body.light-mode .cyber-tool-title { color: #1a1a1a !important; }
+body.light-mode .cyber-tool-description { color: #444444 !important; }
+body.light-mode .cyber-badge { background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.08); color: #555555; }
+body.light-mode .cyber-tool-footer { border-top-color: rgba(0, 0, 0, 0.06); }
+
+/* Carte Standby Claire (Haute lisibilité) */
+body.light-mode .standby-card {
+    background: rgba(0, 0, 0, 0.02) !important;
+    border: 1px dashed rgba(0, 0, 0, 0.2) !important;
+    opacity: 0.7;
+}
+body.light-mode .standby-card .cyber-tool-title { color: #777777 !important; }
+
+
+/* --- 📱 RESPONSIVE INTERFACE --- */
+@media (max-width: 768px) {
+    .cyber-tools-grid { grid-template-columns: 1fr; gap: 20px; }
+    .cyber-tool-card { padding: 18px; }
+}
 
 /* FIN DU FICHIER CLEAN ET CORRIGÉ */
-
-

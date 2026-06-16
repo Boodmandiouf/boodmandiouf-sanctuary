@@ -1,326 +1,329 @@
 /* ==========================================================================
-   DA CYBERPUNK - CENTRAL CORE OVERRIDE (ADMIN SECTION)
+   RESTAURATION ET VERROUILLAGE DU DESIGN DE L'ÉCRAN DE CONNEXION (CYBERPUNK)
    ========================================================================== */
-
-.admin-terminal {
-    background: rgba(5, 5, 10, 0.95);
-    border: 1px solid #df162b;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(223, 22, 43, 0.15);
-    font-family: 'Orbitron', sans-serif;
-    margin: 20px auto;
-    max-width: 1200px;
-    overflow: hidden;
+.vault-auth-container {
+    position: fixed !important;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: #050508 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 9999 !important;
+    font-family: 'Orbitron', sans-serif !important;
 }
 
-.terminal-header {
-    background: #111;
-    border-bottom: 1px solid rgba(223, 22, 43, 0.3);
-    padding: 10px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.85rem;
+.vault-auth-container .crypto-modal {
+    background: rgba(10, 10, 15, 0.95) !important;
+    border: 2px solid #df162b !important;
+    border-radius: 4px !important;
+    padding: 35px 40px !important;
+    width: 100% !important;
+    max-width: 450px !important;
+    box-shadow: 0 0 30px rgba(223, 22, 43, 0.25), inset 0 0 15px rgba(223, 22, 43, 0.1) !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
 }
 
-.terminal-dots {
-    display: flex;
-    gap: 6px;
+.vault-auth-container .crypto-modal h3 {
+    color: #ffffff !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 3px !important;
+    margin-top: 0 !important; margin-bottom: 25px !important;
+    text-transform: uppercase !important;
 }
 
-.terminal-dots .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #df162b;
-    opacity: 0.6;
+.vault-auth-container .crypto-input-wrapper {
+    position: relative !important; margin-bottom: 20px !important; width: 100% !important;
 }
 
-.terminal-title-text {
-    color: #fff;
-    letter-spacing: 2px;
-    font-weight: bold;
+.vault-auth-container .crypto-input-wrapper i {
+    position: absolute !important; left: 15px !important; top: 50% !important;
+    transform: translateY(-50%) !important; color: rgba(255, 255, 255, 0.3) !important;
 }
 
-.terminal-status {
-    color: #ffb300;
-    font-size: 0.8rem;
+.vault-auth-container .crypto-input,
+.vault-auth-container .vault-input {
+    width: 100% !important; background: rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(223, 22, 43, 0.4) !important; border-radius: 3px !important;
+    padding: 12px 15px 12px 42px !important; color: #ffffff !important;
+    font-family: monospace !important; outline: none !important; box-sizing: border-box !important;
 }
 
-/* Grilles & Conteneurs de Panneaux */
-.admin-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
+.vault-auth-container .btn-decrypt,
+.vault-auth-container .btn-vault {
+    width: 100% !important; background: transparent !important; border: 1px solid #df162b !important;
+    color: #df162b !important; padding: 12px 20px !important; font-family: 'Orbitron', sans-serif !important;
+    cursor: pointer !important; text-transform: uppercase !important; box-sizing: border-box !important;
 }
 
-.panel-box {
-    background: rgba(10, 10, 15, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-left: 3px solid #df162b;
-    padding: 15px;
+.vault-auth-container .btn-decrypt:hover,
+.vault-auth-container .btn-vault:hover {
+    background: #df162b !important; color: #ffffff !important;
+}
+
+.vault-auth-container .error-msg {
+    color: #df162b !important; font-size: 0.75rem !important; margin-top: 15px !important; font-weight: bold;
+}
+
+/* ==========================================================================
+   DA CYBERPUNK - CENTRAL CORE OVERRIDE (ADMIN VISUAL CONTAINER)
+   ========================================================================== */
+#admin {
     position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding-top: 80px !important;
 }
 
-.panel-title {
-    font-size: 0.9rem;
-    color: #df162b;
-    margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(223, 22, 43, 0.1);
-    padding-bottom: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    letter-spacing: 1px;
+.admin-cyber-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    background: radial-gradient(circle at 50% 50%, #0d0d11 0%, #050507 100%);
 }
 
-.panel-content p {
-    margin: 8px 0;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
-    color: #a4b0be;
+.cyber-grid {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 18, 24, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+    background-size: 100% 4px; pointer-events: none;
 }
 
-.panel-content .label {
-    color: #df162b;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    margin-right: 5px;
+.laser-scan {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(223, 22, 43, 0.015); opacity: 0.8; pointer-events: none;
+    animation: crtFlicker 0.15s infinite;
 }
 
-.status-online {
-    color: #00ff66;
-    font-size: 0.75rem;
-    text-shadow: 0 0 8px rgba(0, 255, 102, 0.4);
-}
+@keyframes crtFlicker { 0% { opacity: 0.23; } 50% { opacity: 0.25; } 100% { opacity: 0.22; } }
 
-/* Éléments Interactifs de la Console */
-.terminal-textarea {
-    width: 100%;
-    height: 120px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(223, 22, 43, 0.2);
-    color: #fff;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.05rem;
-    padding: 10px;
-    resize: none;
-    outline: none;
-    border-radius: 2px;
+/* ==========================================================================
+   NAVBAR FIXE ET COMMUTATEUR
+   ========================================================================== */
+.admin-mini-nav {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; width: 100% !important; margin: 0 !important; height: 55px;
+    background: rgba(17, 17, 21, 0.9) !important; backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(223, 22, 43, 0.3) !important;
+    border-left: none !important; border-right: none !important; border-top: none !important;
+    border-radius: 0 !important; padding: 0 30px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 10000 !important; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6) !important;
     box-sizing: border-box;
 }
 
-.terminal-textarea:focus {
-    border-color: #df162b;
-    box-shadow: 0 0 5px rgba(223, 22, 43, 0.3);
+.nav-brand-status { display: flex; align-items: center; gap: 12px; }
+.nav-core-title { font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: #fff; letter-spacing: 2px; }
+
+#theme-toggle-btn, .theme-toggle {
+    background: rgba(13, 13, 17, 0.6) !important; border: 1px solid #df162b !important;
+    color: #df162b !important; width: 36px; height: 36px; border-radius: 4px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+}
+#theme-toggle-btn:hover, .theme-toggle:hover { background: #df162b !important; color: #fff !important; }
+
+/* ==========================================================================
+   STRUCTURE EN GRILLE & ALIGNEMENT DES BLOCS
+   ========================================================================== */
+.admin-terminal {
+    background: rgba(5, 5, 10, 0.95); border: 1px solid #df162b; border-radius: 4px;
+    box-shadow: 0 0 20px rgba(223, 22, 43, 0.15); font-family: 'Orbitron', sans-serif;
+    margin: 20px auto; max-width: 1200px; overflow: hidden;
 }
 
-.actions-flex {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.terminal-header {
+    background: #111; border-bottom: 1px solid rgba(223, 22, 43, 0.3);
+    padding: 10px 15px; display: flex; justify-content: space-between; align-items: center;
 }
 
-.console-btn {
-    background: transparent;
-    border: 1px solid #df162b;
-    color: #df162b;
-    font-family: 'Orbitron', sans-serif;
-    padding: 10px;
-    cursor: pointer;
+.terminal-dots { display: flex; gap: 6px; }
+.terminal-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: #df162b; opacity: 0.6; }
+.terminal-title-text { color: #fff; letter-spacing: 2px; font-weight: bold; font-size: 0.85rem; }
+
+/* CORRECTION ALIGNEMENT LED VERRE + TEXTE ONLINE */
+.terminal-status { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 8px !important; 
+    color: #aaa; 
     font-size: 0.8rem;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    text-align: center;
+    line-height: 1 !important;
+}
+.status-online { 
+    width: 8px; 
+    height: 8px; 
+    background: #00ff66; 
+    border-radius: 50%; 
+    box-shadow: 0 0 8px #00ff66; 
+    animation: blink 1.5s infinite;
+    display: inline-block;
+    margin: 0 !important;
 }
 
-.console-btn:hover {
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.terminal-body {
+    display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 20px !important; padding: 20px !important;
+}
+
+@media (max-width: 992px) {
+    .terminal-body { grid-template-columns: 1fr !important; }
+}
+
+.admin-panel, .panel-box {
+    background: rgba(10, 10, 15, 0.7) !important; border: 1px solid rgba(223, 22, 43, 0.2) !important;
+    border-radius: 4px; padding: 15px !important; display: flex !important; flex-direction: column !important; box-sizing: border-box;
+}
+
+.panel-title { font-size: 0.9rem; color: #fff; margin-bottom: 15px; border-bottom: 1px solid rgba(223, 22, 43, 0.2); padding-bottom: 5px; }
+.panel-title span { color: #df162b; }
+
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.metric-card { background: rgba(20, 20, 25, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 4px; text-align: center; }
+.metric-value { font-size: 1.6rem; font-weight: bold; color: #fff; }
+.metric-value.secure { color: #00ff66; }
+.metric-label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+
+.canvas-container, .graph-container { flex-grow: 1; min-height: 140px; background: rgba(5, 5, 8, 0.5); border: 1px solid rgba(255, 255, 255, 0.03); position: relative; }
+canvas { width: 100%; height: 100%; display: block; }
+
+.log-feed, #logFeed {
+    background: rgba(0, 0, 0, 0.4) !important; border: 1px solid rgba(223, 22, 43, 0.1);
+    padding: 10px; height: 180px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; line-height: 1.5; text-align: left;
+}
+.log-feed div, #logFeed div { margin-bottom: 4px; color: #ccc; }
+.log-feed .time, #logFeed .time { color: #555; }
+.log-feed .info, #logFeed .info { color: #00ff66; }
+.log-feed .warn, #logFeed .warn { color: #ffb834; }
+.log-feed .crit, #logFeed .crit { color: #df162b; font-weight: bold; }
+
+.admin-notes, .terminal-textarea {
+    width: 100%; height: 115px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(223, 22, 43, 0.2);
+    color: #fff; padding: 10px; font-family: monospace; resize: none; outline: none; box-sizing: border-box;
+}
+
+.actions-group, .actions-flex { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+.admin-btn, .console-btn {
+    width: 100%; background: transparent; border: 1px solid #df162b; color: #df162b;
+    padding: 8px 12px; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; cursor: pointer; transition: all 0.3s;
+}
+.admin-btn:hover, .console-btn:hover { background: #df162b; color: #fff; }
+
+/* ==========================================================================
+   CONVERSION LIGHT MODE AMÉLIORÉE & ULTRA RECEPTIVE
+   ========================================================================== */
+body.light-mode,
+body.light-mode #admin {
+    background: #f1f2f6 !important;
+    color: #2f3640 !important;
+}
+
+body.light-mode .admin-mini-nav {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-bottom: 1px solid rgba(47, 54, 64, 0.2) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .nav-core-title { color: #2f3640 !important; }
+
+body.light-mode #theme-toggle-btn, 
+body.light-mode .theme-toggle {
+    background: rgba(245, 246, 250, 0.9) !important;
+    border-color: #2f3640 !important;
+    color: #2f3640 !important;
+}
+
+body.light-mode .cyber-grid {
+    background: linear-gradient(rgba(255, 255, 255, 0) 50%, rgba(47, 54, 64, 0.04) 50%) !important;
+    background-size: 100% 4px !important;
+}
+body.light-mode .laser-scan { background: transparent !important; animation: none !important; }
+
+body.light-mode .admin-terminal,
+body.light-mode .admin-panel,
+body.light-mode .panel-box,
+body.light-mode .metric-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(47, 54, 64, 0.15) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    color: #2f3640 !important;
+}
+
+body.light-mode .terminal-header {
+    background: #e1e2e6 !important;
+    border-bottom: 1px solid rgba(47, 54, 64, 0.15) !important;
+}
+
+body.light-mode .terminal-title-text,
+body.light-mode .panel-title,
+body.light-mode .panel-title span,
+body.light-mode #fps-counter,
+body.light-mode .terminal-status,
+body.light-mode .metric-value,
+body.light-mode .panel-box p,
+body.light-mode .panel-box span {
+    color: #2f3640 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .metric-value.secure { color: #00aa44 !important; }
+body.light-mode .metric-label { color: #718093 !important; }
+
+body.light-mode .admin-notes, 
+body.light-mode .terminal-textarea {
+    background: #f8f9fa !important; color: #2f3640 !important; border: 1px solid rgba(47, 54, 64, 0.2) !important;
+}
+
+body.light-mode .log-feed, 
+body.light-mode #logFeed {
+    background: #ffffff !important; color: #2f3640 !important; border-color: rgba(47, 54, 64, 0.15) !important;
+}
+body.light-mode .log-feed div, body.light-mode #logFeed div { color: #2f3640 !important; }
+body.light-mode .log-feed .time, body.light-mode #logFeed .time { color: #718093 !important; }
+
+body.light-mode .admin-btn, 
+body.light-mode .console-btn {
+    background: #f8f9fa !important; border: 1px solid #2f3640 !important; color: #2f3640 !important;
+}
+body.light-mode .admin-btn:hover, 
+body.light-mode .console-btn:hover {
+    background: #2f3640 !important; color: #ffffff !important;
+}
+
+/* ==========================================================================
+   OPTIMISATION PANNEAU FULL LOGS (TERMINAL EMULATION)
+   ========================================================================== */
+.terminal-logs-section {
+    margin: 0 20px 20px 20px !important;
+}
+
+/* La boîte de logs devient géante et ultra-réaliste */
+.log-feed, #logFeed {
+    background: rgba(2, 2, 5, 0.95) !important; 
+    border: 1px solid rgba(223, 22, 43, 0.3) !important;
+    padding: 15px !important; 
+    height: 320px !important; /* Agrandissement massif */
+    overflow-y: auto; 
+    font-family: 'Courier New', Courier, monospace !important; 
+    font-size: 0.8rem !important; 
+    line-height: 1.6 !important; 
+    text-align: left;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Customisation de la Scrollbar des logs pour le look Cyberpunk */
+.log-feed::-webkit-scrollbar, #logFeed::-webkit-scrollbar {
+    width: 6px;
+}
+.log-feed::-webkit-scrollbar-track, #logFeed::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.3);
+}
+.log-feed::-webkit-scrollbar-thumb, #logFeed::-webkit-scrollbar-thumb {
     background: #df162b;
-    color: #fff;
-    box-shadow: 0 0 10px rgba(223, 22, 43, 0.4);
+    border-radius: 3px;
 }
 
-.console-btn.btn-danger {
-    background: rgba(223, 22, 43, 0.1);
-}
-
-.console-btn.btn-danger:hover {
-    background: #df162b;
-}
-
-/* Monitoring Réseau & Zone de Logs */
-.canvas-container {
-    width: 100%;
-    height: 150px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.02);
-}
-
-#networkCanvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.log-feed {
-    height: 150px;
-    overflow-y: auto;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 10px;
+/* Couleur du chiffre des visites dans le premier panneau */
+#visit-count {
     font-family: monospace;
-    font-size: 0.85rem;
-    color: #00ff66;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    border: 1px solid rgba(0, 255, 102, 0.1);
+    font-size: 1rem;
+    text-shadow: 0 0 5px rgba(0, 255, 102, 0.4);
 }
-
-.log-item {
-    line-height: 1.4;
-    animation: fadeInLog 0.2s ease-out;
-}
-
-.log-time {
-    color: #a4b0be;
-    margin-right: 8px;
-}
-
-.log-warning {
-    color: #ffb300;
-}
-
-.log-danger {
-    color: #df162b;
-}
-
-/* Personnalisation Scrollbar pour les Logs */
-.log-feed::-webkit-scrollbar {
-    width: 4px;
-}
-.log-feed::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-}
-.log-feed::-webkit-scrollbar-thumb {
-    background: #df162b;
-}
-
-@keyframes fadeInLog {
-    from { opacity: 0; transform: translateY(3px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-    .admin-grid {
-        grid-template-columns: 1fr;
-    }
-    .matrix-graph-section, .terminal-logs-section {
-        margin: 0 10px 10px 10px !important;
-    }
-}
-/* Styles de la barrière de déchiffrement */
-        .vault-auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #0a0a0c;
-            padding: 20px;
-        }
-
-        .crypto-modal {
-            background: #111115;
-            border: 1px solid #df162b;
-            box-shadow: 0 0 20px rgba(223, 22, 43, 0.2);
-            padding: 40px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-        }
-
-        .crypto-modal h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: #f1f2f6;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-        }
-
-        .crypto-input-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .crypto-input-wrapper i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #a4b0be;
-        }
-
-        .crypto-input {
-            width: 100%;
-            padding: 14px 15px 14px 45px;
-            background: #0d0d13;
-            border: 1px solid #22222a;
-            color: #f1f2f6;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .crypto-input:focus {
-            outline: none;
-            border-color: #df162b;
-            box-shadow: 0 0 10px rgba(223, 22, 43, 0.3);
-        }
-
-        .btn-decrypt {
-            background: transparent;
-            border: 1px solid #df162b;
-            border-radius: 0px !important;
-            font-family: 'Orbitron', sans-serif;
-            color: #df162b;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px 35px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .btn-decrypt:hover {
-            background-color: #df162b;
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(223, 22, 43, 0.4);
-        }
-
-        .error-msg {
-            color: #df162b;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.95rem;
-            margin-top: 15px;
-            display: none;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        /* Thème Light adaptatif automatique pour l'écran de verrouillage */
-        body.light-mode .vault-auth-container { background-color: #f5f6fa; }
-        body.light-mode .crypto-modal { background: #ffffff; border-color: #E30613; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        body.light-mode .crypto-modal h3 { color: #2f3640; }
-        body.light-mode .crypto-input { background: #f1f2f6; border-color: rgba(0,0,0,0.1); color: #2f3640; }
-        body.light-mode .btn-decrypt { border-color: #E30613; color: #E30613; }
-        body.light-mode .btn-decrypt:hover { background-color: #E30613; color: #ffffff; }

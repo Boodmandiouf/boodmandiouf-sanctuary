@@ -16,7 +16,7 @@
 <div class="cosmic-clouds" aria-hidden="true"></div>
     <header>
         <div class="logo-area" data-target="home" style="cursor: pointer;">
-            <img src="img/logo.jpg" alt="Logo" class="logo-img">
+            <img src="img/logo.png" alt="Logo" class="logo-img">
             <span class="brand nav-link">BoodmanDiouf</span>
         </div>
         <nav>
@@ -113,7 +113,16 @@
                 </div>
             </div>
 
-            <button class="carousel-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        <div class="carousel-dots">
+    <span class="carousel-dot" onclick="currentSlideTo(0)"><span class="carousel-progress"></span></span>
+    <span class="carousel-dot" onclick="currentSlideTo(1)"><span class="carousel-progress"></span></span>
+    <span class="carousel-dot" onclick="currentSlideTo(2)"><span class="carousel-progress"></span></span>
+    <span class="carousel-dot" onclick="currentSlideTo(3)"><span class="carousel-progress"></span></span>
+    <span class="carousel-dot" onclick="currentSlideTo(4)"><span class="carousel-progress"></span></span>
+</div>
+
+        <button class="carousel-btn next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
         </div>
     </section>
 
@@ -172,18 +181,111 @@
         </div>
     </section>
 
-    <section id="dev" class="page-section">
-        <h2 class="section-title">DEVELOPMENT HUB</h2>
-        <div class="grid-container">
-            <div class="card">
-                <h3>Gestionnaire HTML/CSS</h3>
-                <p>Création d'interfaces modulaires, boutons customisés et gestion des configurations utilisateurs avant export JSON.</p>
-                <span class="tag">Front-End</span>
-            </div>
-            <div class="card">
-                <h3>Discord Share Tool</h3>
-                <p>Idée : Développer un webhook ou une mini-app pour pousser proprement des templates de listes.</p>
-                <span class="tag">Idée / R&D</span>
+<section id="dev" class="page-section">
+        <div class="cyber-container">
+            <h2 class="section-title">// DEVELOPMENT HUB //</h2>
+            <p class="section-subtitle" style="text-align: center; color: var(--text-muted); margin-bottom: 40px;">
+                Spécifications techniques, modules d'automatisation et outils logiciels autonomes.
+            </p>
+
+            <div class="cyber-tools-grid">
+                
+                <!-- Carte 1 : Gestionnaire HTML/CSS -->
+                <div class="cyber-tool-card">
+                    <div class="card-glitch-line"></div>
+                    <div class="cyber-tool-header">
+                        <div class="cyber-tool-icon"><i class="fas fa-code"></i></div>
+                        <div class="cyber-tool-meta">
+                            <h4 class="cyber-tool-title">Gestionnaire HTML/CSS</h4>
+                            <span class="cyber-tool-status"><span class="status-dot"></span> ARCHIVED</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-body">
+                        <p class="cyber-tool-description">Création d'interfaces modulaires, boutons customisés et gestion des configurations utilisateurs avant export JSON.</p>
+                        <div class="cyber-tool-badges"><span class="cyber-badge">Front-End</span></div>
+                    </div>
+                </div>
+
+                <!-- Carte 2 : Discord Share Tool -->
+                <div class="cyber-tool-card">
+                    <div class="card-glitch-line"></div>
+                    <div class="cyber-tool-header">
+                        <div class="cyber-tool-icon"><i class="fab fa-discord"></i></div>
+                        <div class="cyber-tool-meta">
+                            <h4 class="cyber-tool-title">Discord Share Tool</h4>
+                            <span class="cyber-tool-status pipeline"><span class="status-dot"></span> R&D</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-body">
+                        <p class="cyber-tool-description">Développement d'un webhook ou d'une mini-app pour pousser proprement des templates de listes et configurations.</p>
+                        <div class="cyber-tool-badges"><span class="cyber-badge">Webhook</span><span class="cyber-badge">API</span></div>
+                    </div>
+                </div>
+                
+                <!-- Carte 3 : WEBP to PNG -->
+                <div class="cyber-tool-card">
+                    <div class="card-glitch-line"></div>
+                    <div class="cyber-tool-header">
+                        <div class="cyber-tool-icon"><i class="fas fa-file-image"></i></div>
+                        <div class="cyber-tool-meta">
+                            <h4 class="cyber-tool-title">WEBP to PNG Converter</h4>
+                            <span class="cyber-tool-status"><span class="status-dot"></span> STABLE</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-body">
+                        <p class="cyber-tool-description">Un utilitaire système léger exécutable sous Windows conçu pour convertir massivement et instantanément les fichiers graphiques de type .webp en .png d'un simple clic.</p>
+                        <div class="cyber-tool-badges">
+                            <span class="cyber-badge">Windows</span>
+                            <span class="cyber-badge">Automation</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-footer">
+                        <a href="https://github.com/Boodmandiouf/WEBP-to-PNG-Windows" target="_blank" class="cyber-tool-btn">
+                            <i class="fab fa-github"></i> FETCH_SOURCE_CODE <i class="fas fa-arrow-right btn-arrow"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Carte 4 : 3DS to CIA Converter -->
+                <div class="cyber-tool-card">
+                    <div class="card-glitch-line"></div>
+                    <div class="cyber-tool-header">
+                        <div class="cyber-tool-icon"><i class="fas fa-gamepad"></i></div>
+                        <div class="cyber-tool-meta">
+                            <h4 class="cyber-tool-title">3DS to CIA Converter</h4>
+                            <span class="cyber-tool-status"><span class="status-dot"></span> READY</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-body">
+                        <p class="cyber-tool-description">Un utilitaire d'automatisation permettant de convertir facilement vos fichiers d'images de jeux .3ds au format installable .cia pour l'écosystème custom firmware.</p>
+                        <div class="cyber-tool-badges">
+                            <span class="cyber-badge">Console</span>
+                            <span class="cyber-badge">SysMod</span>
+                            <span class="cyber-badge">Google Drive</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-footer">
+                        <a href="https://drive.google.com/file/d/1QNhpIOCaSKnxWb_qs5KJUxDFi_TUaS9m/view?usp=sharing" target="_blank" class="cyber-tool-btn link-drive">
+                            <i class="fas fa-download"></i> DOWNLOAD_FROM_DRIVE <i class="fas fa-arrow-right btn-arrow"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Carte 5 : Standby / Pipeline -->
+                <div class="cyber-tool-card standby-card">
+                    <div class="cyber-tool-header">
+                        <div class="cyber-tool-icon"><i class="fas fa-network-wired"></i></div>
+                        <div class="cyber-tool-meta">
+                            <h4 class="cyber-tool-title">Subroutine_In_Dev</h4>
+                            <span class="cyber-tool-status pipeline"><span class="status-dot"></span> PIPELINE</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-body">
+                        <p class="cyber-tool-description">Analyseur de paquets réseau ou script d'optimisation en cours de compilation dans le terminal.</p>
+                        <div class="cyber-tool-badges"><span class="cyber-badge">En cours...</span></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
