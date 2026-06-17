@@ -1326,7 +1326,7 @@ body.light-mode .standby-card .cyber-tool-title { color: #777777 !important; }
     .carousel-container { padding: 40px 10px 25px 10px !important; margin: 20px 10px !important; }
     .carousel-content { max-width: 86% !important; margin: 0 auto !important; text-align: center !important; align-items: center !important; }
     .carousel-content h3 { font-size: 1.15rem !important; letter-spacing: 1.5px !important; margin-top: 10px !important; width: 100% !important; }
-    .carousel-slide p { font-size: 0.85rem !important; line-height: 1.4 !important; margin: 12px 0 !important; }
+    .carousel-slide p { font-size: 0.85rem !important; line-height: 1.4 !important; margin: 12px 7px !important; }
     .carousel-link { display: inline-flex !important; font-size: 0.7rem !important; padding: 8px 12px !important; width: max-content !important; max-width: 100% !important; margin: 15px auto 0 auto !important; }
     .carousel-btn { width: 32px !important; height: 32px !important; font-size: 0.8rem !important; }
     .carousel-btn.prev { left: 5px !important; }
