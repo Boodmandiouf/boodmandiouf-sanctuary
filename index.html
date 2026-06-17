@@ -126,7 +126,7 @@
         </div>
     </section>
 
-    <section id="musique" class="page-section">
+<section id="musique" class="page-section">
         <h2 class="section-title">AUDIO ARCHIVES</h2>
         
         <div class="music-stack">
@@ -179,51 +179,88 @@
                 </div>
             </div>
         </div>
-    </section>
+</section>
 
 <section id="dev" class="page-section">
-        <!-- Remplacement de cyber-container par la classe native container de ton site -->
-        <div class="container"> 
+        <div class="container">
             <h2 class="section-title">// DEVELOPMENT HUB //</h2>
             <p class="section-subtitle" style="text-align: center; color: var(--text-muted); margin-bottom: 40px;">
                 Spécifications techniques, modules d'automatisation et outils logiciels autonomes.
             </p>
 
             <div class="cyber-tools-grid">
-                
-                <!-- Carte 1 : Gestionnaire HTML/CSS -->
                 <div class="cyber-tool-card">
                     <div class="card-glitch-line"></div>
                     <div class="cyber-tool-header">
                         <div class="cyber-tool-icon"><i class="fas fa-code"></i></div>
                         <div class="cyber-tool-meta">
-                            <h4 class="cyber-tool-title">Gestionnaire HTML/CSS</h4>
-                            <span class="cyber-tool-status"><span class="status-dot"></span> ARCHIVED</span>
+                            <h4 class="cyber-tool-title">Gestionnaire HTML/CSS/JS/PHP/PYTHON</h4>
+                            <span class="cyber-sub-card-title">Gestionnaire Développement</span>
                         </div>
                     </div>
                     <div class="cyber-tool-body">
-                        <p class="cyber-tool-description">Création d'interfaces modulaires, boutons customisés et gestion des configurations utilisateurs avant export JSON.</p>
-                        <div class="cyber-tool-badges"><span class="cyber-badge">Front-End</span></div>
+                        <p class="cyber-tool-description">Création d'interfaces FrontEnd/BackEnd, customisation WordPress, micrologiciels et scripts d'automatisation réseau et système.</p>
+                        
+                        <div class="stack-classification">
+                            <div class="stack-type">
+                                <span class="stack-type-title"><i class="fas fa-globe"></i> WEB:</span>
+                                <div class="cyber-tool-badges" style="display:inline-flex; margin:0;">
+                                    <span class="cyber-badge">HTML</span>
+                                    <span class="cyber-badge">CSS</span>
+                                    <span class="cyber-badge">JS</span>
+                                    <span class="cyber-badge">PHP</span>
+                                    <span class="cyber-badge">CMS (WP)</span>
+                                </div>
+                            </div>
+                            <div class="stack-type" style="margin-top: 8px;">
+                                <span class="stack-type-title"><i class="fas fa-laptop-code"></i> LOGICIEL:</span>
+                                <div class="cyber-tool-badges" style="display:inline-flex; margin:0;">
+                                    <span class="cyber-badge">PYTHON</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Carte 2 : Discord Share Tool -->
+                <div class="cyber-tool-card">
+                    <div class="card-glitch-line"></div>
+                    <div class="cyber-tool-header">
+                        <div class="cyber-tool-icon"><i class="fas fa-palette"></i></div>
+                        <div class="cyber-tool-meta">
+                            <h4 class="cyber-tool-title">UI / UX & Référencement Web</h4>
+                            <span class="cyber-sub-card-title">Optimisation & Design</span>
+                        </div>
+                    </div>
+                    <div class="cyber-tool-body">
+                        <p class="cyber-tool-description">Conception d'interfaces utilisateurs ergonomiques, prototypage adaptatif (Responsive) et application des standards SEO pour maximiser l'indexation et la visibilité.</p>
+                        <div class="cyber-tool-badges">
+                            <span class="cyber-badge">UI/UX Design</span>
+                            <span class="cyber-badge">SEO</span>
+                            <span class="cyber-badge">Wireframing</span>
+                            <span class="cyber-badge">Light/Dark Mode</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="cyber-tool-card">
                     <div class="card-glitch-line"></div>
                     <div class="cyber-tool-header">
                         <div class="cyber-tool-icon"><i class="fab fa-discord"></i></div>
                         <div class="cyber-tool-meta">
                             <h4 class="cyber-tool-title">Discord Share Tool</h4>
-                            <span class="cyber-tool-status pipeline"><span class="status-dot"></span> R&D</span>
+                            <span class="cyber-tool-status status-rd"><span class="status-dot" style="background:#f1c40f;"></span> R&D</span>
                         </div>
                     </div>
                     <div class="cyber-tool-body">
-                        <p class="cyber-tool-description">Développement d'un webhook ou d'une mini-app pour pousser proprement des templates de listes et configurations.</p>
-                        <div class="cyber-tool-badges"><span class="cyber-badge">Webhook</span><span class="cyber-badge">API</span></div>
+                        <p class="cyber-tool-description">Développement d'un webhook ou d'une mini-app pour pousser proprement des templates de listes et des configurations de suivi multi-mondes.</p>
+                        <div class="cyber-tool-badges">
+                            <span class="cyber-badge">Webhook</span>
+                            <span class="cyber-badge">API</span>
+                            <span class="cyber-badge">Automation</span>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Carte 3 : WEBP to PNG -->
+
                 <div class="cyber-tool-card">
                     <div class="card-glitch-line"></div>
                     <div class="cyber-tool-header">
@@ -238,6 +275,7 @@
                         <div class="cyber-tool-badges">
                             <span class="cyber-badge">Windows</span>
                             <span class="cyber-badge">Automation</span>
+                            <span class="cyber-badge">CLI / GUI</span>
                         </div>
                     </div>
                     <div class="cyber-tool-footer">
@@ -247,7 +285,6 @@
                     </div>
                 </div>
 
-                <!-- Carte 4 : 3DS to CIA Converter -->
                 <div class="cyber-tool-card">
                     <div class="card-glitch-line"></div>
                     <div class="cyber-tool-header">
@@ -272,18 +309,16 @@
                     </div>
                 </div>
 
-                <!-- Carte 5 : Standby / Pipeline -->
-                <div class="cyber-tool-card standby-card">
+                <div class="cyber-tool-card standby-card" style="opacity: 0.5;">
                     <div class="cyber-tool-header">
                         <div class="cyber-tool-icon"><i class="fas fa-network-wired"></i></div>
                         <div class="cyber-tool-meta">
-                            <h4 class="cyber-tool-title">Subroutine_In_Dev</h4>
-                            <span class="cyber-tool-status pipeline"><span class="status-dot"></span> PIPELINE</span>
+                            <h4 class="cyber-tool-title" style="color: var(--text-muted);">Subroutine_In_Dev</h4>
+                            <span class="cyber-tool-status" style="color: #f1c40f;"><span class="status-dot" style="background:#f1c40f;"></span> PIPELINE</span>
                         </div>
                     </div>
                     <div class="cyber-tool-body">
-                        <p class="cyber-tool-description">Analyseur de paquets réseau ou script d'optimisation en cours de compilation dans le terminal.</p>
-                        <div class="cyber-tool-badges"><span class="cyber-badge">En cours...</span></div>
+                        <p class="cyber-tool-description" style="color: var(--text-muted);">Analyseur de paquets réseau et scripts de supervision système en cours de compilation...</p>
                     </div>
                 </div>
 
@@ -428,7 +463,7 @@
             <p class="contact-subtitle">Une question, un projet ou besoin d'une collaboration ? Laisse un message.</p>
             <form action="https://formsubmit.co/l.picard974@laposte.net" method="POST" class="contact-form">
                 <input type="hidden" name="_next" value="https://boodmandiouf.github.io/boodmandiouf-sanctuary/">
-                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_captcha" value="true">
                 <div class="form-group">
                     <label for="name">Identifiant / Nom</label>
                     <input type="text" id="name" name="name" required placeholder="Ex: John Doe">
