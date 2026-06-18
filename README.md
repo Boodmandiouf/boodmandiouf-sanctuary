@@ -2,6 +2,9 @@
 
 Bienvenue sur **Sanctuary**, un hub personnel de développement et d'outils web conçu avec une esthétique Cyberpunk / Synthwave. Ce projet regroupe un portfolio (CV), un espace musical (SoundCloud/Spotify), des outils de développement et une console d'administration sécurisée.
 
+## 🔗 Lien du projet Live
+Accéder au Hub : [boodmandiouf-sanctuary.is-a.dev](https://boodmandiouf-sanctuary.is-a.dev)
+
 ## 🚀 Fonctionnalités
 - **Design Cyberpunk Immersif** : Mode sombre et mode clair (Light Mode) optimisés avec effets de lueur (glow) dynamiques.
 - **Hub de Développement** : Grille de cartes unifiée pour répertorier des outils web et projets (R&D, Pipeline, Stables).
