@@ -1,37 +1,3 @@
-<!--<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BoodmanDiouf | Central Core Override</title>
-    <link rel="icon" type="image/png" href="img/logo_admin.png">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-</head>
-<body>
-
-    <div id="auth-screen" class="vault-auth-container">
-        <div class="crypto-modal">
-            <h3><i class="fas fa-lock"></i> Decrypt Vault Terminal</h3>
-            <div class="crypto-input-wrapper">
-                <i class="fas fa-key"></i>
-                <input type="password" id="vault-key" class="crypto-input" placeholder="ENTER ENCRYPTION KEY" onkeydown="if(event.key === 'Enter') unlockVault()">
-            </div>
-            <button class="btn-decrypt" onclick="unlockVault()">
-                DECRYPT TERMINAL <span>➔]</span>
-            </button>
-            <div id="error-box" class="error-msg">⚠️ CLÉ DE CHIFFREMENT ERRONÉE OU CORROMPUE</div>
-        </div>
-    </div>
-
-    <div id="admin-vault-slot" style="display: none; padding: 20px;">
-    </div>
-</body>
-</html>-->
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -43,157 +9,91 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/admin.css">
+    <!-- CryptoJS indispensable pour déchiffrer à la volée sur GitHub Pages -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-<template id="raw-admin-template">
-        <section id="admin" class="page-section">
 
-            <nav class="admin-mini-nav">
-                <div class="nav-brand-status">
-                    <!-- LED de la Navbar bien isolée -->
-                    <span class="status-online"></span>
-                    <span class="nav-core-title">SECURE_CORE // ADMIN</span>
-                </div>
-                
-                <div class="nav-actions">
-                    <!-- Bouton parfaitement structuré avec son ID -->
-                    <button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">
-                        <i id="theme-icon" class="fas fa-sun"></i>
-                    </button>
-                </div>
-            </nav>
-
-            <div class="admin-cyber-bg" aria-hidden="true">
-                <div class="cyber-grid"></div>
-                <div class="laser-scan"></div>
-            </div>
-
-            <h2 class="section-title">CENTRAL CORE OVERRIDE</h2>
-
-            <div class="admin-terminal">
-                <div class="terminal-header">
-                    <div class="terminal-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-                    <div class="terminal-title-text">ST3MON // CENTRAL_CORE_v2.4.0</div>
-                    <div class="terminal-status"><i class="fas fa-lock"></i> SECURE_SESSION</div>
-                </div>
-
-                <div class="admin-grid">
-                    <div class="panel-box">
-                        <!-- ID unique ajouté ici pour l'alignement précis de la LED de statut de l'hôte -->
-                        <h3 class="panel-title" id="host-status-container">
-                            <span><i class="fas fa-server"></i> HOST_STATUS</span> 
-                            <span id="host-status-led" class="status-online"></span> ONLINE
-                        </h3>
-                        <div class="panel-content">
-                            <p><span class="label">TARGET_URL:</span> boodmandiouf.github.io</p>
-                            <p><span class="label">SERVER_GATE:</span> GitHub Pages Proxy</p>
-                            <p><span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)</p>
-                            <p><span class="label">ENVIRONMENT:</span> PRODUCTION_ENV</p>
-                            <p><span class="label">VAULT_VISITS:</span> <span id="visit-count" style="color: #ffffff; font-weight: bold;">CHARGEMENT...</span></p>
-                        </div>
-                    </div>
-
-                    <div class="panel-box">
-                        <h3 class="panel-title"><span><i class="fas fa-edit"></i> WORKFLOW_LOGBOOK</span> <span style="color: #df162b; font-size: 0.75rem;">AUTO_SAVE</span></h3>
-                        <div class="panel-content" style="height: calc(100% - 30px); display: flex; flex-direction: column;">
-                            <textarea id="admin-notes" class="terminal-textarea" placeholder="[Saisir vos directives, ID de tracks ou mémos système...]"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="panel-box">
-                        <h3 class="panel-title"><span><i class="fas fa-sliders-h"></i> CORE_OVERRIDES</span></h3>
-                        <div class="panel-content actions-flex">
-                            <button class="console-btn" onclick="triggerAction('PURGE_CACHE')">FLUSH CACHE</button>
-                            <button class="console-btn btn-danger" onclick="triggerAction('EMERGENCY_LOCK')">LOCKDOWN</button>
-                            <button class="console-btn" style="border-color: #ffb300; color: #ffb300;" onclick="clearNotes()">CLEAR LOGBOOK</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel-box matrix-graph-section" style="margin: 0 20px 20px 20px;">
-                    <h3 class="panel-title"><span><i class="fas fa-wave-square"></i> NETWORK_FLOW_MONITORING</span> <span id="fps-counter" style="color: #00ff66; font-size: 0.75rem;">GRID: ACTIVE</span></h3>
-                    <div class="canvas-container"><canvas id="networkCanvas"></canvas></div>
-                </div>
-
-                <div class="panel-box terminal-logs-section" style="margin: 0 20px 20px 20px;">
-                    <h3 class="panel-title"><span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span></h3>
-                    <div class="log-feed" id="logFeed"></div>
-                </div>
-            </div>
-        </section>
-    </template>
-
-<!-- ÉCRAN D'ACCÈS AU TERMINAL CENTRAL (Unique et propre) -->
     <!-- ==========================================================================
-         ÉCRAN D'ACCÈS AU TERMINAL CENTRAL (RESTORED CYBERPUNK DESIGN)
+         ÉCRAN D'ACCÈS AU TERMINAL CENTRAL (SÉCURISÉ)
          ========================================================================== -->
     <div id="auth-screen" class="vault-auth-container">
         <div class="crypto-modal">
             <h3><i class="fas fa-terminal"></i> CENTRAL CORE OVERRIDE</h3>
             <div class="crypto-input-wrapper">
                 <i class="fas fa-key"></i>
-                <!-- Changement des classes pour se reconnecter à style.css -->
                 <input type="password" id="vault-key" class="vault-input" placeholder="ENTER ACCESS KEY" onkeydown="if(event.key === 'Enter') unlockVault()">
             </div>
-            <!-- Restauration de la classe du bouton d'origine -->
             <button class="btn-vault" onclick="unlockVault()">
                 INITIALIZE OVERRIDE <span>➔]</span>
             </button>
-            <div id="error-box" class="error-msg" style="display: none;">⚠️ ACCESS DENIED // KEY CORRUPTED</div>
+            <div id="error-box" class="error-msg" style="display: none;">⚠️ ACCESS DENIED // DECRYPTION FAILURE // KEY INVALIDE</div>
         </div>
     </div>
 
-    <!-- Le slot d'injection (masqué au départ, il s'ouvrira avec unlockVault()) -->
+    <!-- Le slot d'injection (totalement vide au départ, inviolable par F12) -->
     <div id="admin-vault-slot" style="display: none; background: #0a0a0c; color: #ffffff; min-height: 100vh; padding: 20px;"></div>
+
     <script src="js/admin.js"></script>
     <script>
-    const SECRET_PASSPHRASE = "2JsFgyosx0mq9Fzrte2a8UMXML2Y5e3y";
+    //
+    const ENCRYPTED_ADMIN_DATA = "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"; // 
 
     function unlockVault() {
-    const inputKey = document.getElementById('vault-key').value;
-    const errorBox = document.getElementById('error-box');
-    const SECRET_PASSPHRASE = "2JsFgyosx0mq9Fzrte2a8UMXML2Y5e3y";
-
-    if (inputKey === SECRET_PASSPHRASE) {
-        errorBox.style.display = 'none';
-        
-        const template = document.getElementById('raw-admin-template');
+        const inputKey = document.getElementById('vault-key').value;
+        const errorBox = document.getElementById('error-box');
         const slot = document.getElementById('admin-vault-slot');
         const authScreen = document.getElementById('auth-screen');
-        
-        if (!template) {
-            console.error("ERREUR : Template introuvable !");
+
+        if (!inputKey) {
+            errorBox.style.display = 'block';
+            errorBox.innerText = "⚠️ MERCI DE SAISIR UNE CLÉ";
             return;
         }
 
-        // 1. Masquer l'écran de login en forçant le !important
-        if (authScreen) {
-            authScreen.style.setProperty('display', 'none', 'important');
-        }
-        
-        // 2. Injecter le contenu de l'admin
-        slot.innerHTML = template.innerHTML;
-        
-        // 3. Forcer l'affichage du conteneur de l'admin
-        slot.style.setProperty('display', 'block', 'important');
-        slot.style.setProperty('opacity', '1', 'important');
-        slot.style.setProperty('visibility', 'visible', 'important');
+        try {
+            // Déchiffrement à la volée avec CryptoJS
+            const decryptedBytes = CryptoJS.AES.decrypt(ENCRYPTED_ADMIN_DATA, inputKey);
+            const decryptedHtml = decryptedBytes.toString(CryptoJS.enc.Utf8);
 
-        // 4. Forcer l'affichage de la section interne #admin
-        const adminSection = slot.querySelector('#admin');
-        if (adminSection) {
-            adminSection.style.setProperty('display', 'block', 'important');
-            adminSection.style.setProperty('opacity', '1', 'important');
-            adminSection.style.setProperty('visibility', 'visible', 'important');
-        }
+            // Si le décodage échoue ou renvoie du contenu invalide
+            if (!decryptedHtml || !decryptedHtml.trim().startsWith("<section")) {
+                throw new Error("Clé invalide");
+            }
 
-        // 5. Lancer les scripts d'animation (canvas, etc.)
-        setTimeout(loadAdminScripts, 50);
-    } else {
-        errorBox.style.display = 'block';
+            errorBox.style.display = 'none';
+            
+            // 1. Masquage propre du portail d'accès
+            if (authScreen) {
+                authScreen.style.setProperty('display', 'none', 'important');
+            }
+            
+            // 2. Injection sécurisée du HTML déchiffré
+            slot.innerHTML = decryptedHtml;
+            
+            // 3. Rendre l'admin visible à l'écran
+            slot.style.setProperty('display', 'block', 'important');
+            slot.style.setProperty('opacity', '1', 'important');
+            slot.style.setProperty('visibility', 'visible', 'important');
+
+            const adminSection = slot.querySelector('#admin');
+            if (adminSection) {
+                adminSection.style.setProperty('display', 'block', 'important');
+                adminSection.style.setProperty('opacity', '1', 'important');
+                adminSection.style.setProperty('visibility', 'visible', 'important');
+            }
+
+            // 4. Lancement des scripts d'animation d'origine
+            if (typeof loadAdminScripts === 'function') {
+                setTimeout(loadAdminScripts, 50);
+            }
+
+        } catch (err) {
+            errorBox.style.display = 'block';
+            errorBox.innerText = "⚠️ ACCESS DENIED // DECRYPTION FAILURE // KEY INVALIDE";
+            console.warn("Système : Échec de l'authentification.");
+        }
     }
-}
     </script>
 </body>
 </html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BoodmanDiouf | Central Core Override (Source de travail)</title>
+	<link rel="icon" type="image/png" href="img/logo_admin.png">
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         GARDE CE FICHIER SUR TON ORDINATEUR POUR FAIRE TES MODIFICATIONS !
+         ========================================================================== -->
+         <section id="admin" class="page-section">
+
+         	<nav class="admin-mini-nav">
+         		<div class="nav-brand-status">
+         			<span class="status-online"></span>
+         			<span class="nav-core-title">SECURE_CORE // ADMIN</span>
+         		</div>
+         		
+         		<div class="nav-actions">
+         			<button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">
+         				<i id="theme-icon" class="fas fa-sun"></i>
+         			</button>
+         		</div>
+         	</nav>
+
+         	<div class="admin-cyber-bg" aria-hidden="true">
+         		<div class="cyber-grid"></div>
+         		<div class="laser-scan"></div>
+         	</div>
+
+         	<h2 class="section-title">CENTRAL CORE OVERRIDE</h2>
+
+         	<div class="admin-terminal">
+         		<div class="terminal-header">
+         			<div class="terminal-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+         			<div class="terminal-title-text">ST3MON // CENTRAL_CORE_v2.4.0</div>
+         			<div class="terminal-status"><i class="fas fa-lock"></i> SECURE_SESSION</div>
+         		</div>
+
+         		<div class="admin-grid">
+         			<div class="panel-box">
+         				<h3 class="panel-title" id="host-status-container">
+         					<span><i class="fas fa-server"></i> HOST_STATUS</span> 
+         					<span id="host-status-led" class="status-online"></span> ONLINE
+         				</h3>
+         				<div class="panel-content">
+         					<p><span class="label">TARGET_URL:</span> boodmandiouf.github.io</p>
+         					<p><span class="label">SERVER_GATE:</span> GitHub Pages Proxy</p>
+         					<p><span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)</p>
+         					<p><span class="label">ENVIRONMENT:</span> PRODUCTION_ENV</p>
+         					<p><span class="label">VAULT_VISITS:</span> <span id="visit-count" style="color: #ffffff; font-weight: bold;">CHARGEMENT...</span></p>
+         				</div>
+         			</div>
+
+         			<div class="panel-box">
+         				<h3 class="panel-title"><span><i class="fas fa-edit"></i> WORKFLOW_LOGBOOK</span> <span style="color: #df162b; font-size: 0.75rem;">AUTO_SAVE</span></h3>
+         				<div class="panel-content" style="height: calc(100% - 30px); display: flex; flex-direction: column;">
+         					<textarea id="admin-notes" class="terminal-textarea" placeholder="[Saisir vos directives, ID de tracks ou mémos système...]"></textarea>
+         				</div>
+         			</div>
+
+         			<div class="panel-box">
+         				<h3 class="panel-title"><span><i class="fas fa-sliders-h"></i> CORE_OVERRIDES</span></h3>
+         				<div class="panel-content actions-flex">
+         					<button class="console-btn" onclick="triggerAction('PURGE_CACHE')">FLUSH CACHE</button>
+         					<button class="console-btn btn-danger" onclick="triggerAction('EMERGENCY_LOCK')">LOCKDOWN</button>
+         					<button class="console-btn" style="border-color: #ffb300; color: #ffb300;" onclick="clearNotes()">CLEAR LOGBOOK</button>
+         				</div>
+         			</div>
+         		</div>
+
+         		<div class="panel-box matrix-graph-section" style="margin: 0 20px 20px 20px;">
+         			<h3 class="panel-title"><span><i class="fas fa-wave-square"></i> NETWORK_FLOW_MONITORING</span> <span id="fps-counter" style="color: #00ff66; font-size: 0.75rem;">GRID: ACTIVE</span></h3>
+         			<div class="canvas-container"><canvas id="networkCanvas"></canvas></div>
+         		</div>
+
+         		<div class="panel-box terminal-logs-section" style="margin: 0 20px 20px 20px;">
+         			<h3 class="panel-title"><span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span></h3>
+         			<div class="log-feed" id="logFeed"></div>
+         		</div>
+         	</div>
+         </section>
+
+     </body>
+     </html>
