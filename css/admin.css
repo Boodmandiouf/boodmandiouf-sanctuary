@@ -651,6 +651,10 @@ body.light-mode #logFeed div {
     font-weight: bold;
 }
 
+.add-resource-title {
+    margin-bottom: 15px;
+}
+
 /* ==========================================================================
    10. MUSIC VAULT & COULEURS DYNAMIQUES DES CATÉGORIES (RESTAURÉES)
    ========================================================================== */
@@ -708,7 +712,16 @@ body.light-mode #logFeed div {
     text-decoration: none;
     font-size: 0.85rem;
     font-weight: 700;
-    align-self: flex-start;
+    align-self: center;
+    width: 100%;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.resource-card a:hover {
+    background: #00ff66;
+    color: #05050a;
+    box-shadow: 0 0 10px #00ff66;
 }
 
 .add-resource-box {
@@ -931,4 +944,89 @@ body.light-mode #logFeed div {
         opacity: 1 !important;
         visibility: visible !important;
     }
+}
+
+/* La boîte est fermée et masquée par défaut */
+#add-resource-box {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border: none; /* Pour éviter qu'une bordure vide ne dépasse */
+}
+
+/* Quand la classe 'open' est ajoutée via JS */
+#add-resource-box.open {
+    max-height: 1000px; /* Assure-toi d'une hauteur max suffisante pour contenir ton formulaire */
+    opacity: 1;
+    padding: 20px; /* Remets ton padding d'origine ici */
+    margin-bottom: 20px;
+    border: 1px solid var(--accent-color, #0ff); /* Remets ta bordure cyberpunk d'origine */
+}
+
+#resetFiltersBtn {
+    width: 100%;
+    color: red;
+}
+
+#resetFiltersBtn:hover {
+    border-color: red;
+}
+
+.bloc-add {
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+/* Bouton Go To Top Cyberpunk Compact */
+.go-to-top-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: rgba(10, 15, 30, 0.85);
+  border: 1px solid var(--neon-cyan, #00f0ff);
+  color: var(--neon-cyan, #00f0ff);
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.go-to-top-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.go-to-top-btn:hover {
+  background: var(--neon-cyan, #00f0ff);
+  color: #05050a;
+  box-shadow: 0 0 15px var(--neon-cyan, #00f0ff);
+}
+
+body.light-mode .go-to-top-btn {
+  background: rgba(240, 240, 240, 0.9);
+  border-color: #0284c7;
+  color: #0284c7;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+}
+
+body.light-mode .go-to-top-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 0 15px #0284c7;
 }
