@@ -4,11 +4,16 @@
  * ==========================================================================
  */
 
+// Variables d'état globales pour le Music Vault
+let activeFilters = [];
+let currentSearchQuery = '';
+
 document.addEventListener("DOMContentLoaded", () => {
     // Application préventive du thème sur le body dès le chargement
-    const savedTheme = localStorage.getItem("theme");
+    const savedTheme = localStorage.getItem("sanctuary_theme") || localStorage.getItem("theme");
     if (savedTheme === "light") {
         document.body.classList.add("light-mode");
+        updateSwitchIcon(true);
     }
 
     // Initialisation des modules d'administration
@@ -16,7 +21,76 @@ document.addEventListener("DOMContentLoaded", () => {
     initKernelLogs();
     setupLogbook();
     initVisitCounter();
-    updateThemeIcon(); // Aligne l'icône si le panneau est déjà présent
+    
+    // Initialisation du Music Vault si les données existent
+    if (typeof musicResources !== 'undefined') {
+        renderMusicResources(musicResources);
+    }
+
+    // --- GESTION DE LA RECHERCHE & DES FILTRES MUSIC VAULT ---
+    const searchInput = document.getElementById('musicSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value.toLowerCase();
+            filterAndRenderMusic();
+        });
+    }
+
+    // Gestion des boutons de filtres multiples (chips)
+    const filterButtons = document.querySelectorAll('.filter-btn:not(.action-reset)');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const filterValue = e.target.getAttribute('data-filter');
+
+            if (e.target.classList.contains('active')) {
+                e.target.classList.remove('active');
+                activeFilters = activeFilters.filter(f => f !== filterValue);
+            } else {
+                e.target.classList.add('active');
+                activeFilters.push(filterValue);
+            }
+
+            filterAndRenderMusic();
+        });
+    });
+
+    // Bouton "Tout Effacer" pour les filtres
+    const resetBtn = document.getElementById('resetFiltersBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            activeFilters = [];
+            filterButtons.forEach(b => b.classList.remove('active'));
+            filterAndRenderMusic();
+        });
+    }
+
+    // --- GESTION DU FORMULAIRE D'AJOUT DE RESSOURCE ---
+    const addForm = document.getElementById('addMusicForm');
+    if (addForm) {
+        addForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('newTitle').value.trim();
+            const category = document.getElementById('newCategory').value;
+            const url = document.getElementById('newUrl').value.trim();
+            const description = document.getElementById('newDesc').value.trim();
+
+            if (title && category && url) {
+                // Appel de la fonction d'ajout globale (définie dans music-data.js)
+                if (typeof addMusicResource === 'function') {
+                    addMusicResource(title, category, url, description || "Aucune description.");
+                }
+                
+                // Réinitialisation du formulaire
+                addForm.reset();
+                
+                // Log visuel de confirmation
+                if (typeof pushLog === 'function') {
+                    pushLog('info', `MUSIC_VAULT: Nouvelle entrée injectée -> "${title}"`);
+                }
+            }
+        });
+    }
 });
 
 // 1. SIMULATION DU GRAPH DE MONITORING RÉSEAU (CANVAS)
@@ -55,8 +129,8 @@ function initNetworkMonitoring() {
         
         for (let i = 0; i < canvas.width; i++) {
             const y = canvas.height / 2 + 
-                      Math.sin(i * 0.015 + offset) * 20 + 
-                      Math.cos(i * 0.03 - offset) * 8;
+                    Math.sin(i * 0.015 + offset) * 20 + 
+                    Math.cos(i * 0.03 - offset) * 8;
             if (i === 0) ctx.moveTo(i, y);
             else ctx.lineTo(i, y);
         }
@@ -68,8 +142,8 @@ function initNetworkMonitoring() {
         
         for (let i = 0; i < canvas.width; i++) {
             const y = canvas.height / 2 + 
-                      Math.cos(i * 0.02 + offset * 1.5) * 15 + 
-                      Math.sin(i * 0.005 - offset) * 12;
+                    Math.cos(i * 0.02 + offset * 1.5) * 15 + 
+                    Math.sin(i * 0.005 - offset) * 12;
             if (i === 0) ctx.moveTo(i, y);
             else ctx.lineTo(i, y);
         }
@@ -95,7 +169,6 @@ function initKernelLogs() {
     const logFeed = document.getElementById('logFeed');
     if (!logFeed) return;
 
-    // Routine de démarrage intense
     const initialLogs = [
         { type: 'info', msg: 'Connecting to main network backbone...' },
         { type: 'info', msg: 'Handshake complete. Credentials verified under token st3mon_ed.' },
@@ -111,14 +184,13 @@ function initKernelLogs() {
         setTimeout(() => pushLog(l.type, l.msg), i * 350);
     });
 
-    // Flux continu ultra-rapide (toutes les 3.5 secondes) pour faire vivre le panel de logs
     setInterval(() => {
         const liveMsgs = [
             { type: 'info', msg: 'Gateway health-check: 200 OK (latency: 14ms).' },
             { type: 'info', msg: 'Synchronizing DOM style variables with active theme.' },
             { type: 'warn', msg: 'Minor latency detected on media assets pipeline.' },
             { type: 'info', msg: 'Clearing idle websocket connections...' },
-            { type: 'info', msg: 'Ping token sent to master node. Pong received (Oms).' },
+            { type: 'info', msg: 'Ping token sent to master node. Pong received (0ms).' },
             { type: 'warn', msg: 'Sub-routine [crypto-check] reports high memory utilization.' },
             { type: 'info', msg: 'Flushing standard output buffers.' },
             { type: 'info', msg: 'Indexed static routes successfully.' },
@@ -129,7 +201,6 @@ function initKernelLogs() {
     }, 3500);
 }
 
-// Fonction centrale pour injecter une ligne de log formatée
 function pushLog(type, message) {
     const logFeed = document.getElementById('logFeed');
     if (!logFeed) return;
@@ -154,7 +225,6 @@ function triggerAction(actionName) {
         logFeed.innerHTML += `<div><span class="time">[${timeStr}]</span> <span class="crit">[EXEC]</span> EXECUTION_REQUEST: [${actionName}] dispatch down to main thread.</div>`;
         logFeed.scrollTop = logFeed.scrollHeight;
         
-        // Simulations de réponses de logs suite aux boutons cliqués
         if (actionName === 'PURGE_CACHE') {
             setTimeout(() => pushLog('warn', 'CACHE_ENGINE: 1,420 entries purged from redis storage.'), 600);
         }
@@ -188,65 +258,167 @@ function clearNotes() {
     }
 }
 
-// 4. COMPTEUR DE VISITES - LIEN DIRECT ET SÉCURISÉ VERS L'API TEXTE
+// 4. COMPTEUR DE VISITES - API MOECOUNTER
 function initVisitCounter() {
     const counterElement = document.getElementById('visit-count');
     const hostStatusContainer = document.getElementById('host-status-container');
     const name = "boodmandiouf_sanctuary";
 
-    // Utilisation de l'API JSON de MoeCounter pour extraire proprement le nombre
     fetch(`https://api.moecounter.org/get/${name}/views`)
         .then(res => res.json())
         .then(data => {
             const count = data.value !== undefined ? data.value : "ONLINE";
             if (counterElement) {
                 counterElement.innerText = count;
-                counterElement.style.color = "#00ff66"; // Vert néon pour le chiffre
+                counterElement.style.color = "#00ff66";
             }
             pushLog('info', `TELEMETRY: Metric [VAULT_VISITS] synced: ${count}`);
         })
         .catch(() => {
-            // Failsafe en cas de problème réseau ou API
             if (hostStatusContainer) {
                 hostStatusContainer.innerHTML = `<span><i class="fas fa-server"></i> HOST_STATUS</span> <span id="host-status-led" class="status-online"></span> ONLINE`;
             }
             if (counterElement) {
-                counterElement.innerText = "9,854"; // Chiffre d'ambiance simulé si l'API externe bloque
+                counterElement.innerText = "9,854";
                 counterElement.style.color = "#26de81";
             }
             pushLog('warn', 'TELEMETRY: Failed to fetch online visit-count API. Fallback data engaged.');
         });
 }
 
-// ==========================================================================
-// 5. GESTION DU COMMUTATEUR DE THÈME CORRIGÉ
-// ==========================================================================
-function toggleTheme() {
-    document.body.classList.toggle("light-mode");
-    const isLight = document.body.classList.contains("light-mode");
-    
-    localStorage.setItem("theme", isLight ? "light" : "dark"); 
-    updateThemeIcon();
-    pushLog('info', `THEME_ENGINE: ${isLight ? 'Light' : 'Matrix/Dark'} theme applied successfully.`);
+// 5. GESTION DU COMMUTATEUR DE THÈME
+function toggleLightMode() {
+    const isLight = document.body.classList.toggle('light-mode');
+    localStorage.setItem('sanctuary_theme', isLight ? 'light' : 'dark');
+    updateSwitchIcon(isLight);
 }
 
-function updateThemeIcon() {
-    const themeIcon = document.getElementById("theme-icon");
-    if (!themeIcon) return;
-    
-    if (document.body.classList.contains("light-mode")) {
-        themeIcon.className = "fas fa-moon";
-    } else {
-        themeIcon.className = "fas fa-sun";
+function updateSwitchIcon(isLight) {
+    const icon = document.querySelector('#themeSwitchBtn i');
+    if (icon) {
+        if (isLight) {
+            icon.className = "fas fa-moon";
+        } else {
+            icon.className = "fas fa-sun";
+        }
     }
 }
 
-// Fonction globale accessible à l'injection pour réveiller les scripts après déchiffrement
+// Fonction globale accessible pour réveiller les scripts après déchiffrement
 window.loadAdminScripts = function() {
     initNetworkMonitoring();
     initKernelLogs();
     setupLogbook();
     initVisitCounter();
-    updateThemeIcon();
     setInterval(initVisitCounter, 10000);
 };
+
+// Fonction pour changer d'onglet dans l'admin
+function switchTab(tabName) {
+    document.querySelectorAll('.admin-view').forEach(view => view.classList.remove('active-view'));
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
+
+    if (tabName === 'dashboard') {
+        document.getElementById('view-dashboard').classList.add('active-view');
+        document.getElementById('btn-dashboard').classList.add('active');
+    } else if (tabName === 'music') {
+        document.getElementById('view-music').classList.add('active-view');
+        document.getElementById('btn-music').classList.add('active');
+        if (typeof musicResources !== 'undefined') {
+            filterAndRenderMusic();
+        }
+    }
+}
+
+// Fonction pour afficher les cartes dans la grille
+function renderMusicResources(items) {
+    const grid = document.getElementById('musicGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+
+    if (items.length === 0) {
+        grid.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">Aucune ressource trouvée.</p>';
+        return;
+    }
+
+    items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'resource-card';
+        card.innerHTML = `
+            <div>
+                <span class="resource-tag" data-category="${item.category}">${item.category}</span>
+                <h4>${item.title}</h4>
+                <p>${item.description}</p>
+            </div>
+            <a href="${item.url}" target="_blank">ACCÉDER ↗</a>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// Fonction globale pour filtrer et afficher (Multi-sélection & Recherche)
+function filterAndRenderMusic() {
+    if (typeof musicResources === 'undefined') return;
+    
+    let filtered = musicResources;
+
+    // 1. Filtrer par catégories multiples actives
+    if (activeFilters.length > 0) {
+        filtered = filtered.filter(item => {
+            return activeFilters.some(filter => 
+                item.category === filter || item.category.startsWith(filter + ' -')
+            );
+        });
+    }
+
+    // 2. Filtrer par texte de recherche
+    if (currentSearchQuery !== '') {
+        filtered = filtered.filter(item => 
+            item.title.toLowerCase().includes(currentSearchQuery) || 
+            item.category.toLowerCase().includes(currentSearchQuery) ||
+            item.description.toLowerCase().includes(currentSearchQuery)
+        );
+    }
+
+    renderMusicResources(filtered);
+}
+
+// Fonction pour télécharger automatiquement le fichier music-data.js mis à jour
+function exportMusicDataFile() {
+    if (typeof musicResources === 'undefined') return;
+
+    // Construction du contenu du fichier JavaScript
+    let fileContent = `/**\n * ==========================================================================\n * SANCTUARY - MUSIC VAULT DATABASE (music-data.js)\n * ==========================================================================\n */\n\n`;
+    fileContent += `const defaultMusicResources = ` + JSON.stringify(musicResources, null, 4) + `;\n\n`;
+    fileContent += `let musicResources = JSON.parse(localStorage.getItem('sanctuary_music_vault')) || defaultMusicResources;\n\n`;
+    fileContent += `function addMusicResource(title, category, url, description) {\n`;
+    fileContent += `    const newEntry = { title, category, url, description };\n`;
+    fileContent += `    musicResources.unshift(newEntry);\n`;
+    fileContent += `    localStorage.setItem('sanctuary_music_vault', JSON.stringify(musicResources));\n`;
+    fileContent += `    if (typeof filterAndRenderMusic === 'function') {\n`;
+    fileContent += `        filterAndRenderMusic();\n`;
+    fileContent += `    }\n`;
+    fileContent += `    return newEntry;\n`;
+    fileContent += `}\n\n`;
+    fileContent += `function resetMusicVault() {\n`;
+    fileContent += `    localStorage.removeItem('sanctuary_music_vault');\n`;
+    fileContent += `    musicResources = [...defaultMusicResources];\n`;
+    fileContent += `    if (typeof filterAndRenderMusic === 'function') filterAndRenderMusic();\n`;
+    fileContent += `}`;
+
+    // Création d'un lien virtuel de téléchargement
+    const blob = new Blob([fileContent], { type: 'text/javascript' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'music-data.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    if (typeof pushLog === 'function') {
+        pushLog('info', 'SYSTEM: Fichier music-data.js exporté avec succès.');
+    }
+}

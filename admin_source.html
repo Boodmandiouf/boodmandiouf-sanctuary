@@ -1,92 +1,435 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>BoodmanDiouf | Central Core Override (Source de travail)</title>
-	<link rel="icon" type="image/png" href="img/logo_admin.png">
-	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/admin.css">
-</head>
-<body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BoodmanDiouf | Central Core Override (Source de travail)</title>
+    <link rel="icon" type="image/png" href="img/logo_admin.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/admin.css" />
+    <script src="js/music-data.js"></script>
+    <script src="js/admin.js"></script>
+  </head>
+  <body>
     <!-- ==========================================================================
          GARDE CE FICHIER SUR TON ORDINATEUR POUR FAIRE TES MODIFICATIONS !
          ========================================================================== -->
-         <section id="admin" class="page-section">
+    <section id="admin" class="page-section">
+      <nav class="admin-mini-nav">
+        <div class="nav-brand-status">
+          <span class="status-online"></span>
+          <span class="nav-core-title">SECURE_CORE // ADMIN</span>
+        </div>
 
-         	<nav class="admin-mini-nav">
-         		<div class="nav-brand-status">
-         			<span class="status-online"></span>
-         			<span class="nav-core-title">SECURE_CORE // ADMIN</span>
-         		</div>
-         		
-         		<div class="nav-actions">
-         			<button id="theme-toggle-btn" class="theme-toggle" onclick="toggleTheme()">
-         				<i id="theme-icon" class="fas fa-sun"></i>
-         			</button>
-         		</div>
-         	</nav>
+        <div class="admin-nav-right-group">
+          <div class="admin-nav-tabs">
+            <button
+              onclick="switchTab('dashboard')"
+              class="admin-tab-btn active"
+              id="btn-dashboard"
+            >
+              <i class="fas fa-terminal"></i> DASHBOARD
+            </button>
+            <button
+              onclick="switchTab('music')"
+              class="admin-tab-btn"
+              id="btn-music"
+            >
+              <i class="fas fa-music"></i> MUSIC VAULT
+            </button>
+          </div>
 
-         	<div class="admin-cyber-bg" aria-hidden="true">
-         		<div class="cyber-grid"></div>
-         		<div class="laser-scan"></div>
-         	</div>
+          <button
+            id="themeSwitchBtn"
+            class="console-btn"
+            onclick="toggleLightMode()"
+          >
+            <i class="fas fa-sun"></i>
+          </button>
+        </div>
+      </nav>
 
-         	<h2 class="section-title">CENTRAL CORE OVERRIDE</h2>
+      <div class="admin-cyber-bg" aria-hidden="true">
+        <div class="cyber-grid"></div>
+        <div class="laser-scan"></div>
+      </div>
 
-         	<div class="admin-terminal">
-         		<div class="terminal-header">
-         			<div class="terminal-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-         			<div class="terminal-title-text">ST3MON // CENTRAL_CORE_v2.4.0</div>
-         			<div class="terminal-status"><i class="fas fa-lock"></i> SECURE_SESSION</div>
-         		</div>
+      <!-- Vue Dashboard (Contient tout le terminal et les stats) -->
+      <div id="view-dashboard" class="admin-view active-view">
+        <h2 class="section-title">CENTRAL CORE OVERRIDE</h2>
 
-         		<div class="admin-grid">
-         			<div class="panel-box">
-         				<h3 class="panel-title" id="host-status-container">
-         					<span><i class="fas fa-server"></i> HOST_STATUS</span> 
-         					<span id="host-status-led" class="status-online"></span> ONLINE
-         				</h3>
-         				<div class="panel-content">
-         					<p><span class="label">TARGET_URL:</span> boodmandiouf.github.io</p>
-         					<p><span class="label">SERVER_GATE:</span> GitHub Pages Proxy</p>
-         					<p><span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)</p>
-         					<p><span class="label">ENVIRONMENT:</span> PRODUCTION_ENV</p>
-         					<p><span class="label">VAULT_VISITS:</span> <span id="visit-count" style="color: #ffffff; font-weight: bold;">CHARGEMENT...</span></p>
-         				</div>
-         			</div>
+        <div class="admin-terminal">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <span class="dot"></span><span class="dot"></span
+              ><span class="dot"></span>
+            </div>
+            <div class="terminal-title-text">ST3MON // CENTRAL_CORE_v2.4.0</div>
+            <div class="terminal-status">
+              <i class="fas fa-lock"></i> SECURE_SESSION
+            </div>
+          </div>
 
-         			<div class="panel-box">
-         				<h3 class="panel-title"><span><i class="fas fa-edit"></i> WORKFLOW_LOGBOOK</span> <span style="color: #df162b; font-size: 0.75rem;">AUTO_SAVE</span></h3>
-         				<div class="panel-content" style="height: calc(100% - 30px); display: flex; flex-direction: column;">
-         					<textarea id="admin-notes" class="terminal-textarea" placeholder="[Saisir vos directives, ID de tracks ou mémos système...]"></textarea>
-         				</div>
-         			</div>
+          <div class="admin-grid">
+            <div class="panel-box">
+              <h3 class="panel-title" id="host-status-container">
+                <span><i class="fas fa-server"></i> HOST_STATUS</span>
+                <span id="host-status-led" class="status-online"></span> ONLINE
+              </h3>
+              <div class="panel-content">
+                <p>
+                  <span class="label">TARGET_URL:</span> boodmandiouf.github.io
+                </p>
+                <p>
+                  <span class="label">SERVER_GATE:</span> GitHub Pages Proxy
+                </p>
+                <p>
+                  <span class="label">SSL_HANDSHAKE:</span> ACTIVE (TLSv1.3)
+                </p>
+                <p><span class="label">ENVIRONMENT:</span> PRODUCTION_ENV</p>
+                <p>
+                  <span class="label">VAULT_VISITS:</span>
+                  <span id="visit-count">CHARGEMENT...</span>
+                </p>
+              </div>
+            </div>
 
-         			<div class="panel-box">
-         				<h3 class="panel-title"><span><i class="fas fa-sliders-h"></i> CORE_OVERRIDES</span></h3>
-         				<div class="panel-content actions-flex">
-         					<button class="console-btn" onclick="triggerAction('PURGE_CACHE')">FLUSH CACHE</button>
-         					<button class="console-btn btn-danger" onclick="triggerAction('EMERGENCY_LOCK')">LOCKDOWN</button>
-         					<button class="console-btn" style="border-color: #ffb300; color: #ffb300;" onclick="clearNotes()">CLEAR LOGBOOK</button>
-         				</div>
-         			</div>
-         		</div>
+            <div class="panel-box">
+              <h3 class="panel-title">
+                <span><i class="fas fa-edit"></i> WORKFLOW_LOGBOOK</span>
+                <span class="logbook-autosave-badge">AUTO_SAVE</span>
+              </h3>
+              <div class="panel-content logbook-content-wrapper">
+                <textarea
+                  id="admin-notes"
+                  class="terminal-textarea"
+                  placeholder="[Saisir vos directives, ID de tracks ou mémos système...]"
+                ></textarea>
+              </div>
+            </div>
 
-         		<div class="panel-box matrix-graph-section" style="margin: 0 20px 20px 20px;">
-         			<h3 class="panel-title"><span><i class="fas fa-wave-square"></i> NETWORK_FLOW_MONITORING</span> <span id="fps-counter" style="color: #00ff66; font-size: 0.75rem;">GRID: ACTIVE</span></h3>
-         			<div class="canvas-container"><canvas id="networkCanvas"></canvas></div>
-         		</div>
+            <div class="panel-box">
+              <h3 class="panel-title">
+                <span><i class="fas fa-sliders-h"></i> CORE_OVERRIDES</span>
+              </h3>
+              <div class="panel-content actions-flex">
+                <button
+                  class="console-btn"
+                  onclick="triggerAction('PURGE_CACHE')"
+                >
+                  FLUSH CACHE
+                </button>
+                <button
+                  class="console-btn btn-danger"
+                  onclick="triggerAction('EMERGENCY_LOCK')"
+                >
+                  LOCKDOWN
+                </button>
+                <button
+                  class="console-btn btn-warning-override"
+                  onclick="clearNotes()"
+                >
+                  CLEAR LOGBOOK
+                </button>
+              </div>
+            </div>
+          </div>
 
-         		<div class="panel-box terminal-logs-section" style="margin: 0 20px 20px 20px;">
-         			<h3 class="panel-title"><span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span></h3>
-         			<div class="log-feed" id="logFeed"></div>
-         		</div>
-         	</div>
-         </section>
+          <div class="panel-box matrix-graph-section matrix-graph-wrapper">
+            <h3 class="panel-title">
+              <span
+                ><i class="fas fa-wave-square"></i>
+                NETWORK_FLOW_MONITORING</span
+              >
+              <span id="fps-counter">GRID: ACTIVE</span>
+            </h3>
+            <div class="canvas-container">
+              <canvas id="networkCanvas"></canvas>
+            </div>
+          </div>
 
-     </body>
-     </html>
+          <div class="panel-box terminal-logs-section terminal-logs-wrapper">
+            <h3 class="panel-title">
+              <span><i class="fas fa-terminal"></i> LIVE_KERNEL_LOGS</span>
+            </h3>
+            <div class="log-feed" id="logFeed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vue Music Vault (Séparée du dashboard) -->
+      <div id="view-music" class="admin-view">
+        <div class="panel-box music-vault-main-box">
+          <h3 class="panel-title">
+            <span><i class="fas fa-music"></i> MUSIC VAULT</span>
+          </h3>
+          <div class="panel-content">
+            <p class="section-desc">
+              Centralisation des tablatures, leçons de guitare et outils MAO.
+            </p>
+
+            <!-- Formulaire d'ajout de ressource -->
+            <div class="add-resource-box">
+              <h4 class="add-resource-title">
+                <i class="fas fa-plus-circle"></i> INJECTER UNE NOUVELLE
+                RESSOURCE
+              </h4>
+
+              <form id="addMusicForm" class="add-music-form-grid">
+                <input
+                  type="text"
+                  id="newTitle"
+                  placeholder="Titre..."
+                  required
+                />
+                <select id="newCategory" required>
+                  <option value="" disabled selected>
+                    Sélectionner une catégorie
+                  </option>
+                  <optgroup label="GUITARE">
+                    <option value="Guitare - Electrique">Électrique</option>
+                    <option value="Guitare - Accoustique">Acoustique</option>
+                    <option value="Guitare - Ukulele">Ukulélé</option>
+                    <option value="Guitare - Entretiens">Entretiens</option>
+                    <option value="Guitare - Cours">Cours & Tips</option>
+                  </optgroup>
+                  <optgroup label="MAO">
+                    <option value="MAO - SITE">Site</option>
+                    <option value="MAO - DAW">DAW</option>
+                    <option value="MAO - PLUGIN & VST">Plugin & VST</option>
+                    <option value="MAO - PRESET">Preset</option>
+                    <option value="MAO - GUIDE (Outils)">Guide (Outils)</option>
+                    <option value="MAO - GUIDE (FX & Sound Design)">
+                      Guide (FX & Sound design)
+                    </option>
+                    <option value="MAO - GUIDE (Mixage)">Guide (Mixage)</option>
+                    <option value="MAO - GUIDE (EQ)">Guide (EQ)</option>
+                    <option value="MAO - GUIDE (Compresseur)">
+                      Guide (Compresseur)
+                    </option>
+                    <option value="MAO - GUIDE (Mastering)">
+                      Guide (Mastering)
+                    </option>
+                    <option value="MAO - GUIDE (Styles & Themes)">
+                      Guide (Styles & Themes)
+                    </option>
+                    <option value="MAO - Référence">Référence</option>
+                    <option value="MAO - Lesson">Leçon / Practice</option>
+                  </optgroup>
+                </select>
+                <input
+                  type="url"
+                  id="newUrl"
+                  placeholder="URL (YouTube ou Site - https://...)"
+                  required
+                  class="full-width-input"
+                />
+                <textarea
+                  id="newDesc"
+                  placeholder="Courte description..."
+                  rows="2"
+                  class="full-width-textarea"
+                ></textarea>
+                <button
+                  type="submit"
+                  class="console-btn btn-success-override full-width-btn"
+                >
+                  AJOUTER AU VAULT
+                </button>
+                <button
+                  type="button"
+                  onclick="exportMusicDataFile()"
+                  class="console-btn full-width-btn"
+                  style="margin-top: 8px; border-color: #38bdf8; color: #38bdf8"
+                >
+                  <i class="fas fa-download"></i> TÉLÉCHARGER LE MUSIC-DATA.JS
+                  MIS À JOUR
+                </button>
+              </form>
+            </div>
+
+            <div class="music-search-box">
+              <input
+                type="text"
+                id="musicSearchInput"
+                placeholder="Rechercher une ressource..."
+              />
+            </div>
+
+            <!-- Filtres rapides -->
+            <!-- Filtres rapides complets -->
+            <!-- Filtres par catégories regroupées -->
+            <div class="music-filters-wrapper">
+              <div class="filter-actions-bar">
+                <button
+                  type="button"
+                  class="filter-btn action-reset"
+                  id="resetFiltersBtn"
+                >
+                  <i class="fas fa-times-circle"></i> TOUT EFFACER
+                </button>
+              </div>
+
+              <!-- Groupe Guitare -->
+              <div class="filter-group">
+                <span class="filter-group-label"
+                  ><i class="fas fa-guitar"></i> GUITARE :</span
+                >
+                <div class="filter-chips">
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="Guitare"
+                  >
+                    TOUTES
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="Guitare - Electrique"
+                  >
+                    Électrique
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="Guitare - Accoustique"
+                  >
+                    Acoustique
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="Guitare - Ukulele"
+                  >
+                    Ukulélé
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="Guitare - Entretiens"
+                  >
+                    Entretiens
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="Guitare - Cours"
+                  >
+                    Cours & Tips
+                  </button>
+                </div>
+              </div>
+
+              <!-- Groupe MAO -->
+              <div class="filter-group">
+                <span class="filter-group-label"
+                  ><i class="fas fa-sliders-h"></i> MAO :</span
+                >
+                <div class="filter-chips">
+                  <button type="button" class="filter-btn" data-filter="MAO">
+                    TOUTES
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - SITE"
+                  >
+                    Site
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - DAW"
+                  >
+                    DAW
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - PLUGIN & VST"
+                  >
+                    Plugin & VST
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - PRESET"
+                  >
+                    Preset
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (Outils)"
+                  >
+                    Guide (Outils)
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (FX & Sound Design)"
+                  >
+                    FX & Sound Design
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (Mixage)"
+                  >
+                    Mixage
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (EQ)"
+                  >
+                    EQ
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (Compresseur)"
+                  >
+                    Compresseur
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (Mastering)"
+                  >
+                    Mastering
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - GUIDE (Styles & Themes)"
+                  >
+                    Styles & Themes
+                  </button>
+                  <button
+                    type="button"
+                    class="filter-btn"
+                    data-filter="MAO - Référence"
+                  >
+                    Référence
+                  <button type="button" class="filter-btn" data-filter="MAO - Lesson">Lesson</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="musicGrid" class="resource-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
