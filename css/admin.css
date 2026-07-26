@@ -17,15 +17,15 @@
    2. CLASSE LIGHT MODE (Surcharge dynamique via variables)
    ========================================================================== */
 body.light-mode {
-    --bg-primary: #f2f2f7;
+    --bg-primary: #f1f2f6;
     --bg-secondary: #ffffff;
     --panel-bg: rgba(255, 255, 255, 0.98);
-    --text-primary: #1a1a24;
-    --text-muted: #555565;
+    --text-primary: #2f3640;
+    --text-muted: #718093;
     --accent-color: #b31222;
     --accent-glow: rgba(179, 18, 34, 0.2);
-    --border-color: rgba(179, 18, 34, 0.25);
-    --input-bg: #e8e8ef;
+    --border-color: rgba(47, 54, 64, 0.2);
+    --input-bg: #f8f9fa;
 }
 
 /* ==========================================================================
@@ -40,8 +40,7 @@ body {
     padding: 0;
 }
 
-/* Tous les conteneurs et panneaux d'administration */
-.panel-box, .admin-section, .page-section {
+.panel-box, .admin-section, .page-section, .admin-panel {
     background-color: var(--panel-bg);
     border: 1px solid var(--border-color);
     box-shadow: 0 0 15px var(--accent-glow);
@@ -49,7 +48,6 @@ body {
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
-/* Champs de texte et barres de recherche */
 input, textarea, select {
     background-color: var(--input-bg);
     color: var(--text-primary);
@@ -61,7 +59,6 @@ input::placeholder, textarea::placeholder {
     color: var(--text-muted);
 }
 
-/* Textes secondaires / descriptions */
 p, span, .text-muted {
     color: var(--text-muted);
 }
@@ -70,987 +67,721 @@ h1, h2, h3, h4, h5, h6, .nav-core-title {
     color: var(--text-primary);
 }
 
-/* ==========================================================================
-   APPLICATION DES VARIABLES SUR VOS ÉLÉMENTS
-   ========================================================================== */
-body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    font-family: 'Rajdhani', sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transition douce */
-}
-
-/* Exemple pour un panneau / carte */
-.panel-box {
-    background-color: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 0 15px var(--accent-glow);
-    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
 canvas {
-  width: 100%;
-  height: 100%;
-  display: block;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
-
 /* ==========================================================================
-   2. ÉCRAN DE CONNEXION (VAULT AUTH)
+   4. ÉCRAN DE CONNEXION (VAULT AUTH)
    ========================================================================== */
 .vault-auth-container {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #050508 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 9999 !important;
-  font-family: "Orbitron", sans-serif !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #050508;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: "Orbitron", sans-serif;
 }
 
 .vault-auth-container .crypto-modal {
-  background: rgba(10, 10, 15, 0.95) !important;
-  border: 2px solid #df162b !important;
-  border-radius: 4px !important;
-  padding: 35px 40px !important;
-  width: 100% !important;
-  max-width: 450px !important;
-  box-shadow:
-    0 0 30px rgba(223, 22, 43, 0.25),
-    inset 0 0 15px rgba(223, 22, 43, 0.1) !important;
-  text-align: center !important;
-  box-sizing: border-box !important;
+    background: rgba(10, 10, 15, 0.95);
+    border: 2px solid #df162b;
+    border-radius: 4px;
+    padding: 35px 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 0 30px rgba(223, 22, 43, 0.25), inset 0 0 15px rgba(223, 22, 43, 0.1);
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .vault-auth-container .crypto-modal h3 {
-  color: #ffffff !important;
-  font-size: 1.1rem !important;
-  letter-spacing: 3px !important;
-  margin-top: 0 !important;
-  margin-bottom: 25px !important;
-  text-transform: uppercase !important;
+    color: #ffffff;
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-transform: uppercase;
 }
 
 .vault-auth-container .crypto-input-wrapper {
-  position: relative !important;
-  margin-bottom: 20px !important;
-  width: 100% !important;
+    position: relative;
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .vault-auth-container .crypto-input-wrapper i {
-  position: absolute !important;
-  left: 15px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  color: rgba(255, 255, 255, 0.3) !important;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .vault-auth-container .crypto-input,
 .vault-auth-container .vault-input {
-  width: 100% !important;
-  background: rgba(0, 0, 0, 0.6) !important;
-  border: 1px solid rgba(223, 22, 43, 0.4) !important;
-  border-radius: 3px !important;
-  padding: 12px 15px 12px 42px !important;
-  color: #ffffff !important;
-  font-family: monospace !important;
-  outline: none !important;
-  box-sizing: border-box !important;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(223, 22, 43, 0.4);
+    border-radius: 3px;
+    padding: 12px 15px 12px 42px;
+    color: #ffffff;
+    font-family: monospace;
+    outline: none;
+    box-sizing: border-box;
 }
 
 .vault-auth-container .btn-decrypt,
 .vault-auth-container .btn-vault {
-  width: 100% !important;
-  background: transparent !important;
-  border: 1px solid #df162b !important;
-  color: #df162b !important;
-  padding: 12px 20px !important;
-  font-family: "Orbitron", sans-serif !important;
-  cursor: pointer !important;
-  text-transform: uppercase !important;
-  box-sizing: border-box !important;
-  transition: all 0.3s;
+    width: 100%;
+    background: transparent;
+    border: 1px solid #df162b;
+    color: #df162b;
+    padding: 12px 20px;
+    font-family: "Orbitron", sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    transition: all 0.3s;
 }
 
 .vault-auth-container .btn-decrypt:hover,
 .vault-auth-container .btn-vault:hover {
-  background: #df162b !important;
-  color: #ffffff !important;
+    background: #df162b;
+    color: #ffffff;
 }
 
 .vault-auth-container .error-msg {
-  color: #df162b !important;
-  font-size: 0.75rem !important;
-  margin-top: 15px !important;
-  font-weight: bold;
+    color: #df162b;
+    font-size: 0.75rem;
+    margin-top: 15px;
+    font-weight: bold;
 }
 
-
 /* ==========================================================================
-   3. ADMIN VISUAL CONTAINER & EFFETS CRT (BACKGROUND)
+   5. ADMIN VISUAL CONTAINER & EFFETS CRT (BACKGROUND)
    ========================================================================== */
 #admin {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  padding-top: 80px !important;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    padding-top: 80px;
 }
 
 .admin-cyber-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: radial-gradient(circle at 50% 50%, #0d0d11 0%, #050507 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at 50% 50%, #0d0d11 0%, #050507 100%);
 }
 
 .cyber-grid {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(rgba(18, 18, 24, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
-  background-size: 100% 4px;
-  pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(18, 18, 24, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+}
+
+body.light-mode .cyber-grid {
+    background: linear-gradient(rgba(255, 255, 255, 0) 50%, rgba(47, 54, 64, 0.04) 50%);
+    background-size: 100% 4px;
 }
 
 .laser-scan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(223, 22, 43, 0.015);
-  opacity: 0.8;
-  pointer-events: none;
-  animation: crtFlicker 0.15s infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(223, 22, 43, 0.015);
+    opacity: 0.8;
+    pointer-events: none;
+    animation: crtFlicker 0.15s infinite;
+}
+
+body.light-mode .laser-scan {
+    background: transparent;
+    animation: none;
 }
 
 @keyframes crtFlicker {
-  0% { opacity: 0.23; }
-  50% { opacity: 0.25; }
-  100% { opacity: 0.22; }
+    0% { opacity: 0.23; }
+    50% { opacity: 0.25; }
+    100% { opacity: 0.22; }
 }
 
-
 /* ==========================================================================
-   4. NAVIGATION FIXE & ONGLETS ADMIN
+   6. NAVIGATION FIXE & ONGLETS ADMIN (CORRIGÉ & COMPACT)
    ========================================================================== */
 .admin-mini-nav {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  margin: 0 !important;
-  height: 55px;
-  background: rgba(17, 17, 21, 0.9) !important;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(223, 22, 43, 0.3) !important;
-  border-radius: 0 !important;
-  padding: 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 10000 !important;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6) !important;
-  box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    height: 55px;
+    background: rgba(17, 17, 21, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(223, 22, 43, 0.3);
+    border-radius: 0;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10000;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+    box-sizing: border-box;
+}
+
+body.light-mode .admin-mini-nav {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(47, 54, 64, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .nav-brand-status {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.nav-core-title {
-  font-family: "Orbitron", sans-serif;
-  font-size: 0.85rem;
-  color: #fff;
-  letter-spacing: 2px;
-}
-
-/* --- NOUVEAU GROUPE DE DROITE --- */
-.admin-nav-right-group {
     display: flex;
     align-items: center;
-    gap: 10px; /* Espace réduit entre les éléments */
-    margin-left: auto;
-}
-
-/* --- ONGLETS ADMIN --- */
-.admin-nav-tabs {
-    display: flex;
     gap: 10px;
 }
 
-/* Style commun des boutons (onglets + thème) */
+.nav-core-title {
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.85rem;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+body.light-mode .nav-core-title {
+    color: #2f3640;
+}
+
+.nav-mobile-control-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-nav-right-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-nav-tabs, .admin-tabs, .admin-nav-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 .admin-tab-btn, 
-.theme-switch-btn {
+.filter-btn {
     background: transparent;
     border: 1px solid #334155;
     color: #94a3b8;
-    padding: 6px 12px; /* Padding interne */
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     transition: all 0.2s ease;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center; /* Centre le contenu */
+    justify-content: center;
     gap: 6px;
-    
-    /* --- C'EST ICI QUE L'ON FORCE LA TAILLE --- */
-    /* On enlève les largeurs auto et on met une largeur fixe pour tous */
-    width: 150px; /* Tu peux ajuster cette valeur (ex: 150px) */
-    box-sizing: border-box; /* Important pour que le padding ne casse pas la taille */
+    box-sizing: border-box;
+    white-space: nowrap;
 }
 
-/* --- SPÉCIFICITÉS DU BOUTON THÈME --- */
-.theme-switch-btn {
-    padding: 0; /* Annule le padding pour que l'icône soit bien centrée dans la même largeur */
-    font-size: 1rem; /* Légèrement plus grand pour l'icône */
-    
-    /* Force la même hauteur que les onglets */
-    height: 32px; /* Exemple de hauteur fixe (dépend de ton padding + line-height) */
-}
-
-/* S'assurer que les onglets aussi ont une hauteur fixe */
-.admin-tab-btn {
-    height: 32px;
-}
-
-/* --- HOVER & ACTIVE --- */
-.admin-tab-btn:hover, .theme-switch-btn:hover {
+.admin-tab-btn:hover, .filter-btn:hover {
     border-color: #00ff66;
     color: #00ff66;
 }
 
-.admin-tab-btn.active {
+.admin-tab-btn.active, .filter-btn.active {
     background: rgba(0, 255, 102, 0.1);
     border-color: #00ff66;
     color: #00ff66;
     box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
 }
 
-/* Gestion des vues / onglets */
+body.light-mode .admin-tab-btn,
+body.light-mode .filter-btn {
+    background: #f8f9fa;
+    border-color: #2f3640;
+    color: #2f3640;
+}
+
+body.light-mode .admin-tab-btn:hover,
+body.light-mode .filter-btn:hover,
+body.light-mode .admin-tab-btn.active,
+body.light-mode .filter-btn.active {
+    background: #2f3640;
+    color: #ffffff;
+    border-color: #2f3640;
+    box-shadow: none;
+}
+
 .admin-view {
-  display: none;
+    display: none;
 }
 
 .admin-view.active-view {
-  display: block;
+    display: block;
 }
 
-
 /* ==========================================================================
-   5. BOUTON THEME SWITCH
+   7. BOUTON THEME SWITCH & BOUTON BURGER
    ========================================================================== */
 #theme-toggle-btn,
 .theme-toggle,
-.theme-switch-btn {
-  background: rgba(13, 13, 17, 0.6) !important;
-  border: 1px solid #df162b !important;
-  color: #df162b !important;
-  width: 36px;
-  height: 36px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  font-size: 1rem;
+.theme-switch-btn,
+#themeSwitchBtn,
+.menu-burger-btn {
+    background: rgba(13, 13, 17, 0.6);
+    border: 1px solid #df162b;
+    color: #df162b;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
 }
 
 #theme-toggle-btn:hover,
 .theme-toggle:hover,
-.theme-switch-btn:hover {
-  background: #df162b !important;
-  color: #fff !important;
-  border-color: #df162b !important;
-}
-
-
-/* ==========================================================================
-   6. STRUCTURE EN GRILLE & PANNEAUX DE CONTRÔLE
-   ========================================================================== */
-.admin-terminal {
-  background: rgba(5, 5, 10, 0.95);
-  border: 1px solid #df162b;
-  border-radius: 4px;
-  box-shadow: 0 0 20px rgba(223, 22, 43, 0.15);
-  font-family: "Orbitron", sans-serif;
-  margin: 20px auto;
-  max-width: 1200px;
-  overflow: hidden;
-}
-
-.terminal-header {
-  background: #111;
-  border-bottom: 1px solid rgba(223, 22, 43, 0.3);
-  padding: 10px 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.terminal-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.terminal-dots .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #df162b;
-  opacity: 0.6;
-}
-
-.terminal-title-text {
-  color: #fff;
-  letter-spacing: 2px;
-  font-weight: bold;
-  font-size: 0.85rem;
-}
-
-.terminal-status {
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  color: #aaa;
-  font-size: 0.8rem;
-  line-height: 1 !important;
-}
-
-.status-online {
-  width: 8px;
-  height: 8px;
-  background: #00ff66;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #00ff66;
-  animation: blink 1.5s infinite;
-  display: inline-block;
-  margin: 0 !important;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.terminal-body {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr 1fr !important;
-  gap: 20px !important;
-  padding: 20px !important;
-}
-
-@media (max-width: 992px) {
-  .terminal-body {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-.admin-panel,
-.panel-box {
-  background: rgba(10, 10, 15, 0.7) !important;
-  border: 1px solid rgba(223, 22, 43, 0.2) !important;
-  border-radius: 4px;
-  padding: 15px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  box-sizing: border-box;
-}
-
-.panel-title {
-  font-size: 0.9rem;
-  color: #fff;
-  margin-bottom: 15px;
-  border-bottom: 1px solid rgba(223, 22, 43, 0.2);
-  padding-bottom: 5px;
-}
-
-.panel-title span {
-  color: #df162b;
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-}
-
-.metric-card {
-  background: rgba(20, 20, 25, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 15px;
-  border-radius: 4px;
-  text-align: center;
-}
-
-.metric-value {
-  font-size: 1.6rem;
-  font-weight: bold;
-  color: #fff;
-}
-
-.metric-value.secure {
-  color: #00ff66;
-}
-
-.metric-label {
-  font-size: 0.7rem;
-  color: #888;
-  text-transform: uppercase;
-}
-
-.canvas-container,
-.graph-container {
-  flex-grow: 1;
-  min-height: 140px;
-  background: rgba(5, 5, 8, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  position: relative;
-}
-
-.admin-notes,
-.terminal-textarea {
-  width: 100%;
-  height: 115px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(223, 22, 43, 0.2);
-  color: #fff;
-  padding: 10px;
-  font-family: monospace;
-  resize: none;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.actions-group,
-.actions-flex {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: auto;
-}
-
-.admin-btn,
-.console-btn {
-  width: 100%;
-  background: transparent;
-  border: 1px solid #df162b;
-  color: #df162b;
-  padding: 8px 12px;
-  font-family: "Orbitron", sans-serif;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.admin-btn:hover,
-.console-btn:hover {
-  background: #df162b;
-  color: #fff;
-}
-
-#visit-count {
-  font-family: monospace;
-  font-size: 1rem;
-  text-shadow: 0 0 5px rgba(0, 255, 102, 0.4);
-}
-
-
-/* ==========================================================================
-   7. TERMINAL LOGS & FEED (FULL LOGS EMULATION)
-   ========================================================================== */
-.terminal-logs-section {
-  margin: 0 20px 20px 20px !important;
-}
-
-.log-feed,
-#logFeed {
-  background: rgba(2, 2, 5, 0.95) !important;
-  border: 1px solid rgba(223, 22, 43, 0.3) !important;
-  padding: 15px !important;
-  height: 320px !important;
-  overflow-y: auto;
-  font-family: "Courier New", Courier, monospace !important;
-  font-size: 0.8rem !important;
-  line-height: 1.6 !important;
-  text-align: left;
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
-}
-
-.log-feed::-webkit-scrollbar,
-#logFeed::-webkit-scrollbar {
-  width: 6px;
-}
-
-.log-feed::-webkit-scrollbar-track,
-#logFeed::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.log-feed::-webkit-scrollbar-thumb,
-#logFeed::-webkit-scrollbar-thumb {
-  background: #df162b;
-  border-radius: 3px;
-}
-
-.log-feed div,
-#logFeed div {
-  margin-bottom: 4px;
-  color: #ccc;
-}
-
-.log-feed .time,
-#logFeed .time {
-  color: #555;
-}
-
-.log-feed .info,
-#logFeed .info {
-  color: #00ff66;
-}
-
-.log-feed .warn,
-#logFeed .warn {
-  color: #ffb834;
-}
-
-.log-feed .crit,
-#logFeed .crit {
-  color: #df162b;
-  font-weight: bold;
-}
-
-
-/* ==========================================================================
-   8. GUITAR & MAO VAULT SECTION (ONGLET MUSIQUE)
-   ========================================================================== */
-.music-search-box {
-  margin-bottom: 1.5rem;
-}
-
-.music-search-box input {
-  width: 100%;
-  padding: 10px 14px;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 4px;
-  color: #f8fafc;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
-}
-
-.music-search-box input:focus {
-  border-color: #00ff66;
-  box-shadow: 0 0 5px rgba(0, 255, 102, 0.3);
-}
-
-.resource-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 15px;
-}
-
-.resource-card {
-  background: #1e293b;
-  border: 1px solid #334155;
-  padding: 1rem;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.2s, border-color 0.2s;
-}
-
-.resource-card:hover {
-  transform: translateY(-2px);
-  border-color: #00ff66;
-}
-
-.resource-tag {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.1);
-  padding: 2px 6px;
-  border-radius: 3px;
-  display: inline-block;
-  margin-bottom: 0.5rem;
-}
-
-.resource-card h4 {
-  font-size: 1rem;
-  color: #f1f5f9;
-  margin-bottom: 0.4rem;
-  font-family: 'Orbitron', sans-serif;
-}
-
-.resource-card p {
-  color: #94a3b8;
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-}
-
-.resource-card a {
-  border: 3px solid #00ff66;
-  padding: 7px;
-  border-radius: 10px;
-  color: #00ff66;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 700;
-  align-self: flex-start;
-}
-
-.resource-card a:hover {
-  text-decoration: underline;
-}
-
-.section-desc {
-  margin-bottom: 15px;
-}
-
-
-/* ==========================================================================
-   9. LIGHT MODE (MODE CLAIR)
-   ========================================================================== */
-body.light-mode,
-body.light-mode #admin {
-  background: #f1f2f6 !important;
-  color: #2f3640 !important;
-}
-
-body.light-mode .admin-mini-nav {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-bottom: 1px solid rgba(47, 54, 64, 0.2) !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
-}
-
-body.light-mode .nav-core-title {
-  color: #2f3640 !important;
+.theme-switch-btn:hover,
+#themeSwitchBtn:hover,
+.menu-burger-btn:hover {
+    background: #df162b;
+    color: #fff;
+    border-color: #df162b;
 }
 
 body.light-mode #theme-toggle-btn,
 body.light-mode .theme-toggle,
-body.light-mode .theme-switch-btn {
-  background: rgba(245, 246, 250, 0.9) !important;
-  border-color: #2f3640 !important;
-  color: #2f3640 !important;
+body.light-mode .theme-switch-btn,
+body.light-mode #themeSwitchBtn,
+body.light-mode .menu-burger-btn {
+    background: rgba(245, 246, 250, 0.9);
+    border-color: #2f3640;
+    color: #2f3640;
 }
 
 body.light-mode #theme-toggle-btn:hover,
 body.light-mode .theme-toggle:hover,
-body.light-mode .theme-switch-btn:hover {
-  background: #2f3640 !important;
-  color: #ffffff !important;
+body.light-mode .theme-switch-btn:hover,
+body.light-mode #themeSwitchBtn:hover,
+body.light-mode .menu-burger-btn:hover {
+    background: #2f3640;
+    color: #ffffff;
 }
 
-body.light-mode .cyber-grid {
-  background: linear-gradient(
-    rgba(255, 255, 255, 0) 50%,
-    rgba(47, 54, 64, 0.04) 50%
-  ) !important;
-  background-size: 100% 4px !important;
+.menu-burger-btn {
+    display: none;
 }
 
-body.light-mode .laser-scan {
-  background: transparent !important;
-  animation: none !important;
+/* ==========================================================================
+   8. STRUCTURE EN GRILLE & PANNEAUX DE CONTRÔLE
+   ========================================================================== */
+.admin-terminal {
+    background: rgba(5, 5, 10, 0.95);
+    border: 1px solid #df162b;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(223, 22, 43, 0.15);
+    font-family: "Orbitron", sans-serif;
+    margin: 20px auto;
+    max-width: 1200px;
+    overflow: hidden;
 }
 
-body.light-mode .admin-terminal,
-body.light-mode .admin-panel,
-body.light-mode .panel-box,
-body.light-mode .metric-card {
-  background: #ffffff !important;
-  border: 1px solid rgba(47, 54, 64, 0.15) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
-  color: #2f3640 !important;
+body.light-mode .admin-terminal {
+    background: #ffffff;
+    border: 1px solid rgba(47, 54, 64, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.terminal-header {
+    background: #111;
+    border-bottom: 1px solid rgba(223, 22, 43, 0.3);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 body.light-mode .terminal-header {
-  background: #e1e2e6 !important;
-  border-bottom: 1px solid rgba(47, 54, 64, 0.15) !important;
+    background: #e1e2e6;
+    border-bottom: 1px solid rgba(47, 54, 64, 0.15);
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.terminal-dots .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #df162b;
+    opacity: 0.6;
+}
+
+.terminal-title-text {
+    color: #fff;
+    letter-spacing: 2px;
+    font-weight: bold;
+    font-size: 0.85rem;
 }
 
 body.light-mode .terminal-title-text,
 body.light-mode .panel-title,
 body.light-mode .panel-title span,
-body.light-mode #fps-counter,
 body.light-mode .terminal-status,
 body.light-mode .metric-value,
 body.light-mode .panel-box p,
 body.light-mode .panel-box span {
-  color: #2f3640 !important;
-  text-shadow: none !important;
+    color: #2f3640;
+    text-shadow: none;
 }
 
-body.light-mode .metric-value.secure {
-  color: #00aa44 !important;
+.terminal-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaa;
+    font-size: 0.8rem;
+    line-height: 1;
 }
 
-body.light-mode .metric-label {
-  color: #718093 !important;
+.status-online {
+    width: 8px;
+    height: 8px;
+    background: #00ff66;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00ff66;
+    animation: blink 1.5s infinite;
+    display: inline-block;
+    margin: 0;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.admin-panel,
+.panel-box {
+    background: rgba(10, 10, 15, 0.7);
+    border: 1px solid rgba(223, 22, 43, 0.2);
+    border-radius: 4px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+body.light-mode .admin-panel,
+body.light-mode .panel-box {
+    background: #ffffff;
+    border: 1px solid rgba(47, 54, 64, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    color: #2f3640;
+}
+
+.panel-title {
+    font-size: 0.9rem;
+    color: #fff;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(223, 22, 43, 0.2);
+    padding-bottom: 5px;
+}
+
+.panel-title span {
+    color: #df162b;
+}
+
+.canvas-container {
+    flex-grow: 1;
+    min-height: 140px;
+    background: rgba(5, 5, 8, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    position: relative;
+}
+
+.admin-notes,
+.terminal-textarea {
+    width: 100%;
+    height: 115px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(223, 22, 43, 0.2);
+    color: #fff;
+    padding: 10px;
+    font-family: monospace;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
 }
 
 body.light-mode .admin-notes,
 body.light-mode .terminal-textarea {
-  background: #f8f9fa !important;
-  color: #2f3640 !important;
-  border: 1px solid rgba(47, 54, 64, 0.2) !important;
+    background: #f8f9fa;
+    color: #2f3640;
+    border: 1px solid rgba(47, 54, 64, 0.2);
+}
+
+.actions-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.console-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #df162b;
+    color: #df162b;
+    padding: 8px 12px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.console-btn:hover {
+    background: #df162b;
+    color: #fff;
+}
+
+body.light-mode .console-btn {
+    background: #f8f9fa;
+    border: 1px solid #2f3640;
+    color: #2f3640;
+}
+
+body.light-mode .console-btn:hover {
+    background: #2f3640;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   9. TERMINAL LOGS & FEED
+   ========================================================================== */
+.terminal-logs-section {
+    margin: 0 20px 20px 20px;
+}
+
+.log-feed,
+#logFeed {
+    background: rgba(2, 2, 5, 0.95);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    padding: 15px;
+    height: 320px;
+    overflow-y: auto;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    text-align: left;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
 }
 
 body.light-mode .log-feed,
 body.light-mode #logFeed {
-  background: #ffffff !important;
-  color: #2f3640 !important;
-  border-color: rgba(47, 54, 64, 0.15) !important;
+    background: #ffffff;
+    color: #2f3640;
+    border-color: rgba(47, 54, 64, 0.15);
+}
+
+.log-feed div,
+#logFeed div {
+    margin-bottom: 4px;
+    color: #ccc;
 }
 
 body.light-mode .log-feed div,
 body.light-mode #logFeed div {
-  color: #2f3640 !important;
+    color: #2f3640;
 }
 
-body.light-mode .log-feed .time,
-body.light-mode #logFeed .time {
-  color: #718093 !important;
+.log-feed .time,
+#logFeed .time {
+    color: #555;
 }
 
-body.light-mode .admin-btn,
-body.light-mode .console-btn {
-  background: #f8f9fa !important;
-  border: 1px solid #2f3640 !important;
-  color: #2f3640 !important;
+.log-feed .info,
+#logFeed .info {
+    color: #00ff66;
 }
 
-body.light-mode .admin-btn:hover,
-body.light-mode .console-btn:hover {
-  background: #2f3640 !important;
-  color: #ffffff !important;
+.log-feed .warn,
+#logFeed .warn {
+    color: #ffb834;
 }
 
-/* ==========================================================================
-   FILTRES MUSIC VAULT
-   ========================================================================== */
-.music-filters-container {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid #334155;
-  color: #94a3b8;
-  padding: 6px 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-}
-
-.filter-btn:hover {
-  border-color: #00ff66;
-  color: #00ff66;
-}
-
-.filter-btn.active {
-  background: rgba(0, 255, 102, 0.1);
-  border-color: #00ff66;
-  color: #00ff66;
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
-}
-
-/* Support pour le Light Mode */
-body.light-mode .filter-btn {
-  background: #f8f9fa;
-  border-color: #2f3640;
-  color: #2f3640;
-}
-
-body.light-mode .filter-btn:hover,
-body.light-mode .filter-btn.active {
-  background: #2f3640;
-  color: #ffffff;
-  border-color: #2f3640;
-  box-shadow: none;
+.log-feed .crit,
+#logFeed .crit {
+    color: #df162b;
+    font-weight: bold;
 }
 
 /* ==========================================================================
-   FORMULAIRE D'AJOUT - MUSIC VAULT
+   10. MUSIC VAULT & COULEURS DYNAMIQUES DES CATÉGORIES (RESTAURÉES)
    ========================================================================== */
+.music-search-box {
+    margin-bottom: 1.5rem;
+}
+
+.music-search-box input {
+    width: 100%;
+    padding: 10px 14px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    color: #f8fafc;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 15px;
+}
+
+.resource-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    padding: 1rem;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.resource-card h4 {
+    font-size: 1rem;
+    color: #f1f5f9;
+    margin-bottom: 0.4rem;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.resource-card p {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.resource-card a {
+    border: 2px solid #00ff66;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #00ff66;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    align-self: flex-start;
+}
+
 .add-resource-box {
-  margin-bottom: 2rem;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(223, 22, 43, 0.3);
-  border-radius: 4px;
-}
-
-.add-resource-title {
-  color: #ffffff;
-  font-size: 0.9rem;
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-family: 'Orbitron', sans-serif;
-}
-
-.add-resource-title i {
-  color: #00ff66;
-  margin-right: 8px;
+    margin-bottom: 2rem;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+    border-radius: 4px;
 }
 
 .add-music-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
 }
 
 .add-music-form-grid input,
 .add-music-form-grid select,
 .add-music-form-grid textarea {
-  padding: 10px;
-  border-radius: 3px;
-  background: var(--input-bg, rgba(15, 23, 42, 0.8));
-  color: var(--text-primary, #ffffff);
-  border: 1px solid var(--border-color, #334155);
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.95rem;
-  width: 100%;
-  box-sizing: border-box;
+    padding: 10px;
+    border-radius: 3px;
+    background: var(--input-bg, rgba(15, 23, 42, 0.8));
+    color: var(--text-primary, #ffffff);
+    border: 1px solid var(--border-color, #334155);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.add-music-form-grid input:focus,
-.add-music-form-grid select:focus,
-.add-music-form-grid textarea:focus {
-  border-color: #00ff66;
-  outline: none;
+.full-width-input, .full-width-textarea, .full-width-btn {
+    grid-column: span 2;
 }
 
-.full-width-input {
-  grid-column: span 2;
-}
-
-.full-width-textarea {
-  grid-column: span 2;
-  resize: vertical;
-  min-height: 70px;
-}
-
-.full-width-btn {
-  grid-column: span 2;
-  width: 100%;
-  margin-top: 5px;
-}
-
-/* ==========================================================================
-   FILTRES MULTIPLES - MUSIC VAULT
-   ========================================================================== */
 .music-filters-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-  background: rgba(15, 23, 42, 0.4);
-  padding: 15px;
-  border-radius: 4px;
-  border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #334155;
 }
 
 .filter-actions-bar {
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
 }
 
 .filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .filter-group-label {
-  font-family: 'Orbitron', sans-serif;
+    font-family: 'Orbitron', sans-serif;
     font-size: 0.75rem;
     color: #00ff66;
     letter-spacing: 1px;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin: 8px 0 4px 0;
 }
 
 .filter-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
-.filter-btn {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid #334155;
-  color: #94a3b8;
-  padding: 5px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-}
-
-.filter-btn:hover {
-  border-color: #00ff66;
-  color: #00ff66;
-}
-
-.filter-btn.active {
-  background: rgba(0, 255, 102, 0.15);
-  border-color: #00ff66;
-  color: #00ff66;
-  box-shadow: 0 0 8px rgba(0, 255, 102, 0.2);
-}
-
-.action-reset {
-  background: rgba(223, 22, 43, 0.1);
-  border-color: rgba(223, 22, 43, 0.4);
-  color: #ff5c5c;
-}
-
-.action-reset:hover {
-  background: rgba(223, 22, 43, 0.25);
-  border-color: #df162b;
-  color: #ff3333;
-}
-
-/* ==========================================================================
-   COULEURS DYNAMIQUES DE TOUTES LES CATÉGORIES (MUSIC VAULT)
-   ========================================================================== */
-
+/* --- COULEURS DYNAMIQUES DES CATÉGORIES (MUSIC VAULT) --- */
 .resource-tag {
     font-size: 0.7rem;
     text-transform: uppercase;
@@ -1060,13 +791,11 @@ body.light-mode .filter-btn.active {
     display: inline-block;
     margin-bottom: 0.5rem;
     font-weight: 700;
-    /* Style par défaut (Fallback) */
     color: #94a3b8;
     background: rgba(148, 163, 184, 0.15);
     border: 1px solid rgba(148, 163, 184, 0.3);
 }
 
-/* --- 1. GUITARE & INSTRUMENTS (Bleu / Cyan / Turquoise) --- */
 .resource-tag[data-category="Guitare - Electrique"] {
     color: #38bdf8;
     background: rgba(56, 189, 248, 0.15);
@@ -1085,21 +814,18 @@ body.light-mode .filter-btn.active {
     border: 1px solid rgba(52, 211, 153, 0.3);
 }
 
-/* --- 2. ENTRETIEN (Orange / Ambre - Maintenance) --- */
-.resource-tag[data-category="Entretien de guitare"] {
+.resource-tag[data-category="Guitare - Entretiens"] {
     color: #fb923c;
     background: rgba(251, 146, 60, 0.15);
     border: 1px solid rgba(251, 146, 60, 0.3);
 }
 
-/* --- 3. LESSON (Vert Cyberpunk / Vif) --- */
-.resource-tag[data-category="Lesson"] {
+.resource-tag[data-category="Guitare - Cours"] {
     color: #00ff66;
     background: rgba(0, 255, 102, 0.15);
     border: 1px solid rgba(0, 255, 102, 0.3);
 }
 
-/* --- 4. MAO & GUIDES TECHNIQUES (Violet / Magenta / Rose) --- */
 .resource-tag[data-category="MAO - SITE"] {
     color: #c084fc;
     background: rgba(192, 132, 252, 0.15);
@@ -1118,6 +844,12 @@ body.light-mode .filter-btn.active {
     border: 1px solid rgba(244, 114, 182, 0.3);
 }
 
+.resource-tag[data-category="MAO - PRESET"] {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
 .resource-tag[data-category^="MAO - GUIDE"] {
     color: #818cf8;
     background: rgba(129, 140, 248, 0.15);
@@ -1128,4 +860,75 @@ body.light-mode .filter-btn.active {
     color: #67e8f9;
     background: rgba(103, 232, 249, 0.15);
     border: 1px solid rgba(103, 232, 249, 0.3);
+}
+
+.resource-tag[data-category="MAO - Lesson"] {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.15);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+/* ==========================================================================
+   11. RESPONSIVE & MENU BURGER MOBILE (MODE MOBILE < 768px)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+    .menu-burger-btn {
+        display: inline-flex;
+    }
+
+    .admin-nav-right-group {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 55px;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 15, 0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(223, 22, 43, 0.4);
+        padding: 20px;
+        gap: 12px;
+        transform: translateY(-150%);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+    }
+
+    .admin-nav-right-group.active-menu {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .admin-nav-tabs {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .admin-tab-btn {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+
+    #themeSwitchBtn {
+        width: 100%;
+        height: 40px;
+        border-radius: 4px;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .admin-nav-right-group.active-menu,
+    #adminTabsMenu.active-menu {
+        transform: translateY(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
 }

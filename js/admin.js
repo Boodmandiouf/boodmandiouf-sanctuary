@@ -4,9 +4,56 @@
  * ==========================================================================
  */
 
-// Variables d'état globales pour le Music Vault
-let activeFilters = [];
-let currentSearchQuery = '';
+// Variables d'état globales (Utilisation de 'var' pour éviter les erreurs de redéclaration)
+var activeFilters = [];
+var currentSearchQuery = '';
+
+// --- GESTION UNIFIÉE DU MENU BURGER MOBILE (COMPATIBLE CLASS & ID) ---
+document.addEventListener("DOMContentLoaded", () => {
+    // Cherche d'abord par ID (source), puis par Classe (admin)
+    const burgerBtn = document.getElementById('menuBurgerBtn') || document.querySelector(".menu-burger-btn");
+    const tabsMenu = document.getElementById('adminTabsMenu') || document.querySelector(".admin-nav-right-group");
+
+    if (burgerBtn && tabsMenu) {
+        burgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            tabsMenu.classList.toggle('active-menu');
+            
+            // Change l'icône du burger (barres <-> croix)
+            const icon = burgerBtn.querySelector('i');
+            if (icon) {
+                if (tabsMenu.classList.contains('active-menu')) {
+                    icon.className = "fas fa-times";
+                } else {
+                    icon.className = "fas fa-bars";
+                }
+            }
+        });
+
+        // Fermer le menu si on clique en dehors
+        document.addEventListener('click', (e) => {
+            if (!tabsMenu.contains(e.target) && !burgerBtn.contains(e.target)) {
+                closeBurger();
+            }
+        });
+    }
+});
+
+// Fonction globale pour refermer proprement le menu burger
+function closeBurger() {
+    const tabsMenu = document.getElementById('adminTabsMenu') || document.querySelector(".admin-nav-right-group");
+    const burgerBtn = document.getElementById('menuBurgerBtn') || document.querySelector(".menu-burger-btn");
+    
+    if (tabsMenu) {
+        tabsMenu.classList.remove('active-menu');
+    }
+    if (burgerBtn) {
+        const icon = burgerBtn.querySelector('i');
+        if (icon) {
+            icon.className = "fas fa-bars";
+        }
+    }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     // Application préventive du thème sur le body dès le chargement
@@ -20,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initNetworkMonitoring();
     initKernelLogs();
     setupLogbook();
-    initVisitCounter();
     
     // Initialisation du Music Vault si les données existent
     if (typeof musicResources !== 'undefined') {
@@ -28,41 +74,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- GESTION DE LA RECHERCHE & DES FILTRES MUSIC VAULT ---
-    const searchInput = document.getElementById('musicSearchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            currentSearchQuery = e.target.value.toLowerCase();
+    // Utilisation de la délégation d'événements globale pour la recherche
+    document.addEventListener('input', (e) => {
+        const target = e.target;
+        if (target && (target.id === 'musicSearchInput' || target.classList.contains('music-search-input'))) {
+            currentSearchQuery = target.value.toLowerCase();
             filterAndRenderMusic();
-        });
-    }
-
-    // Gestion des boutons de filtres multiples (chips)
-    const filterButtons = document.querySelectorAll('.filter-btn:not(.action-reset)');
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const filterValue = e.target.getAttribute('data-filter');
-
-            if (e.target.classList.contains('active')) {
-                e.target.classList.remove('active');
-                activeFilters = activeFilters.filter(f => f !== filterValue);
-            } else {
-                e.target.classList.add('active');
-                activeFilters.push(filterValue);
-            }
-
-            filterAndRenderMusic();
-        });
+        }
     });
 
-    // Bouton "Tout Effacer" pour les filtres
-    const resetBtn = document.getElementById('resetFiltersBtn');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
+    // Gestion robuste des boutons de filtres multiples par délégation d'événements
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+
+        // Si c'est le bouton "Tout Effacer" (ou un bouton avec la classe d'action reset)
+        if (btn.classList.contains('action-reset') || btn.id === 'resetFiltersBtn') {
             activeFilters = [];
-            filterButtons.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            
+            // Réinitialiser également tous les champs de recherche présents sur la page
+            document.querySelectorAll('#musicSearchInput, .music-search-input').forEach(input => {
+                input.value = '';
+            });
+            currentSearchQuery = '';
+
             filterAndRenderMusic();
-        });
-    }
+            return;
+        }
+
+        const filterValue = btn.getAttribute('data-filter');
+        if (!filterValue) return;
+
+        if (btn.classList.contains('active')) {
+            btn.classList.remove('active');
+            activeFilters = activeFilters.filter(f => f !== filterValue);
+        } else {
+            btn.classList.add('active');
+            activeFilters.push(filterValue);
+        }
+
+        filterAndRenderMusic();
+    });
 
     // --- GESTION DU FORMULAIRE D'AJOUT DE RESSOURCE ---
     const addForm = document.getElementById('addMusicForm');
@@ -76,15 +129,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const description = document.getElementById('newDesc').value.trim();
 
             if (title && category && url) {
-                // Appel de la fonction d'ajout globale (définie dans music-data.js)
                 if (typeof addMusicResource === 'function') {
                     addMusicResource(title, category, url, description || "Aucune description.");
                 }
                 
-                // Réinitialisation du formulaire
                 addForm.reset();
                 
-                // Log visuel de confirmation
                 if (typeof pushLog === 'function') {
                     pushLog('info', `MUSIC_VAULT: Nouvelle entrée injectée -> "${title}"`);
                 }
@@ -164,7 +214,7 @@ function initNetworkMonitoring() {
     drawGraph();
 }
 
-// 2. LOGS IMMERSIFS DU NOYAU (KERNEL LOGS FEED COMPLET)
+// 2. LOGS IMMERSIFS DU NOYAU
 function initKernelLogs() {
     const logFeed = document.getElementById('logFeed');
     if (!logFeed) return;
@@ -258,33 +308,8 @@ function clearNotes() {
     }
 }
 
-// 4. COMPTEUR DE VISITES - API MOECOUNTER
-function initVisitCounter() {
-    const counterElement = document.getElementById('visit-count');
-    const hostStatusContainer = document.getElementById('host-status-container');
-    const name = "boodmandiouf_sanctuary";
+// 4. COMPTEUR DE VISITES LOCAL (Rétabli et sans API externe)
 
-    fetch(`https://api.moecounter.org/get/${name}/views`)
-        .then(res => res.json())
-        .then(data => {
-            const count = data.value !== undefined ? data.value : "ONLINE";
-            if (counterElement) {
-                counterElement.innerText = count;
-                counterElement.style.color = "#00ff66";
-            }
-            pushLog('info', `TELEMETRY: Metric [VAULT_VISITS] synced: ${count}`);
-        })
-        .catch(() => {
-            if (hostStatusContainer) {
-                hostStatusContainer.innerHTML = `<span><i class="fas fa-server"></i> HOST_STATUS</span> <span id="host-status-led" class="status-online"></span> ONLINE`;
-            }
-            if (counterElement) {
-                counterElement.innerText = "9,854";
-                counterElement.style.color = "#26de81";
-            }
-            pushLog('warn', 'TELEMETRY: Failed to fetch online visit-count API. Fallback data engaged.');
-        });
-}
 
 // 5. GESTION DU COMMUTATEUR DE THÈME
 function toggleLightMode() {
@@ -304,16 +329,12 @@ function updateSwitchIcon(isLight) {
     }
 }
 
-// Fonction globale accessible pour réveiller les scripts après déchiffrement
 window.loadAdminScripts = function() {
     initNetworkMonitoring();
     initKernelLogs();
     setupLogbook();
-    initVisitCounter();
-    setInterval(initVisitCounter, 10000);
 };
 
-// Fonction pour changer d'onglet dans l'admin
 function switchTab(tabName) {
     document.querySelectorAll('.admin-view').forEach(view => view.classList.remove('active-view'));
     document.querySelectorAll('.admin-tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -330,7 +351,6 @@ function switchTab(tabName) {
     }
 }
 
-// Fonction pour afficher les cartes dans la grille
 function renderMusicResources(items) {
     const grid = document.getElementById('musicGrid');
     if (!grid) return;
@@ -357,13 +377,11 @@ function renderMusicResources(items) {
     });
 }
 
-// Fonction globale pour filtrer et afficher (Multi-sélection & Recherche)
 function filterAndRenderMusic() {
     if (typeof musicResources === 'undefined') return;
     
     let filtered = musicResources;
 
-    // 1. Filtrer par catégories multiples actives
     if (activeFilters.length > 0) {
         filtered = filtered.filter(item => {
             return activeFilters.some(filter => 
@@ -372,7 +390,6 @@ function filterAndRenderMusic() {
         });
     }
 
-    // 2. Filtrer par texte de recherche
     if (currentSearchQuery !== '') {
         filtered = filtered.filter(item => 
             item.title.toLowerCase().includes(currentSearchQuery) || 
@@ -384,11 +401,9 @@ function filterAndRenderMusic() {
     renderMusicResources(filtered);
 }
 
-// Fonction pour télécharger automatiquement le fichier music-data.js mis à jour
 function exportMusicDataFile() {
     if (typeof musicResources === 'undefined') return;
 
-    // Construction du contenu du fichier JavaScript
     let fileContent = `/**\n * ==========================================================================\n * SANCTUARY - MUSIC VAULT DATABASE (music-data.js)\n * ==========================================================================\n */\n\n`;
     fileContent += `const defaultMusicResources = ` + JSON.stringify(musicResources, null, 4) + `;\n\n`;
     fileContent += `let musicResources = JSON.parse(localStorage.getItem('sanctuary_music_vault')) || defaultMusicResources;\n\n`;
@@ -407,7 +422,6 @@ function exportMusicDataFile() {
     fileContent += `    if (typeof filterAndRenderMusic === 'function') filterAndRenderMusic();\n`;
     fileContent += `}`;
 
-    // Création d'un lien virtuel de téléchargement
     const blob = new Blob([fileContent], { type: 'text/javascript' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -422,3 +436,112 @@ function exportMusicDataFile() {
         pushLog('info', 'SYSTEM: Fichier music-data.js exporté avec succès.');
     }
 }
+
+// --- GESTION DU MENU BURGER MOBILE ---
+document.addEventListener("DOMContentLoaded", () => {
+    const burgerBtn = document.getElementById('menuBurgerBtn');
+    const tabsMenu = document.getElementById('adminTabsMenu');
+
+    if (burgerBtn && tabsMenu) {
+        burgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            tabsMenu.classList.toggle('active-menu');
+            
+            // Change l'icône du burger (barres <-> croix)
+            const icon = burgerBtn.querySelector('i');
+            if (icon) {
+                if (tabsMenu.classList.contains('active-menu')) {
+                    icon.className = "fas fa-times";
+                } else {
+                    icon.className = "fas fa-bars";
+                }
+            }
+        });
+
+        // Fermer le menu si on clique en dehors
+        document.addEventListener('click', (e) => {
+            if (!tabsMenu.contains(e.target) && !burgerBtn.contains(e.target)) {
+                closeBurger();
+            }
+        });
+    }
+});
+
+// Fonction globale pour refermer proprement le menu burger
+function closeBurger() {
+    const tabsMenu = document.getElementById('adminTabsMenu');
+    const burgerBtn = document.getElementById('menuBurgerBtn');
+    
+    if (tabsMenu) {
+        tabsMenu.classList.remove('active-menu');
+    }
+    if (burgerBtn) {
+        const icon = burgerBtn.querySelector('i');
+        if (icon) {
+            icon.className = "fas fa-bars";
+        }
+    }
+}
+
+// --- GESTION DU MENU BURGER MOBILE (COMPATIBLE HTML DYNAMIQUE / CHIFFRÉ) ---
+
+// Fonction d'initialisation du burger (appelée au clic ou après injection)
+function initBurgerMenu() {
+    const burgerBtn = document.getElementById('menuBurgerBtn') || document.querySelector(".menu-burger-btn");
+    const tabsMenu = document.getElementById('adminTabsMenu') || document.querySelector(".admin-nav-right-group");
+
+    if (burgerBtn && tabsMenu) {
+        // Évite de doubler les écouteurs si la fonction est relancée
+        if (burgerBtn.dataset.listenerInitialized) return;
+        burgerBtn.dataset.listenerInitialized = "true";
+
+        burgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            tabsMenu.classList.toggle('active-menu');
+            
+            const icon = burgerBtn.querySelector('i');
+            if (icon) {
+                if (tabsMenu.classList.contains('active-menu')) {
+                    icon.className = "fas fa-times";
+                } else {
+                    icon.className = "fas fa-bars";
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!tabsMenu.contains(e.target) && !burgerBtn.contains(e.target)) {
+                closeBurger();
+            }
+        });
+    }
+}
+
+// Fonction globale pour refermer proprement le menu burger
+function closeBurger() {
+    const tabsMenu = document.getElementById('adminTabsMenu') || document.querySelector(".admin-nav-right-group");
+    const burgerBtn = document.getElementById('menuBurgerBtn') || document.querySelector(".menu-burger-btn");
+    
+    if (tabsMenu) {
+        tabsMenu.classList.remove('active-menu');
+    }
+    if (burgerBtn) {
+        const icon = burgerBtn.querySelector('i');
+        if (icon) {
+            icon.className = "fas fa-bars";
+        }
+    }
+}
+
+// Tentative d'initialisation au chargement classique (si page non chiffrée)
+document.addEventListener("DOMContentLoaded", initBurgerMenu);
+
+// S'assure que le burger s'initialise aussi juste après l'affichage du vault chiffré
+const observer = new MutationObserver((mutations, obs) => {
+    const burgerBtn = document.getElementById('menuBurgerBtn');
+    if (burgerBtn) {
+        initBurgerMenu();
+        obs.disconnect(); // Arrête l'observation une fois trouvé
+    }
+});
+observer.observe(document.body, { childList: true, subtree: true });
