@@ -6,6 +6,42 @@
 
 const defaultMusicResources = [
     {
+        "title": "Stitchers sorrow - Sea of Thieves",
+        "category": "Guitare - Accoustique",
+        "url": "https://youtu.be/-xFsXWV3NdM?is=2icIR78ABLtoZY8m",
+        "description": "Aucune description."
+    },
+    {
+        "title": "Lost painting / SOTN",
+        "category": "Guitare - Accoustique",
+        "url": "https://youtu.be/deFL_KmhgSc?is=pK50nu6HAMSPdUPP",
+        "description": "Aucune description."
+    },
+    {
+        "title": "Outer wilds",
+        "category": "Guitare - Accoustique",
+        "url": "https://youtu.be/U0DmKBESMSM?is=8f3-o5YE_OPWiUwF",
+        "description": "Aucune description."
+    },
+    {
+        "title": "lost-paintings-symphony-of-the-night-acoustic-guitar-cover-chequerchequer",
+        "category": "Guitare - Accoustique",
+        "url": "https://chordify.net/chords/lost-paintings-symphony-of-the-night-acoustic-guitar-cover-chequerchequer",
+        "description": "Aucune description."
+    },
+    {
+        "title": "Lost painting / SOTN Castlevania",
+        "category": "Guitare - Accoustique",
+        "url": "https://chordify.net/chords/shan-genmichiru-songs/shiwareta-cai-hua-chords",
+        "description": "Aucune description."
+    },
+    {
+        "title": "life is beautiful deadly premonition / ppf",
+        "category": "Guitare - Accoustique",
+        "url": "https://chordify.net/fr/chords/life-is-beautiful-deadly-premonition-ppf-topic",
+        "description": "Aucune description."
+    },
+    {
         "title": "prs-se-mark-holcomb-holcomb-burst",
         "category": "MAO - SITE",
         "url": "https://www.muziker.fr/prs-se-mark-holcomb-holcomb-burst-2022",
