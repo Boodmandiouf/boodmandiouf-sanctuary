@@ -6,6 +6,24 @@
 
 const defaultMusicResources = [
     {
+        "title": "counting stars / Nujabes",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=RwqMH4ivM2k&list=RDRwqMH4ivM2k&start_radio=1",
+        "description": "counting stars / nujabes"
+    },
+    {
+        "title": "Lady Brown (Nujabes)",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=KVT3Yo_6pXw&list=RDKVT3Yo_6pXw&index=1",
+        "description": "Lady Brown (Nujabes) / Laurindo Almeida"
+    },
+    {
+        "title": "Nujabes - Aruarian Dance",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=3lAwtrb-9g4&list=RDKVT3Yo_6pXw&index=11",
+        "description": "Nujabes - Aruarian Dance / Laurindo Almeida"
+    },
+    {
         "title": "Stitchers sorrow - Sea of Thieves",
         "category": "Guitare - Accoustique",
         "url": "https://youtu.be/-xFsXWV3NdM?is=2icIR78ABLtoZY8m",
