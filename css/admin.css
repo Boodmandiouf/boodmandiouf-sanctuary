@@ -816,9 +816,9 @@ body.light-mode #logFeed div {
 }
 
 .resource-tag[data-category="Guitare - Accoustique"] {
-    color: #22d3ee;
-    background: rgba(34, 211, 238, 0.15);
-    border: 1px solid rgba(34, 211, 238, 0.3);
+    color: #fc036f;
+    background: rgba(252, 3, 111, 0.15);
+    border: 1px solid rgba(252, 3, 111, 0.3);
 }
 
 .resource-tag[data-category="Guitare - Ukulele"] {
