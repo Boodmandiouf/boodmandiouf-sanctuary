@@ -6,6 +6,36 @@
 
 const defaultMusicResources = [
     {
+        "title": "Op3 CAPO 4Fr Naruto BLUE BIRD",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=FwoXpNCSMl8&list=RDzNcI9NePSWM&index=20",
+        "description": "Op3 CAPO 4Fr Naruto BLUE BIRD"
+    },
+    {
+        "title": "Op3 Naruto BLUE BIRD",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=xv92R8dSLrQ",
+        "description": "Op3 Naruto BLUE BIRD"
+    },
+    {
+        "title": "Midna's Lament",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=swAUBva3IGM&list=RDzNcI9NePSWM&index=18",
+        "description": "Midna's Lament Zelda Twilight Princess"
+    },
+    {
+        "title": "Title theme Oot",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=zNcI9NePSWM&list=RDzNcI9NePSWM&start_radio=1",
+        "description": "Title theme Zelda Ocarina Of Time"
+    },
+    {
+        "title": "Sheik Theme OoT",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=shGiYrcMBAA",
+        "description": "Sheik Theme Zelda Ocarina of Time"
+    },
+    {
         "title": "counting stars / Nujabes",
         "category": "Guitare - Accoustique",
         "url": "https://www.youtube.com/watch?v=RwqMH4ivM2k&list=RDRwqMH4ivM2k&start_radio=1",
