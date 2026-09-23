@@ -379,12 +379,25 @@ function switchTab(tabName) {
         if (typeof musicResources !== 'undefined') {
             filterAndRenderMusic();
         }
+    } else if (tabName === 'mao') {
+        const viewMao = document.getElementById('view-mao');
+        const btnMao = document.getElementById('btn-mao');
+        if (viewMao) viewMao.classList.add('active-view');
+        if (btnMao) btnMao.classList.add('active');
     }
 }
 
 function renderMusicResources(items) {
     const grid = document.getElementById('musicGrid');
+    const countDisplay = document.getElementById('searchResultCount');
+    
     if (!grid) return;
+    
+    // Mise à jour du compteur de résultats
+    if (countDisplay) {
+        const count = items.length;
+        countDisplay.textContent = `${count} résultat${count > 1 ? 's' : ''} trouvé${count > 1 ? 's' : ''}`;
+    }
     
     grid.innerHTML = '';
 
@@ -487,3 +500,34 @@ function scrollToTop() {
         behavior: 'smooth'
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Sauvegarde automatique du bloc-notes (textarea)
+  const notesTextarea = document.getElementById("mao-project-notes");
+  if (notesTextarea) {
+    const savedNotes = localStorage.getItem("mao_project_notes");
+    if (savedNotes !== null) {
+      notesTextarea.value = savedNotes;
+    }
+    notesTextarea.addEventListener("input", () => {
+      localStorage.setItem("mao_project_notes", notesTextarea.value);
+    });
+  }
+
+  // 2. Sauvegarde automatique de toutes les checkboxes de la section MAO
+  const checkboxes = document.querySelectorAll(".mao-checkbox");
+  checkboxes.forEach((checkbox, index) => {
+    const storageKey = `mao_checkbox_${index}`;
+
+    // Restaurer l'état enregistré
+    const savedState = localStorage.getItem(storageKey);
+    if (savedState === "true") {
+      checkbox.checked = true;
+    }
+
+    // Sauvegarder dès qu'on clique dessus
+    checkbox.addEventListener("change", () => {
+      localStorage.setItem(storageKey, checkbox.checked);
+    });
+  });
+});
