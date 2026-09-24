@@ -6,6 +6,48 @@
 
 const defaultMusicResources = [
     {
+        "title": "Monkey Island Theme",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=ToUG9Bfcq6w",
+        "description": "Monkey Island Theme"
+    },
+    {
+        "title": "Thème principal de The Secret of Monkey Island FingerStyle",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=HK090HelxcU",
+        "description": "Thème principal de The Secret of Monkey Island FingerStyle"
+    },
+    {
+        "title": "Howl's Moving Castle (Merry-Go-Round of Life)",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=eAV3318yNoM&list=RDeAV3318yNoM&start_radio=1",
+        "description": "Howl's Moving Castle (Merry-Go-Round of Life)"
+    },
+    {
+        "title": "Song of Storms - The Legend of Zelda - Fingerstyle",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=B3f7FSWGSPQ&list=RDzNcI9NePSWM&index=9",
+        "description": "Song of Storms - The Legend of Zelda - Fingerstyle"
+    },
+    {
+        "title": "Song of Healing – Majora’s Mask",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=ZKVDXx3w_vc&list=RDzNcI9NePSWM&index=14",
+        "description": "Song of Healing – Majora’s Mask FRET 5"
+    },
+    {
+        "title": "Monkey Island 2 Woodtick Theme Chordify",
+        "category": "Guitare - Accoustique",
+        "url": "https://chordify.net/chords/michael-land-songs/woodtick-chords",
+        "description": "Monkey Island 2 Woodtick Theme Chordify"
+    },
+    {
+        "title": "Monkey Island 2 Woodtick Theme",
+        "category": "Guitare - Accoustique",
+        "url": "https://chordu.com/chords-tabs-monkey-island-2-woodtick-theme-id_WXWeT4E9XJI",
+        "description": "Monkey Island 2 Woodtick Theme"
+    },
+    {
         "title": "prs-se-mark-holcomb-holcomb-burst",
         "category": "MAO - SITE",
         "url": "https://www.muziker.fr/prs-se-mark-holcomb-holcomb-burst-2022",
