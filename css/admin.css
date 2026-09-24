@@ -894,6 +894,11 @@ body.light-mode #logFeed div {
    11. RESPONSIVE & MENU BURGER MOBILE (MODE MOBILE < 768px)
    ========================================================================== */
 @media screen and (max-width: 768px) {
+
+    #admin-vault-slot {
+    padding: 0px !important
+
+    }
     .menu-burger-btn {
         display: inline-flex;
     }
@@ -1004,8 +1009,8 @@ body.light-mode #logFeed div {
   height: 40px;
   padding: 0;
   background: rgba(10, 15, 30, 0.85);
-  border: 1px solid var(--neon-cyan, #00f0ff);
-  color: var(--neon-cyan, #00f0ff);
+  background-color: var(--card-bg);
+  border: 1px solid var(--accent-red);
   font-size: 0.9rem;
   cursor: pointer;
   opacity: 0;
