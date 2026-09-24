@@ -67,10 +67,6 @@ input::placeholder, textarea::placeholder {
     color: var(--text-muted);
 }
 
-p, span, .text-muted {
-    color: var(--text-muted);
-}
-
 h1, h2, h3, h4, h5, h6, .nav-core-title {
     color: var(--text-primary);
 }
@@ -1124,7 +1120,7 @@ body.light-mode .go-to-top-btn:hover {
     transform: rotate(180deg);
   }
   .cyber-content {
-    padding: 12px 16px 16px 16px;
+    padding: 10px;
     border-top: 1px solid #143240;
     color: #cbd5e1;
     overflow-x: auto;
@@ -1409,7 +1405,7 @@ details summary::-webkit-details-marker {
 /* Animation de la flèche personnalisée (si tu en utilises une via ::after) */
 details summary::after {
     content: "▼";
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
