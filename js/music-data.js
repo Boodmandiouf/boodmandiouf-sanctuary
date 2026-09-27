@@ -6,6 +6,24 @@
 
 const defaultMusicResources = [
     {
+        "title": "Outer Wilds - Timber Hearth 2",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=ci7O16XLpcY",
+        "description": "Outer Wilds - Timber Hearth 2"
+    },
+    {
+        "title": "Outer Wilds – Timber Hearth",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=36PjyqsSW70",
+        "description": "Outer Wilds – Timber Hearth | Guitar Cover + Tabs"
+    },
+    {
+        "title": "Outer Wilds - Main Theme",
+        "category": "Guitare - Accoustique",
+        "url": "https://www.youtube.com/watch?v=IDP1p7Ysqzc",
+        "description": "Outer Wilds - Main Theme / FRET 5"
+    },
+    {
         "title": "Monkey Island Theme",
         "category": "Guitare - Accoustique",
         "url": "https://www.youtube.com/watch?v=ToUG9Bfcq6w",
