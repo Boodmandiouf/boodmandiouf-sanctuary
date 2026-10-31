@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ImageText — OCR local</title>
+<style>
+:root{color-scheme:light dark;--bg:#f4f6fb;--panel:#fff;--ink:#172033;--muted:#68738a;--line:#dce2ec;--accent:#536dfe;--soft:#edf0ff}
+@media(prefers-color-scheme:dark){:root{--bg:#111827;--panel:#1c2637;--ink:#edf2ff;--muted:#a7b2c7;--line:#354258;--accent:#8b9aff;--soft:#293451}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:1080px;margin:28px auto;padding:0 18px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:25px}.brand h1{font-size:22px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:15px;box-shadow:0 4px 18px #1018280a}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.row.spread{justify-content:space-between}
+.drop{border:2px dashed var(--line);border-radius:15px;padding:35px 15px;text-align:center;cursor:pointer;background:var(--bg);transition:.15s}.drop.over{border-color:var(--accent);background:var(--soft)}.drop strong{display:block;font-size:17px;margin:8px 0 4px}.muted{color:var(--muted);font-size:13px}
+button,select{border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}button.primary{background:var(--accent);border-color:var(--accent);color:white;font-weight:650}button:disabled{opacity:.45;cursor:not-allowed}select{min-width:145px}
+.grid{display:grid;grid-template-columns:minmax(220px, .8fr) minmax(0,1.5fr);gap:15px}.list{display:flex;flex-direction:column;gap:8px;max-height:430px;overflow:auto}.item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:8px;cursor:pointer;min-width:0}.item.selected{border-color:var(--accent);background:var(--soft)}.item img{width:48px;height:48px;object-fit:cover;border-radius:7px}.item .name{font-size:13px;overflow-wrap:anywhere;flex:1}.item .state{font-size:11px;color:var(--muted);margin-top:3px}
+textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line);border-radius:11px;padding:13px;background:var(--bg);color:var(--ink);font:13px/1.55 ui-monospace,Consolas,monospace}
+.progress{height:7px;background:var(--line);border-radius:10px;overflow:hidden;margin-top:9px}.progress>div{height:100%;width:0;background:var(--accent);transition:width .2s}
+#status{font-size:13px;color:var(--muted);min-height:20px}.actions{display:flex;gap:8px;flex-wrap:wrap}.empty{padding:30px 10px;text-align:center;color:var(--muted);font-size:13px}
+.settings{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:13px;padding:12px;border:1px solid var(--line);border-radius:11px}
+.settings label{display:flex;gap:8px;align-items:center;font-size:13px}.settings input{accent-color:var(--accent);width:16px;height:16px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.list{max-height:210px}textarea{min-height:240px}}
+</style>
+</head>
+<body>
+<main>
+ <header class="top">
+  <div class="brand"><div class="logo">📄</div><div><h1>ImageText</h1><p>Extracteur OCR • Traitement local sur ton PC</p></div></div>
+  <span class="muted">Windows · navigateur</span>
+ </header>
+ <section class="panel">
+  <div class="row spread" style="margin-bottom:13px">
+   <div class="row">
+    <label for="lang"><b>Langue OCR</b></label>
+    <select id="lang"><option value="fra+eng">Français + anglais</option><option value="fra">Français</option><option value="eng">Anglais</option><option value="deu">Allemand</option><option value="spa">Espagnol</option><option value="ita">Italien</option></select>
+   </div>
+   <div class="actions"><button id="choose">＋ Ajouter des images</button><button id="clear">Tout effacer</button></div>
+  </div>
+  <div id="drop" class="drop" tabindex="0" role="button" aria-label="Déposer des images">
+   <div style="font-size:34px">📥</div><strong>Glisse-dépose une ou plusieurs images ici</strong>
+   <div class="muted">ou clique pour choisir tes fichiers · JPG, PNG, WEBP, BMP, TIFF</div>
+  </div>
+  <input id="files" type="file" accept="image/*" multiple hidden>
+  <div class="settings">
+   <label for="psm"><b>Disposition du texte</b></label>
+   <select id="psm">
+    <option value="11" selected>Capture / texte épars</option>
+    <option value="6">Bloc de texte</option>
+    <option value="3">Page complète</option>
+    <option value="7">Une seule ligne</option>
+   </select>
+   <label for="cleanSpaces"><input id="cleanSpaces" type="checkbox"> Nettoyer les espaces superflus</label>
+   <label for="removeBlankLines"><input id="removeBlankLines" type="checkbox"> Supprimer les lignes vides</label>
+   <label for="compactList"><input id="compactList" type="checkbox"> Liste compacte (sans en-têtes de fichiers)</label>
+  </div>
+  <div class="muted" style="margin-top:8px">Ces trois options sont indépendantes. « Liste compacte » concerne la copie et l’export de toutes les images : elle retire les en-têtes de fichiers et les lignes vides entre les résultats, tout en gardant chaque nom sur sa propre ligne et les espaces à l’intérieur des noms.</div>
+ </section>
+ <section class="panel">
+  <div class="row spread" style="margin-bottom:12px"><b>Images et résultats</b><span class="muted" id="count">0 image</span></div>
+  <div class="grid">
+   <div><div id="list" class="list"><div class="empty">Aucune image ajoutée.</div></div></div>
+   <div>
+    <div class="row spread" style="margin-bottom:8px"><b id="selectedName">Texte extrait</b><span class="muted" id="selectedState">En attente</span></div>
+    <textarea id="output" placeholder="Le texte extrait apparaîtra ici…" spellcheck="false"></textarea>
+    <div class="actions" style="margin-top:9px"><button id="copy" disabled>Copier tout</button><button id="save" disabled>Télécharger TXT</button></div>
+   </div>
+  </div>
+ </section>
+ <section class="panel">
+  <div class="row spread">
+   <div><b>Reconnaissance de texte</b><div class="muted" id="status">Ajoute des images pour commencer.</div></div>
+   <button id="run" class="primary" disabled>✦ Extraire le texte</button>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="muted" id="pct" style="text-align:right;margin-top:5px">0 %</div>
+ </section>
+ <p class="muted" style="text-align:center">Tes images sont traitées dans ton navigateur. Le moteur OCR et les données de langue sont téléchargés depuis Internet. L’OCR peut encore manquer ou confondre des caractères : relis les résultats importants.</p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+let items=[],selected=-1,busy=false,worker=null,workerLang=null;
+const supported=f=>f.type.startsWith('image/');
+function add(files){let n=0;for(const f of files){if(!supported(f))continue;if(items.some(x=>x.file.name===f.name&&x.file.size===f.size))continue;items.push({file:f,url:URL.createObjectURL(f),text:null,state:'En attente'});n++}render();$('status').textContent=n?`${n} image(s) ajoutée(s).`:'Aucune nouvelle image valide.'}
+function render(){
+ $('count').textContent=`${items.length} image(s)`;$('run').disabled=!items.length||busy;
+ $('copy').disabled=!items.some(x=>x.text!==null);$('save').disabled=!items.some(x=>x.text!==null);
+ $('clear').disabled=busy||!items.length;
+ const list=$('list');list.innerHTML='';
+ if(!items.length){list.innerHTML='<div class="empty">Aucune image ajoutée.</div>';selected=-1;showSelected();return}
+ items.forEach((it,i)=>{const el=document.createElement('div');el.className='item'+(i===selected?' selected':'');
+ const img=document.createElement('img');img.src=it.url;const info=document.createElement('div');info.className='name';const name=document.createElement('div');name.textContent=it.file.name;const state=document.createElement('div');state.className='state';state.textContent=it.state;info.append(name,state);el.append(img,info);el.onclick=()=>{selected=i;render()};list.append(el)});
+ showSelected();
+}
+function formatText(text){
+ if(text==null)return '';
+ if($('removeBlankLines').checked||$('compactList').checked){
+  return text.replace(/\r/g,'')
+   .split('\n')
+   .filter(line=>line.replace(/[\s\u200B\uFEFF\u00A0]/g,'').length>0)
+   .join('\n')
+   .trim();
+ }
+ return text;
+}
+function showSelected(){const it=items[selected];$('selectedName').textContent=it?it.file.name:'Texte extrait';$('selectedState').textContent=it?it.state:'En attente';$('output').value=it?formatText(it.text):''}
+function allText(){
+ const done=items.filter(x=>x.text!==null);
+ if($('compactList').checked){
+  return done.map(x=>formatText(x.text)).filter(Boolean).join('\n');
+ }
+ const blocks=done.map(x=>`===== ${x.file.name} =====\n${formatText(x.text)}`);
+ return blocks.join($('removeBlankLines').checked?'\n':'\n\n\n');
+}
+function cleanText(t){
+ return t.replace(/\r/g,'')
+  .split('\n').map(line=>line.replace(/[ \t]+$/g,'').replace(/[ \t]+([,.;:!?])/g,'$1').replace(/[ \t]{2,}/g,' '))
+  .join('\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+function prepare(file){
+ return new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{try{
+   const scale=Math.min(3,Math.max(2,Math.ceil(1800/Math.max(im.width,im.height))));
+   const c=document.createElement('canvas');c.width=im.width*scale;c.height=im.height*scale;
+   const ctx=c.getContext('2d',{willReadFrequently:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+   ctx.drawImage(im,0,0,c.width,c.height);
+   const pixels=ctx.getImageData(0,0,c.width,c.height),d=pixels.data;
+   for(let i=0;i<d.length;i+=4){let v=(.299*d[i]+.587*d[i+1]+.114*d[i+2]-128)*1.2+128;v=Math.max(0,Math.min(255,v));d[i]=d[i+1]=d[i+2]=v}
+   ctx.putImageData(pixels,0,0);URL.revokeObjectURL(url);resolve(c.toDataURL('image/png'));
+  }catch(e){URL.revokeObjectURL(url);reject(e)}};
+  im.onerror=()=>{URL.revokeObjectURL(url);reject(Error('Image illisible'))};im.src=url;
+ });
+}
+$('choose').onclick=()=>$('files').click();$('drop').onclick=()=>$('files').click();$('files').onchange=e=>{add(e.target.files);e.target.value=''};
+$('drop').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('files').click()}};
+['dragenter','dragover'].forEach(n=>$('drop').addEventListener(n,e=>{e.preventDefault();$('drop').classList.add('over')}));
+['dragleave','drop'].forEach(n=>$('drop').addEventListener(n,e=>{e.preventDefault();$('drop').classList.remove('over')}));
+$('drop').addEventListener('drop',e=>add(e.dataTransfer.files));
+$('clear').onclick=()=>{if(busy)return;items.forEach(x=>URL.revokeObjectURL(x.url));items=[];selected=-1;render();$('status').textContent='Liste vidée.'};
+$('output').addEventListener('input',()=>{if(items[selected]&&items[selected].text!==null)items[selected].text=$('output').value});
+$('removeBlankLines').addEventListener('change',showSelected);
+$('compactList').addEventListener('change',showSelected);
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(allText());$('status').textContent='Tous les résultats ont été copiés.'}catch(e){$('status').textContent='Copie indisponible dans ce navigateur.'}};
+$('save').onclick=()=>{const blob=new Blob([allText()],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='textes-extraits.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('run').onclick=async()=>{
+ if(busy||!items.length)return;
+ if(!window.Tesseract){$('status').textContent='Impossible de charger le moteur OCR. Vérifie ta connexion Internet.';return}
+ busy=true;render();$('bar').style.width='0%';$('pct').textContent='0 %';
+ try{
+  const lang=$('lang').value;
+  if(!worker||workerLang!==lang){
+   if(worker)await worker.terminate();
+   $('status').textContent='Téléchargement / initialisation du moteur OCR…';
+   worker=await Tesseract.createWorker(lang,1,{logger:m=>{if(m.status==='recognizing text'){$('bar').style.width=Math.round(m.progress*100)+'%';$('pct').textContent=Math.round(m.progress*100)+' %'}}});
+   workerLang=lang;
+  }
+  for(let i=0;i<items.length;i++){
+   const it=items[i];it.state=`Analyse ${i+1}/${items.length}…`;selected=i;render();$('status').textContent=`Préparation de ${it.file.name}`;
+   try{
+    const img=await prepare(it.file);it.state='Reconnaissance…';render();
+    const result=await worker.recognize(img,{tessedit_pageseg_mode:$('psm').value,preserve_interword_spaces:'1'});
+    const raw=result.data.text||'';
+    it.text=$('cleanSpaces').checked?cleanText(raw):raw;
+    it.state='✓ Terminé · confiance '+Math.round(result.data.confidence||0)+'%';
+   }catch(err){it.text=`Erreur : ${err.message}`;it.state='Erreur'}
+   render();
+  }
+  $('status').textContent='Extraction terminée. Relis le texte : l’OCR peut encore faire des erreurs.';
+ }catch(err){$('status').textContent='Erreur OCR : '+err.message}
+ finally{busy=false;render()}
+};
+render();
+})();
+</script>
+</body>
+</html>
