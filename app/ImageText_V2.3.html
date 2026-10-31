@@ -5,28 +5,142 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ImageText — OCR local</title>
 <style>
-:root{color-scheme:light dark;--bg:#f4f6fb;--panel:#fff;--ink:#172033;--muted:#68738a;--line:#dce2ec;--accent:#536dfe;--soft:#edf0ff}
-@media(prefers-color-scheme:dark){:root{--bg:#111827;--panel:#1c2637;--ink:#edf2ff;--muted:#a7b2c7;--line:#354258;--accent:#8b9aff;--soft:#293451}}
+:root{
+  color-scheme:light dark;
+  --bg:#f4f6fb;
+  --panel:#fff;
+  --ink:#172033;
+  --muted:#68738a;
+  --line:#dce2ec;
+  --accent:#536dfe;
+  --accent-hover:#3d5afe;
+  --soft:#edf0ff;
+  --danger:#ef4444;
+  --danger-hover:#dc2626;
+  --danger-soft:#fee2e2;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#111827;
+    --panel:#1c2637;
+    --ink:#edf2ff;
+    --muted:#a7b2c7;
+    --line:#354258;
+    --accent:#8b9aff;
+    --accent-hover:#a5b2ff;
+    --soft:#293451;
+    --danger:#f87171;
+    --danger-hover:#ef4444;
+    --danger-soft:#450a0a;
+  }
+}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
 main{max-width:1080px;margin:28px auto;padding:0 18px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:25px}.brand h1{font-size:22px;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:15px;box-shadow:0 4px 18px #1018280a}
 .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.row.spread{justify-content:space-between}
 .drop{border:2px dashed var(--line);border-radius:15px;padding:35px 15px;text-align:center;cursor:pointer;background:var(--bg);transition:.15s}.drop.over{border-color:var(--accent);background:var(--soft)}.drop strong{display:block;font-size:17px;margin:8px 0 4px}.muted{color:var(--muted);font-size:13px}
-button,select{border:1px solid var(--line);border-radius:10px;padding:10px 13px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer}button.primary{background:var(--accent);border-color:var(--accent);color:white;font-weight:650}button:disabled{opacity:.45;cursor:not-allowed}select{min-width:145px}
+
+/* --- DEBUT STYLE DES BOUTONS REVISITÉS --- */
+button, select {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 14px;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+button .btn-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--soft);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  font-weight: 650;
+}
+
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: #ffffff;
+}
+
+button.danger {
+  color: var(--danger);
+  border-color: var(--line);
+}
+
+button.danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+select {
+  min-width: 145px;
+}
+/* --- FIN STYLE DES BOUTONS --- */
+
 .grid{display:grid;grid-template-columns:minmax(220px, .8fr) minmax(0,1.5fr);gap:15px}.list{display:flex;flex-direction:column;gap:8px;max-height:430px;overflow:auto}.item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:11px;padding:8px;cursor:pointer;min-width:0}.item.selected{border-color:var(--accent);background:var(--soft)}.item img{width:48px;height:48px;object-fit:cover;border-radius:7px}.item .name{font-size:13px;overflow-wrap:anywhere;flex:1}.item .state{font-size:11px;color:var(--muted);margin-top:3px}
 textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line);border-radius:11px;padding:13px;background:var(--bg);color:var(--ink);font:13px/1.55 ui-monospace,Consolas,monospace}
 .progress{height:7px;background:var(--line);border-radius:10px;overflow:hidden;margin-top:9px}.progress>div{height:100%;width:0;background:var(--accent);transition:width .2s}
 #status{font-size:13px;color:var(--muted);min-height:20px}.actions{display:flex;gap:8px;flex-wrap:wrap}.empty{padding:30px 10px;text-align:center;color:var(--muted);font-size:13px}
 .settings{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:13px;padding:12px;border:1px solid var(--line);border-radius:11px}
-.settings label{display:flex;gap:8px;align-items:center;font-size:13px}.settings input{accent-color:var(--accent);width:16px;height:16px}
-@media(max-width:700px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.list{max-height:210px}textarea{min-height:240px}}
+.settings label{display:flex;gap:8px;align-items:center;font-size:13px}.settings input{accent-color:var(--accent);width:16px;height:16px}.actionsCopySave {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}.top{align-items:flex-start}.list{max-height:210px}textarea{min-height:240px}
+  button.primary {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  #choose{width:100%;margin-bottom: 10px;margin-top: 10px;}
+  #clear{width:100%;}
+  #psm{width: 100%;text-align: center;}
+  .actionsCopySave button { flex: 1; }
+}
 </style>
 </head>
 <body>
 <main>
  <header class="top">
   <div class="brand"><div class="logo">📄</div><div><h1>ImageText</h1><p>Extracteur OCR • Traitement local sur ton PC</p></div></div>
-  <span class="muted">Windows · navigateur</span>
  </header>
  <section class="panel">
   <div class="row spread" style="margin-bottom:13px">
@@ -34,7 +148,16 @@ textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line
     <label for="lang"><b>Langue OCR</b></label>
     <select id="lang"><option value="fra+eng">Français + anglais</option><option value="fra">Français</option><option value="eng">Anglais</option><option value="deu">Allemand</option><option value="spa">Espagnol</option><option value="ita">Italien</option></select>
    </div>
-   <div class="actions"><button id="choose">＋ Ajouter des images</button><button id="clear">Tout effacer</button></div>
+   <div class="actions">
+    <button id="choose">
+      <svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      Ajouter des images
+    </button>
+    <button id="clear" class="danger">
+      <svg class="btn-icon" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+      Tout effacer
+    </button>
+   </div>
   </div>
   <div id="drop" class="drop" tabindex="0" role="button" aria-label="Déposer des images">
    <div style="font-size:34px">📥</div><strong>Glisse-dépose une ou plusieurs images ici</strong>
@@ -49,9 +172,11 @@ textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line
     <option value="3">Page complète</option>
     <option value="7">Une seule ligne</option>
    </select>
+   <div class="labelCheckbox">
    <label for="cleanSpaces"><input id="cleanSpaces" type="checkbox"> Nettoyer les espaces superflus</label>
    <label for="removeBlankLines"><input id="removeBlankLines" type="checkbox"> Supprimer les lignes vides</label>
    <label for="compactList"><input id="compactList" type="checkbox"> Liste compacte (sans en-têtes de fichiers)</label>
+  </div>
   </div>
   <div class="muted" style="margin-top:8px">Ces trois options sont indépendantes. « Liste compacte » concerne la copie et l’export de toutes les images : elle retire les en-têtes de fichiers et les lignes vides entre les résultats, tout en gardant chaque nom sur sa propre ligne et les espaces à l’intérieur des noms.</div>
  </section>
@@ -62,7 +187,16 @@ textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line
    <div>
     <div class="row spread" style="margin-bottom:8px"><b id="selectedName">Texte extrait</b><span class="muted" id="selectedState">En attente</span></div>
     <textarea id="output" placeholder="Le texte extrait apparaîtra ici…" spellcheck="false"></textarea>
-    <div class="actions" style="margin-top:9px"><button id="copy" disabled>Copier tout</button><button id="save" disabled>Télécharger TXT</button></div>
+    <div class="actionsCopySave" style="margin-top:9px">
+      <button id="copy" disabled>
+        <svg class="btn-icon" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        Copier tout
+      </button>
+      <button id="save" disabled>
+        <svg class="btn-icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        Télécharger TXT
+      </button>
+    </div>
    </div>
   </div>
  </section>
@@ -74,7 +208,7 @@ textarea{width:100%;min-height:330px;resize:vertical;border:1px solid var(--line
   <div class="progress"><div id="bar"></div></div>
   <div class="muted" id="pct" style="text-align:right;margin-top:5px">0 %</div>
  </section>
- <p class="muted" style="text-align:center">Tes images sont traitées dans ton navigateur. Le moteur OCR et les données de langue sont téléchargés depuis Internet. L’OCR peut encore manquer ou confondre des caractères : relis les résultats importants.</p>
+ <p class="muted" style="text-align:center">Le moteur OCR et les données de langue sont téléchargés depuis Internet. L’OCR peut encore manquer ou confondre des caractères : relis les résultats importants.</p>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
