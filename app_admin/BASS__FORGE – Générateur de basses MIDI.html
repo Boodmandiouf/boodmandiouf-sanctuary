@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BASS//FORGE – Générateur de basses MIDI</title>
+<style>
+:root{--bg:#0a0710;--panel:#150d20;--line:#2d1d44;--tx:#e9dcff;--mut:#8f7bb0;--a:#ff2e88;--b:#19e3ff;--g:#b8ff3c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 400px at 80% -10%,#3a0f4d55,transparent),var(--bg);color:var(--tx);font:14px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:14px}
+h1{margin:0 0 2px;font-size:22px;letter-spacing:.12em;color:var(--a);text-shadow:0 0 14px #ff2e8888}
+h1 span{color:var(--b)}
+.sub{color:var(--mut);font-size:12px;margin-bottom:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+label{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+select,button{background:#0e0817;color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit;font-size:13px}
+input[type=range]{width:100%;accent-color:var(--a)}
+.val{color:var(--b);float:right}
+.seg{display:flex;gap:8px;margin-bottom:10px}
+.seg button{flex:1;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.seg button.on{background:var(--a);border-color:var(--a);color:#fff;box-shadow:0 0 14px #ff2e8877}
+.seg button.on.fr{background:var(--b);border-color:var(--b);color:#04121a;box-shadow:0 0 14px #19e3ff77}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row button{cursor:pointer}
+button.main{background:var(--g);border-color:var(--g);color:#0b1200;font-weight:700}
+button.alt{border-color:var(--a);color:var(--a)}
+button.exp{border-color:var(--b);color:var(--b)}
+.chk{flex-direction:row;align-items:center;gap:6px;text-transform:none;font-size:12px}
+#wrap{position:relative;overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:#07040c}
+#ph{position:absolute;top:0;bottom:0;width:2px;background:var(--g);box-shadow:0 0 8px var(--g);display:none;pointer-events:none}
+canvas{display:block;cursor:crosshair}
+#msg{min-height:18px;color:var(--mut);font-size:12px;margin-top:8px}
+.note{color:var(--mut);font-size:11px;margin-top:6px}
+</style>
+</head>
+<body>
+<h1>BASS<span>//</span>FORGE</h1>
+<div class="sub">Générateur de patterns de basse → export MIDI · Darksynth &amp; French Touch</div>
+
+<div class="panel">
+  <div class="seg">
+    <button id="sDark" class="on">Darksynth</button>
+    <button id="sFr" class="fr">French Touch</button>
+  </div>
+  <div class="grid">
+    <label>Type de basse<select id="type"></select></label>
+    <label>Tonalité<select id="root"></select></label>
+    <label>Gamme<select id="scale"></select></label>
+    <label>Octave<select id="oct"><option value="1">1 (grave)</option><option value="2" selected>2</option><option value="3">3</option></select></label>
+    <label>Progression<select id="prog"></select></label>
+    <label>Mesures<select id="bars"><option>1</option><option>2</option><option selected>4</option><option>8</option></select></label>
+    <label>BPM <span class="val" id="vBpm"></span><input type="range" id="bpm" min="70" max="200" value="128"></label>
+    <label>Densité / variations <span class="val" id="vDens"></span><input type="range" id="dens" min="0" max="100" value="50"></label>
+    <label>Humanisation vélocité <span class="val" id="vHum"></span><input type="range" id="hum" min="0" max="100" value="30"></label>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="row" style="margin-bottom:10px">
+    <button id="play" class="main">▶ Lecture</button>
+    <button id="regen" class="alt">🎲 Nouvelle variation</button>
+    <button id="clear">Vider</button>
+    <button id="export" class="exp">⬇ Exporter MIDI</button>
+    <span style="color:var(--mut);font-size:12px">seed <b id="seedv" style="color:var(--tx)"></b></span>
+  </div>
+  <div id="wrap"><canvas id="cv"></canvas><div id="ph"></div></div>
+  <div class="note">Clique dans la grille pour ajouter ou supprimer une note (1 case = 1 double-croche).</div>
+  <div id="msg"></div>
+</div>
+
+<div class="panel">
+  <div class="grid">
+    <label>Cutoff <span class="val" id="vCut"></span><input type="range" id="cut" min="120" max="4000" value="700"></label>
+    <label>Résonance <span class="val" id="vRes"></span><input type="range" id="res" min="0" max="20" value="6"></label>
+    <label>Drive <span class="val" id="vDrv"></span><input type="range" id="drv" min="0" max="100" value="60"></label>
+    <label>Decay filtre <span class="val" id="vDec"></span><input type="range" id="dec" min="30" max="600" value="180"></label>
+  </div>
+  <div class="row" style="margin-top:10px">
+    <label class="chk"><input type="checkbox" id="kick" checked> Kick de repère</label>
+    <label class="chk"><input type="checkbox" id="side"> Sidechain</label>
+  </div>
+  <div class="note">Les patterns sont des approximations stylistiques « dans l’esprit » des artistes, pas des transcriptions de morceaux.</div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const NN = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const SC = {"Mineur naturel":[0,2,3,5,7,8,10],"Phrygien":[0,1,3,5,7,8,10],"Mineur harmonique":[0,2,3,5,7,8,11],"Dorien":[0,2,3,5,7,9,10],"Locrien":[0,1,3,5,6,8,10]};
+const PROG = {"Statique (i)":[0,0,0,0],"i – VI – III – VII":[0,8,3,10],"i – VII – VI – VII":[0,10,8,10],"i – ♭II (brut)":[0,1,0,1],"i – iv – i – v":[0,5,0,7],"i – ♭II – i – ♭VII":[0,1,0,10],"i – ♭VI – ♭VII – i":[0,8,10,0],"i – v – ♭VI – ♭VII":[0,7,8,10],"i – ♭III – iv – ♭II":[0,3,5,1],"i – ♭VII – ♭VI – V":[0,10,8,7],"i – ♭VI – ♭II – V":[0,8,1,7],"Chromatique ↓ (angoisse)":[0,-1,-2,-3],"i – ♭V (triton)":[0,6,0,6],"8 mes. : i i ♭VI ♭VI ♭III ♭III ♭VII ♭VII":[0,0,8,8,3,3,10,10],"8 mes. : i ♭II i ♭VII / i iv ♭VI V":[0,1,0,10,0,5,8,7]};
+const TYPES = {
+ dark:[["rolling","Rolling 16ᵉ (esprit Carpenter Brut)"],["octave","Rolling octaves (esprit Perturbator)"],["gallop","Galop métal violent"],["brut","Stabs bruts / industriels"],["arp","Arpège sombre (esprit Dan Terminus)"],["drone","Ambiance drone"],["syncope","Syncope aérée viscérale (esprit Roller Mobster / Turbo Killer)"],["mobster","Pulse 8ᵉ + pickups (esprit You’re Mine)"],["hollywood","Rolling aéré (esprit Hollywood Burns)"],["horror","Horreur rampante (esprit Night Prowler)"],["pursuit","Poursuite 3-3-3-3-4 (esprit Speed or Perish)"],["heroic","Héroïque 8ᵉ (esprit The Misfits / The Rebels)"]],
+ fr:[["offbeat","Offbeat pump (esprit Daft Punk)"],["disco","Disco octaves"],["stomp","Stomp violent (esprit Gesaffelstein)"],["tresillo","Tresillo distordu (esprit Justice)"],["rolling","Rolling filtré"],["drone","Ambiance sub"],["stress","Angoisse 3 contre 4 (esprit Stress)"],["generator","Riff chromatique (esprit Generator)"],["pusher","Stabs menaçants (esprit Pusher)"]]
+};
+const SOUND = {dark:{bpm:128,cut:700,res:6,drv:60,dec:180,side:false,prog:"i – VI – III – VII",scale:"Phrygien"},
+               fr:{bpm:122,cut:1500,res:4,drv:30,dec:260,side:true,prog:"i – VII – VI – VII",scale:"Mineur naturel"}};
+let style="dark", seed=1, notes=[], S=64, lo=0, hi=0, cw=14, rh=11, base=36;
+
+function mulberry(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const pick=(r,a)=>a[Math.floor(r()*a.length)];
+
+/* Générateurs : renvoient [step, longueur, hauteur, vélocité] sur 1 mesure (16 pas) */
+const nol=a=>a.filter((x,i)=>!a.some((y,j)=>j<i&&y[0]<x[0]+x[1]&&x[0]<y[0]+y[1]));
+const G = {
+ syncope:({r,d,rng})=>{const T=[[0,3,6,7,10,12,14],[0,2,3,6,8,11,12,15],[0,3,4,7,10,11,14],[0,1,4,6,9,10,13]],n=[];pick(rng,T).forEach((s,i)=>{if(i&&rng()>.55+d*.45)return;n.push([s,pick(rng,[1,1,2]),pick(rng,[r,r,r,r+12,r+1,r+7]),i%2?100:124])});return nol(n)},
+ mobster:({r,sc,d,rng,last})=>{const n=[];for(let k=0;k<8;k++){let p=r;if(last&&k==7&&rng()<d)p=r+pick(rng,[1,6,sc[2]]);n.push([2*k,1,p,k%2?92:122])}[3,7,11,15].forEach(s=>{if(rng()<.3+d*.6)n.push([s,1,r,104])});return n},
+ hollywood:({r,d,rng})=>{const n=[];for(let i=0;i<16;i++){if(i%4==3&&rng()<.6+d*.3)continue;n.push([i,1,i%8==6&&rng()<d?r+12:r,i%4==0?122:94])}return n},
+ horror:({r,sc,d,rng})=>{const n=[[0,pick(rng,[6,8]),r,104]];if(rng()<.4+d*.5)n.push([pick(rng,[8,10]),pick(rng,[2,4]),r+pick(rng,[1,6,sc[1],-2]),88]);if(rng()<d*.6)n.push([pick(rng,[13,14]),1,r,76]);return nol(n)},
+ pursuit:({r,sc,d,rng,last})=>{const n=[];for(let i=0;i<16;i++){const acc=[0,3,6,9,12].includes(i);let p=r;if(last&&i>=12)p=r+sc[i-11];else if(acc&&i&&rng()<d*.35)p=r+12;n.push([i,1,p,acc?124:88])}return n},
+ heroic:({r,sc,d,rng})=>{const P=[0,0,12,0,sc[6],sc[6],sc[4],sc[5]],n=[];for(let k=0;k<8;k++)n.push([2*k,2,r+(k>3&&rng()<d*.4?sc[2]:P[k]),k%2?100:120]);return n},
+ stress:({r,d,rng})=>{const n=[];for(let i=0;i<16;i++){if(i%8==7&&rng()>d*.8)continue;n.push([i,1,i%3==2?r+12:r,i%4==0?124:96])}return n},
+ generator:({r,d,rng})=>{const Q=[0,2,3,6,8,10,11,14],P=[0,0,1,0,6,0,1,12];return nol(Q.map((s,i)=>i&&rng()>.6+d*.4?null:[s,i%3==2?2:1,r+(rng()<d*.4?pick(rng,[1,6,0]):P[i]),i%2?104:124]).filter(Boolean))},
+ pusher:({r,d,rng})=>{const n=[[0,2,r,126],[3,1,r,100],[6,2,r+pick(rng,[0,7]),112],[10,1,r+1,104],[12,2,r,122]];if(rng()<d)n.push([15,1,r+12,96]);return nol(n)},
+ rolling:({r,sc,d,rng})=>{const n=[];for(let i=0;i<16;i++){let p=r;if(i%2&&rng()<d*.35)p=r+12;if(i>=14&&rng()<d*.5)p=r+pick(rng,[sc[1],sc[2],sc[4]]);n.push([i,1,p,i%4==0?122:i%2==0?100:82])}return n},
+ octave:({r,sc,d,rng})=>{const n=[];for(let i=0;i<16;i++){let p=i%2?r+12:r;if(i%8==7&&rng()<d)p=r+pick(rng,[sc[2],sc[4],7]);n.push([i,1,p,i%4==0?122:98])}return n},
+ gallop:({r,d,rng})=>{const n=[];for(let b=0;b<4;b++){let p=r;if(b==3&&rng()<d)p=r+pick(rng,[1,6,3]);n.push([4*b,2,r,118],[4*b+2,1,p,92],[4*b+3,1,r,100])}return n},
+ brut:({r,sc,d,rng})=>{const n=[[0,pick(rng,[2,3,4]),r,124]];[3,6,8,10,12,14].forEach(s=>{if(rng()<.35+d*.5)n.push([s,pick(rng,[1,1,2]),pick(rng,[r,r,r,r+12,r+1,r+6,r+7,r+sc[2]]),pick(rng,[110,118,126])])});return n.filter((x,i,a)=>!a.some((y,j)=>j<i&&y[0]<x[0]+x[1]&&x[0]<y[0]+y[1]))},
+ arp:({r,sc,d,rng})=>{const P=[0,2,4,7,4,2,0,2],n=[];for(let i=0;i<16;i++){if(i%4&&rng()>.55+d*.45)continue;const k=P[i%8];n.push([i,1,r+(k<7?sc[k]:sc[k-7]+12),i%4==0?118:90])}return n},
+ drone:({r,sc,d,rng})=>{const n=[[0,16,r,92]];if(rng()<d){n.length=0;n.push([0,8,r,92],[8,8,r+pick(rng,[7,sc[1],5]),86])}return n},
+ offbeat:({r,d,rng})=>{const n=[];for(let k=0;k<4;k++){n.push([2+4*k,2,r,112]);if(rng()<d*.4)n.push([4*k+1,1,r+12,66])}return n},
+ disco:({r,sc,d,rng})=>{const n=[];for(let k=0;k<8;k++){let p=k%2?r+12:r;if(k==7&&rng()<d)p=r+pick(rng,[7,sc[3],sc[2]]);n.push([2*k,1,p,k%2?96:116])}if(rng()<d)n.push([15,1,r+12,70]);return n},
+ stomp:({r,d,rng})=>{const n=[];for(let k=0;k<4;k++)n.push([4*k,3,r,122]);if(rng()<.5+d*.4)n.push([7,1,r,100]);if(rng()<d)n.push([14,1,r+pick(rng,[1,6]),108]);return n},
+ tresillo:({r,d,rng})=>{const n=[[0,2,r,122],[3,2,r,104],[6,2,rng()<d?r+12:r,112],[8,2,r,118],[11,2,r,104],[14,2,rng()<d?r+1:r,112]];return n}
+};
+
+function build(){
+ const sc=SC[$("scale").value], prog=PROG[$("prog").value], bars=+$("bars").value, d=$("dens").value/100, hum=$("hum").value/100;
+ base=12*(+$("oct").value+1)+(+$("root").value); S=bars*16; notes=[];
+ const rng=mulberry(seed), t=$("type").value;
+ for(let b=0;b<bars;b++){
+  const r=base+prog[b%prog.length];
+  G[t]({r,sc,d,rng,b,last:b==bars-1}).forEach(([s,l,p,v])=>notes.push({s:b*16+s,l:Math.min(l,16-s),p,v:Math.max(1,Math.min(127,v+Math.round((rng()-.5)*hum*40)))}));
+ }
+ $("seedv").textContent=seed; draw();
+}
+
+const cv=$("cv"), ctx=cv.getContext("2d");
+const BLACK=[1,3,6,8,10];
+function draw(){
+ const ps=notes.map(n=>n.p);
+ lo=Math.min(base-2,...ps)-1; hi=Math.max(base+14,...ps)+1;
+ cw=Math.max(14,Math.floor($("wrap").clientWidth/S)); const rows=hi-lo+1;
+ cv.width=S*cw; cv.height=rows*rh; cv.style.width=cv.width+"px"; cv.style.height=cv.height+"px";
+ for(let p=lo;p<=hi;p++){const y=(hi-p)*rh;
+  ctx.fillStyle=BLACK.includes(p%12)?"#0c0715":"#120a1d";ctx.fillRect(0,y,cv.width,rh);
+  if(p%12==base%12){ctx.fillStyle="#ff2e8822";ctx.fillRect(0,y,cv.width,rh);ctx.fillStyle="#8f7bb0";ctx.font="9px monospace";ctx.fillText(NN[p%12]+(Math.floor(p/12)-1),2,y+9)}}
+ for(let s=0;s<=S;s++){ctx.fillStyle=s%16==0?"#ff2e88":s%4==0?"#4a3068":"#24153a";ctx.fillRect(s*cw,0,1,cv.height)}
+ notes.forEach(n=>{const x=n.s*cw+1,y=(hi-n.p)*rh+1,w=n.l*cw-2;
+  ctx.fillStyle=`hsl(${185+(127-n.v)*1.2},95%,${45+n.v/6}%)`;ctx.fillRect(x,y,w,rh-2);
+  ctx.fillStyle="#fff6";ctx.fillRect(x,y,w,1)});
+ $("ph").style.height=cv.height+"px";
+}
+cv.addEventListener("click",e=>{
+ const s=Math.floor(e.offsetX/cw),p=hi-Math.floor(e.offsetY/rh);
+ const i=notes.findIndex(n=>n.p==p&&s>=n.s&&s<n.s+n.l);
+ if(i>=0)notes.splice(i,1);else if(s<S)notes.push({s,l:1,p,v:100});
+ draw();
+});
+
+/* ---------- Audio ---------- */
+let ac,shaper,bus,master,playing=false,timer,step=0,nextT=0,queue=[],cur=0;
+function curve(){const k=1+$("drv").value/6,c=new Float32Array(1024);for(let i=0;i<1024;i++)c[i]=Math.tanh((i/512-1)*k);shaper.curve=c}
+function init(){
+ if(ac)return;
+ ac=new (window.AudioContext||window.webkitAudioContext)();
+ shaper=ac.createWaveShaper();shaper.oversample="2x";bus=ac.createGain();master=ac.createGain();master.gain.value=.6;
+ shaper.connect(bus);bus.connect(master);master.connect(ac.destination);curve();
+}
+function playNote(n,t,dur){
+ const f=440*2**((n.p-69)/12),v=n.v/127,cut=+$("cut").value,dec=$("dec").value/1000;
+ const fl=ac.createBiquadFilter();fl.type="lowpass";fl.Q.value=+$("res").value;
+ fl.frequency.setValueAtTime(Math.min(cut*(1+4*v),14000),t);fl.frequency.exponentialRampToValueAtTime(cut,t+dec);
+ const g=ac.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.32*v,t+.005);g.gain.setValueAtTime(.32*v,t+Math.max(dur-.03,.01));g.gain.linearRampToValueAtTime(0,t+dur+.03);
+ [["sawtooth",f,0,.6],["sawtooth",f,9,.5],["square",f/2,0,.4]].forEach(([w,fr,dt,a])=>{
+  const o=ac.createOscillator(),og=ac.createGain();o.type=w;o.frequency.value=fr;o.detune.value=dt;og.gain.value=a;
+  o.connect(og);og.connect(fl);o.start(t);o.stop(t+dur+.06)});
+ fl.connect(g);g.connect(shaper);
+}
+function kick(t){const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(42,t+.12);
+ g.gain.setValueAtTime(.8,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g);g.connect(master);o.start(t);o.stop(t+.35)}
+function sched(){
+ while(nextT<ac.currentTime+.12){
+  const sd=60/$("bpm").value/4;
+  if(step>=S)step=0;
+  if(step%4==0){
+   if($("kick").checked)kick(nextT);
+   bus.gain.cancelScheduledValues(nextT);
+   if($("side").checked){bus.gain.setValueAtTime(.12,nextT);bus.gain.linearRampToValueAtTime(1,nextT+sd*3)}else bus.gain.setValueAtTime(1,nextT);
+  }
+  notes.forEach(n=>{if(n.s===step)playNote(n,nextT,n.l*sd*.95)});
+  queue.push([nextT,step]);nextT+=sd;step++;
+ }
+}
+function anim(){
+ if(!playing)return;
+ while(queue.length&&queue[0][0]<=ac.currentTime){cur=queue.shift()[1]}
+ $("ph").style.left=cur*cw+"px";requestAnimationFrame(anim);
+}
+function toggle(){
+ init();
+ if(playing){playing=false;clearInterval(timer);$("ph").style.display="none";$("play").textContent="▶ Lecture";return}
+ ac.resume();playing=true;step=0;queue=[];nextT=ac.currentTime+.05;
+ timer=setInterval(sched,25);$("ph").style.display="block";$("play").textContent="■ Stop";anim();
+}
+
+/* ---------- Export MIDI (SMF format 0) ---------- */
+const vlq=n=>{const b=[n&127];while(n>>=7)b.unshift((n&127)|128);return b};
+function midiBytes(){
+ const T=120,mpq=Math.round(60000000/$("bpm").value),ev=[];
+ notes.forEach(n=>{ev.push([n.s*T,1,0x90,n.p,n.v]);ev.push([(n.s+n.l)*T,0,0x80,n.p,0])});
+ ev.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ const tr=[0,0xFF,0x51,3,(mpq>>16)&255,(mpq>>8)&255,mpq&255,0,0xFF,0x58,4,4,2,24,8];
+ let last=0;ev.forEach(e=>{tr.push(...vlq(e[0]-last),e[2],e[3],e[4]);last=e[0]});
+ tr.push(...vlq(Math.max(0,S*T-last)),0xFF,0x2F,0);
+ const L=tr.length,h=[0x4D,0x54,0x68,0x64,0,0,0,6,0,0,0,1,0x01,0xE0,0x4D,0x54,0x72,0x6B,(L>>>24)&255,(L>>>16)&255,(L>>>8)&255,L&255];
+ return new Uint8Array([...h,...tr]);
+}
+const le=(n,b)=>{const a=[];for(let i=0;i<b;i++)a.push((n>>>(8*i))&255);return a};
+let crcT;
+function crc32(u){if(!crcT){crcT=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;crcT.push(c>>>0)}}let r=-1;for(const b of u)r=crcT[(r^b)&255]^(r>>>8);return(r^-1)>>>0}
+function zip(name,data){
+ const nm=[...new TextEncoder().encode(name)],c=crc32(data),sz=data.length;
+ const loc=[...le(0x04034b50,4),...le(20,2),...le(0,2),...le(0,2),...le(0,2),...le(33,2),...le(c,4),...le(sz,4),...le(sz,4),...le(nm.length,2),...le(0,2),...nm];
+ const cen=[...le(0x02014b50,4),...le(20,2),...le(20,2),...le(0,2),...le(0,2),...le(0,2),...le(33,2),...le(c,4),...le(sz,4),...le(sz,4),...le(nm.length,2),...le(0,2),...le(0,2),...le(0,2),...le(0,2),...le(0,4),...le(0,4),...nm];
+ const eo=[...le(0x06054b50,4),...le(0,2),...le(0,2),...le(1,2),...le(1,2),...le(cen.length,4),...le(loc.length+sz,4),...le(0,2)];
+ return new Uint8Array([...loc,...data,...cen,...eo]);
+}
+const msg=t=>$("msg").textContent=t;
+async function exportMidi(){
+ if(!notes.length){msg("Aucune note à exporter.");return}
+ const fn=`bass_${style}_${$("type").value}_${$("bpm").value}bpm_${NN[$("root").value]}`.replace("#","s"),mid=midiBytes();
+ let d=null;try{d=window.claude&&await window.claude.use("downloads")}catch(e){}
+ if(d){
+  try{await d.save({filename:fn+".zip",data:zip(fn+".mid",mid)});msg("ZIP envoyé : dézippe-le pour obtenir le .mid.")}
+  catch(e){if(e&&e.code!=="declined")msg("Export impossible ("+(e.code||"erreur")+").")}
+ }else{
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([mid],{type:"audio/midi"}));a.download=fn+".mid";a.click();msg("Fichier .mid généré.");
+ }
+}
+
+/* ---------- UI ---------- */
+function fill(sel,arr,fn){$(sel).innerHTML=arr.map(fn).join("")}
+fill("root",NN,(n,i)=>`<option value="${i}"${i==0?" selected":""}>${n}</option>`);
+fill("scale",Object.keys(SC),k=>`<option>${k}</option>`);
+fill("prog",Object.keys(PROG),k=>`<option>${k}</option>`);
+function setStyle(s){
+ style=s;$("sDark").className=s=="dark"?"on":"";$("sFr").className=s=="fr"?"on fr":"fr";
+ fill("type",TYPES[s],t=>`<option value="${t[0]}">${t[1]}</option>`);
+ const p=SOUND[s];["bpm","cut","res","drv","dec"].forEach(k=>$(k).value=p[k]);
+ $("side").checked=p.side;$("prog").value=p.prog;$("scale").value=p.scale;
+ labels();seed=1+Math.floor(Math.random()*9999);build();
+}
+function labels(){$("vBpm").textContent=$("bpm").value;$("vDens").textContent=$("dens").value+"%";$("vHum").textContent=$("hum").value+"%";
+ $("vCut").textContent=$("cut").value+" Hz";$("vRes").textContent=$("res").value;$("vDrv").textContent=$("drv").value;$("vDec").textContent=$("dec").value+" ms"}
+$("sDark").onclick=()=>setStyle("dark");$("sFr").onclick=()=>setStyle("fr");
+["type","root","scale","oct","prog","bars","dens","hum"].forEach(i=>$(i).addEventListener("input",()=>{labels();build()}));
+["bpm","cut","res","drv","dec"].forEach(i=>$(i).addEventListener("input",()=>{labels();if(i=="drv"&&ac)curve()}));
+const HINT={syncope:[130,"Phrygien"],mobster:[120,"Mineur naturel"],hollywood:[118,"Mineur harmonique"],horror:[90,"Locrien"],pursuit:[150,"Mineur naturel"],heroic:[140,"Dorien"],stress:[128,"Phrygien"],generator:[125,"Locrien"],pusher:[120,"Mineur harmonique"]};
+$("type").addEventListener("input",()=>{const h=HINT[$("type").value];if(h){$("bpm").value=h[0];$("scale").value=h[1];labels();build()}});
+$("play").onclick=toggle;
+$("regen").onclick=()=>{seed=1+Math.floor(Math.random()*99999);build()};
+$("clear").onclick=()=>{notes=[];draw()};
+$("export").onclick=exportMidi;
+window.addEventListener("resize",draw);
+setStyle("dark");
+</script>
+</body>
+</html>

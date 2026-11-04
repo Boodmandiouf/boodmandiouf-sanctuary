@@ -384,6 +384,11 @@ function switchTab(tabName) {
         const btnMao = document.getElementById('btn-mao');
         if (viewMao) viewMao.classList.add('active-view');
         if (btnMao) btnMao.classList.add('active');
+    } else if (tabName === 'tools') {
+        const viewMao = document.getElementById('view-tools');
+        const btnMao = document.getElementById('btn-tools');
+        if (viewMao) viewMao.classList.add('active-view');
+        if (btnMao) btnMao.classList.add('active');
     }
 }
 
@@ -531,3 +536,55 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// --- GESTION DU FILTRE ET DE LA RECHERCHE POUR LA SECTION TOOLS ---
+let currentToolCategory = 'ALL';
+
+function setToolFilter(category, btnElement) {
+    currentToolCategory = category;
+    
+    // Gestion des classes active sur les boutons de filtre Tools
+    const chipsContainer = document.getElementById('toolsFilterChips');
+    if (chipsContainer) {
+        chipsContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    }
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+    
+    filterTools();
+}
+
+function filterTools() {
+    const searchInput = document.getElementById('toolsSearchInput');
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const cards = document.querySelectorAll('#toolsGrid .tool-card');
+    const countDisplay = document.getElementById('toolsResultCount');
+    
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const keywords = card.getAttribute('data-keywords') || '';
+        const title = card.querySelector('h4').textContent.toLowerCase();
+        const desc = card.querySelector('p').textContent.toLowerCase();
+
+        // Vérification de la correspondance du filtre par catégorie
+        const matchesCategory = (currentToolCategory === 'ALL' || category === currentToolCategory);
+        
+        // Vérification de la recherche textuelle (titre, description ou mots-clés)
+        const matchesSearch = (query === '' || title.includes(query) || desc.includes(query) || keywords.includes(query));
+
+        if (matchesCategory && matchesSearch) {
+            card.style.display = 'flex';
+            visibleCount++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Mise à jour du compteur de résultats dynamique
+    if (countDisplay) {
+        countDisplay.textContent = `${visibleCount} résultat(s) trouvé(s)`;
+    }
+}

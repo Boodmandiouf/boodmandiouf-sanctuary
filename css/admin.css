@@ -1431,3 +1431,119 @@ details[open] .mao-main-accordion-content {
         transform: translateY(0);
     }
 }
+
+/* ==========================================================================
+   14. VUE TOOLS & CARTE UTILITIES (DA ADMIN UNIFIÉE)
+   ========================================================================== */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.tool-card {
+    background: var(--bg-secondary, #12121c);
+    border: 1px solid var(--border-color, rgba(223, 22, 43, 0.3));
+    border-radius: 4px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.tool-card:hover {
+    border-color: #00ff66;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+    transform: translateY(-2px);
+}
+
+body.light-mode .tool-card {
+    background: #ffffff;
+    border: 1px solid rgba(47, 54, 64, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tool-card-header h4 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: var(--text-primary, #ffffff);
+    margin-top: 6px;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.tool-card-header p {
+    color: var(--text-muted, #a0a0b0);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 1.2rem;
+}
+
+/* Boutons de cartes (Style unifié avec la navbar / .admin-tab-btn) */
+.tool-btn {
+    background: transparent;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 8px 14px;
+    border-radius: 4px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.tool-btn:hover {
+    background: rgba(0, 255, 102, 0.1);
+    border-color: #00ff66;
+    color: #00ff66;
+    box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+body.light-mode .tool-btn {
+    background: #f8f9fa;
+    border-color: #2f3640;
+    color: #2f3640;
+}
+
+body.light-mode .tool-btn:hover {
+    background: #2f3640;
+    color: #ffffff;
+    border-color: #2f3640;
+    box-shadow: none;
+}
+
+/* Badges de catégories personnalisés pour les Tools */
+.tool-tag-security {
+    color: #df162b;
+    background: rgba(223, 22, 43, 0.15);
+    border: 1px solid rgba(223, 22, 43, 0.3);
+}
+
+.tool-tag-media {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.tool-tag-dev {
+    color: #c084fc;
+    background: rgba(192, 132, 252, 0.15);
+    border: 1px solid rgba(192, 132, 252, 0.3);
+}
+
+.tool-tag-network {
+    color: #00ff66;
+    background: rgba(0, 255, 102, 0.15);
+    border: 1px solid rgba(0, 255, 102, 0.3);
+}
