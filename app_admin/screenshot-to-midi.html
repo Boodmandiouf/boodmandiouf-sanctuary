@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Screenshot → MIDI</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f1ec;--panel:#fff;--ink:#1c1b19;--mut:#6b6860;--line:#d9d5cb;--acc:#c46a00;--accink:#fff;--cv:#0e1013}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161a;--panel:#1d2026;--ink:#e8e6e1;--mut:#9a978f;--line:#2e323a;--acc:#f5a524;--accink:#1a1100}}
+:root[data-theme="dark"]{--bg:#14161a;--panel:#1d2026;--ink:#e8e6e1;--mut:#9a978f;--line:#2e323a;--acc:#f5a524;--accink:#1a1100}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+header{padding:18px 20px 6px}
+h1{margin:0;font-size:20px;letter-spacing:.02em}
+h1 span{color:var(--acc)}
+header p{margin:4px 0 0;color:var(--mut);max-width:70ch}
+main{display:grid;grid-template-columns:330px 1fr;gap:14px;padding:14px 20px 28px}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:var(--mut)}
+.modes{display:grid;gap:6px}
+.modes button{text-align:left;padding:8px 10px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;cursor:pointer;font:inherit}
+.modes button.on{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+.modes small{display:block;color:var(--mut)}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
+.row label{flex:1 1 130px;color:var(--mut);font-size:13px}
+input,select{font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:5px 7px;width:110px}
+input[type=range]{padding:0;width:110px}
+.big{width:100%;padding:11px;border:0;border-radius:8px;background:var(--acc);color:var(--accink);font:600 15px system-ui;cursor:pointer}
+.big:disabled{opacity:.4;cursor:not-allowed}
+#drop{border:2px dashed var(--line);border-radius:10px;padding:34px 16px;text-align:center;color:var(--mut);cursor:pointer}
+#drop.hov{border-color:var(--acc);color:var(--ink)}
+#wrap{overflow:auto;background:var(--cv);border-radius:10px;max-height:78vh;display:none}
+canvas{display:block;max-width:100%;cursor:crosshair}
+#wrap.full canvas{max-width:none}
+#msg{min-height:1.4em;color:var(--mut);font-size:13px;margin:4px 0 0}
+.warn{font-size:12.5px;color:var(--mut);border-left:3px solid var(--acc);padding-left:9px;margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Screenshot <span>→</span> MIDI</h1>
+  <p>Détection de notes dans une capture de piano roll (n’importe quel DAW), puis export .mid. Tout se passe dans ton navigateur, rien n’est envoyé.</p>
+</header>
+<main>
+<aside>
+  <div class="card">
+    <h2>Réglages (dans l’ordre)</h2>
+    <div class="modes" id="modes">
+      <button data-m="col" class="on"><b>1 · Couleur des notes</b><small>Clique sur le corps d’une note</small></button>
+      <button data-m="ref"><b>2 · Note de référence</b><small>Clique sur une note dont tu connais la hauteur</small></button>
+      <button data-m="x0"><b>3 · Début de mesure</b><small>Clique sur une barre de mesure (temps 0)</small></button>
+      <button data-m="x1"><b>4 · Barre plus loin</b><small>Clique sur une autre barre, N temps après</small></button>
+      <button data-m="add"><b>＋ Ajouter une note</b><small>Glisse un rectangle (jaune) sur la note à créer</small></button>
+      <button data-m="del"><b>− Supprimer une note</b><small>Clique sur un rectangle pour l’enlever</small></button>
+      <button id="rst"><small style="display:inline">↺ Annuler mes ajouts et suppressions</small></button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Paramètres</h2>
+    <div class="row"><label>Tolérance couleur</label><input id="tol" type="range" min="4" max="90" value="28"></div>
+    <div class="row"><label>Largeur min. note (px)</label><input id="minw" type="number" min="2" value="4"></div>
+    <div class="row"><label>Hauteur d’une ligne (px)</label><input id="rowh" type="number" step="0.1" min="2" value="12"></div>
+    <div class="row"><label>Hauteur de la réf.</label><input id="refp" value="C3"></div>
+    <div class="row"><label>Convention Do central</label><select id="mc"><option value="3">C3 = 60 (Ableton, Logic)</option><option value="4">C4 = 60 (Cubase, Reaper)</option><option value="5">C5 = 60 (FL Studio)</option></select></div>
+    <div class="row"><label>Temps entre les 2 barres</label><input id="beats" type="number" min="0.25" step="0.25" value="4"></div>
+    <div class="row"><label>Quantification</label><select id="q"><option value="0">aucune</option><option value="1">1/4</option><option value="0.5">1/8</option><option value="0.25" selected>1/16</option><option value="0.125">1/32</option></select></div>
+    <div class="row"><label>BPM</label><input id="bpm" type="number" min="20" max="300" value="120"></div>
+    <div class="row"><label>Vélocité</label><input id="vel" type="number" min="1" max="127" value="100"></div>
+    <div class="row"><label>Afficher en taille réelle</label><input id="full" type="checkbox" style="width:auto"></div>
+  </div>
+  <div class="card">
+    <button class="big" id="exp" disabled>Exporter .mid</button>
+    <p id="msg"></p>
+    <p class="warn">Limites : la vélocité n’est pas lue dans l’image, et la détection repose sur la couleur des notes. Vérifie toujours la superposition à droite avant d’exporter.</p>
+  </div>
+</aside>
+<section>
+  <div id="drop" tabindex="0">Dépose un screenshot ici, colle-le (Ctrl/Cmd+V) ou clique pour choisir un fichier</div>
+  <input id="file" type="file" accept="image/*" hidden>
+  <div id="wrap"><canvas id="cv"></canvas></div>
+</section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const S={w:0,h:0,data:null,bmp:null,col:null,rects:[],det:[],add:[],del:[],notes:[],refY:null,x0:null,x1:null,mode:"col",rowAuto:true};
+const NN=["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+const msg=t=>{$("#msg").textContent=t};
+const pname=p=>NN[p%12]+(Math.floor(p/12)-5+(+$("#mc").value));
+
+function parsePitch(s){
+  const m=/^([A-Ga-g])([#b]?)(-?\d+)$/.exec(s.trim());
+  if(!m)return null;
+  const base={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1].toUpperCase()]+(m[2]==="#"?1:m[2]==="b"?-1:0);
+  return 12*(+m[3]-(+$("#mc").value))+60+base;
+}
+
+async function loadImage(blob){
+  try{
+    const bmp=await createImageBitmap(blob);
+    const c=document.createElement("canvas");c.width=bmp.width;c.height=bmp.height;
+    const x=c.getContext("2d",{willReadFrequently:true});x.drawImage(bmp,0,0);
+    S.w=bmp.width;S.h=bmp.height;S.bmp=bmp;S.data=x.getImageData(0,0,S.w,S.h).data;
+    Object.assign(S,{col:null,rects:[],det:[],add:[],del:[],notes:[],refY:null,x0:null,x1:null,rowAuto:true});
+    $("#cv").width=S.w;$("#cv").height=S.h;$("#wrap").style.display="block";
+    setMode("col");render();msg("Image chargée. Étape 1 : clique sur une note.");
+  }catch(e){msg("Impossible de lire cette image.")}
+}
+
+function merge(){S.rects=S.det.filter(r=>!S.del.some(d=>d.x>=r.x&&d.x<=r.x+r.w&&d.y>=r.y&&d.y<=r.y+r.h)).concat(S.add)}
+function detect(){
+  if(!S.data||!S.col)return;
+  const {data,w,h}=S,t=+$("#tol").value,t2=t*t,[r,g,b]=S.col,N=w*h;
+  const m=new Uint8Array(N);
+  for(let i=0,p=0;i<N;i++,p+=4){const a=data[p]-r,c=data[p+1]-g,d=data[p+2]-b;if(a*a+c*c+d*d<=t2)m[i]=1}
+  const st=new Int32Array(N),minw=+$("#minw").value,out=[];
+  for(let i=0;i<N;i++){
+    if(m[i]!==1)continue;
+    let sp=0,x0=w,y0=h,x1=0,y1=0,n=0;st[sp++]=i;m[i]=2;
+    while(sp){
+      const j=st[--sp],x=j%w,y=(j/w)|0;n++;
+      if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;
+      if(x>0&&m[j-1]===1){m[j-1]=2;st[sp++]=j-1}
+      if(x<w-1&&m[j+1]===1){m[j+1]=2;st[sp++]=j+1}
+      if(y>0&&m[j-w]===1){m[j-w]=2;st[sp++]=j-w}
+      if(y<h-1&&m[j+w]===1){m[j+w]=2;st[sp++]=j+w}
+    }
+    const bw=x1-x0+1,bh=y1-y0+1;
+    if(bw>=minw&&bh>=4&&n/(bw*bh)>0.3)out.push({x:x0,y:y0,w:bw,h:bh});
+  }
+  S.det=out;merge();
+  if(out.length&&S.rowAuto){
+    const hs=out.map(o=>o.h).sort((a,b)=>a-b);
+    $("#rowh").value=hs[Math.floor(hs.length*0.25)];
+  }
+  compute();
+}
+
+function compute(){
+  const rowH=+$("#rowh").value,ref=parsePitch($("#refp").value),q=+$("#q").value;
+  S.notes=[];
+  if(S.refY!==null&&ref!==null&&S.x1!==null&&S.x0!==null&&S.x1!==S.x0){
+    const ppb=(S.x1-S.x0)/+$("#beats").value;
+    for(const r of S.rects){
+      const p=ref+Math.round((S.refY-(r.y+r.h/2))/rowH);
+      let s=(r.x-S.x0)/ppb,e=(r.x+r.w-S.x0)/ppb;
+      if(q){s=Math.round(s/q)*q;e=Math.max(Math.round(e/q)*q,s+q)}
+      if(e<=0||p<0||p>127)continue;
+      S.notes.push({p,s:Math.max(0,s),e});
+    }
+    S.notes.sort((a,b)=>a.s-b.s||a.p-b.p);
+  }
+  $("#exp").disabled=!S.notes.length;
+  render();
+  const need=[];
+  if(!S.col)need.push("couleur");
+  if(S.refY===null)need.push("référence");
+  if(S.x0===null)need.push("début");
+  if(S.x1===null)need.push("2e barre");
+  msg(S.notes.length?S.notes.length+" notes prêtes ("+pname(Math.min(...S.notes.map(n=>n.p)))+" à "+pname(Math.max(...S.notes.map(n=>n.p)))+")."
+    :S.rects.length?S.rects.length+" rectangles détectés. Il manque : "+(need.join(", ")||"vérifie la hauteur de ligne et la référence")+".":"");
+}
+
+function render(){
+  if(!S.bmp)return;
+  const c=$("#cv"),x=c.getContext("2d");
+  x.drawImage(S.bmp,0,0);
+  const lw=Math.max(1,S.w/700);
+  x.lineWidth=lw;x.font=Math.max(10,S.h/60)+"px ui-monospace,monospace";x.textBaseline="top";
+  const rowH=+$("#rowh").value,ref=parsePitch($("#refp").value);
+  S.rects.forEach(r=>{
+    x.strokeStyle=S.add.includes(r)?"#ffd400":"#00e5ff";x.strokeRect(r.x+.5,r.y+.5,r.w,r.h);
+    if(S.refY!==null&&ref!==null){
+      const p=ref+Math.round((S.refY-(r.y+r.h/2))/rowH);
+      x.fillStyle="rgba(0,0,0,.65)";const t=pname(p);x.fillRect(r.x,r.y-x.measureText(t).width*0+0,0,0);
+      x.fillStyle="#fff";x.strokeStyle="#000";x.lineWidth=3;x.strokeText(t,r.x+2,r.y+1);x.lineWidth=lw;x.fillText(t,r.x+2,r.y+1);
+    }
+  });
+  x.strokeStyle="#ff3d71";
+  if(S.x0!==null){x.beginPath();x.moveTo(S.x0+.5,0);x.lineTo(S.x0+.5,S.h);x.stroke()}
+  if(S.x1!==null){x.strokeStyle="#ff9f1c";x.beginPath();x.moveTo(S.x1+.5,0);x.lineTo(S.x1+.5,S.h);x.stroke()}
+  if(S.refY!==null){x.strokeStyle="#7CFC00";x.beginPath();x.moveTo(0,S.refY+.5);x.lineTo(S.w,S.refY+.5);x.stroke()}
+}
+
+function setMode(m){S.mode=m;document.querySelectorAll("#modes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m))}
+
+$("#cv").addEventListener("click",e=>{
+  const b=e.target.getBoundingClientRect(),x=Math.round((e.clientX-b.left)*S.w/b.width),y=Math.round((e.clientY-b.top)*S.h/b.height);
+  if(S.mode==="add")return;
+  if(S.mode==="del"){
+    const r=S.rects.find(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h);
+    if(!r){msg("Clique à l’intérieur d’un rectangle.");return}
+    const ai=S.add.indexOf(r);
+    if(ai>=0)S.add.splice(ai,1);else S.del.push({x:r.x+r.w/2,y:r.y+r.h/2});
+    merge();compute();
+  }else if(S.mode==="col"){
+    const p=(y*S.w+x)*4;S.col=[S.data[p],S.data[p+1],S.data[p+2]];S.rowAuto=true;detect();setMode("ref");
+  }else if(S.mode==="ref"){
+    const r=S.rects.find(r=>x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h);
+    if(!r){msg("Clique à l’intérieur d’un rectangle cyan (note détectée).");return}
+    S.refY=r.y+r.h/2;compute();setMode("x0");msg("Vérifie le champ « Hauteur de la réf. » (nom de la note cliquée).");
+  }else if(S.mode==="x0"){S.x0=x;compute();setMode("x1")}
+  else{S.x1=x;compute()}
+});
+document.querySelectorAll("#modes button[data-m]").forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+$("#rst").onclick=()=>{S.add=[];S.del=[];merge();compute()};
+/* ajout par glisser : le rectangle est calé sur une ligne de hauteur */
+let drag=null;
+const pos=e=>{const b=$("#cv").getBoundingClientRect();return{x:Math.round((e.clientX-b.left)*S.w/b.width),y:Math.round((e.clientY-b.top)*S.h/b.height)}};
+const box=d=>({x:Math.min(d.a.x,d.b.x),y:Math.min(d.a.y,d.b.y),w:Math.abs(d.a.x-d.b.x),h:Math.abs(d.a.y-d.b.y)});
+$("#cv").style.touchAction="none";
+$("#cv").addEventListener("pointerdown",e=>{if(S.mode!=="add"||!S.bmp)return;drag={a:pos(e),b:pos(e)};e.target.setPointerCapture(e.pointerId)});
+$("#cv").addEventListener("pointermove",e=>{if(!drag)return;drag.b=pos(e);render();const r=box(drag),x=$("#cv").getContext("2d");x.strokeStyle="#ffd400";x.lineWidth=2;x.strokeRect(r.x,r.y,r.w,r.h)});
+$("#cv").addEventListener("pointerup",()=>{
+  if(!drag)return;const r=box(drag);drag=null;
+  if(r.w<3){render();return}
+  const rh=+$("#rowh").value;let cy=r.y+r.h/2;
+  if(S.refY!==null)cy=S.refY+Math.round((cy-S.refY)/rh)*rh;
+  r.y=cy-rh/2;r.h=rh;S.add.push(r);merge();compute();
+});
+["tol","minw"].forEach(i=>$("#"+i).addEventListener("input",detect));
+$("#rowh").addEventListener("input",()=>{S.rowAuto=false;compute()});
+["refp","mc","beats","q"].forEach(i=>$("#"+i).addEventListener("input",compute));
+$("#full").onchange=e=>$("#wrap").classList.toggle("full",e.target.checked);
+
+const drop=$("#drop");
+drop.onclick=()=>$("#file").click();
+$("#file").onchange=e=>e.target.files[0]&&loadImage(e.target.files[0]);
+drop.ondragover=e=>{e.preventDefault();drop.classList.add("hov")};
+drop.ondragleave=()=>drop.classList.remove("hov");
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove("hov");const f=e.dataTransfer.files[0];f&&loadImage(f)};
+document.addEventListener("paste",e=>{for(const it of e.clipboardData.items)if(it.type.startsWith("image/")){loadImage(it.getAsFile());break}});
+
+/* ---------- MIDI writer (SMF format 0, 480 PPQ) ---------- */
+const vlq=n=>{const o=[n&127];while(n>>=7)o.unshift((n&127)|128);return o};
+function buildMidi(){
+  const PPQ=480,vel=Math.min(127,Math.max(1,+$("#vel").value||100)),ev=[];
+  S.notes.forEach(n=>{ev.push([Math.round(n.s*PPQ),1,n.p]);ev.push([Math.round(n.e*PPQ),0,n.p])});
+  ev.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const us=Math.round(60e6/(+$("#bpm").value||120));
+  const t=[0,255,81,3,us>>16&255,us>>8&255,us&255];
+  let last=0;
+  ev.forEach(([tk,on,p])=>{t.push(...vlq(tk-last),on?0x90:0x80,p,on?vel:0);last=tk});
+  t.push(0,255,47,0);
+  const u32=n=>[n>>>24,n>>16&255,n>>8&255,n&255];
+  return new Uint8Array([77,84,104,100,0,0,0,6,0,0,0,1,PPQ>>8,PPQ&255,77,84,114,107,...u32(t.length),...t]);
+}
+
+/* ---------- stored ZIP (the save API does not accept .mid) ---------- */
+const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc=d=>{let c=~0;for(const b of d)c=CT[(c^b)&255]^(c>>>8);return ~c>>>0};
+function zip(name,d){
+  const nm=new TextEncoder().encode(name),c=crc(d);
+  const le=(n,k)=>Array.from({length:k},(_,i)=>n>>>(8*i)&255);
+  const loc=[0x50,0x4b,3,4,...le(20,2),...le(0,2),...le(0,2),...le(0,2),...le(0,2),...le(c,4),...le(d.length,4),...le(d.length,4),...le(nm.length,2),...le(0,2),...nm];
+  const cen=[0x50,0x4b,1,2,...le(20,2),...le(20,2),...le(0,2),...le(0,2),...le(0,2),...le(0,2),...le(c,4),...le(d.length,4),...le(d.length,4),...le(nm.length,2),...le(0,2),...le(0,2),...le(0,2),...le(0,2),...le(0,4),...le(0,4),...nm];
+  const off=loc.length+d.length;
+  const end=[0x50,0x4b,5,6,0,0,0,0,...le(1,2),...le(1,2),...le(cen.length,4),...le(off,4),0,0];
+  return new Uint8Array([...loc,...d,...cen,...end]);
+}
+
+$("#exp").onclick=async()=>{
+  const mid=buildMidi();
+  const dl=await (window.claude&&window.claude.use?window.claude.use("downloads").catch(()=>null):null);
+  if(dl){
+    try{await dl.save({filename:"notes-midi.zip",data:zip("notes.mid",mid)});msg("ZIP enregistré : décompresse-le pour obtenir notes.mid.")}
+    catch(e){msg(e&&e.code==="declined"?"Export annulé.":"Export impossible ("+(e&&e.code||"erreur")+").")}
+  }else{
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([mid],{type:"audio/midi"}));a.download="notes.mid";a.click();
+    msg("notes.mid téléchargé.");
+  }
+};
+</script>
+</body>
+</html>
