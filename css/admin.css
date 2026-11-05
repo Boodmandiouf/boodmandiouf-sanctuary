@@ -1486,7 +1486,7 @@ body.light-mode .tool-card {
     background: transparent;
     border: 1px solid #334155;
     color: #94a3b8;
-    padding: 8px 14px;
+    padding: 15px 15px;
     border-radius: 4px;
     font-family: 'Rajdhani', sans-serif;
     font-size: 0.85rem;
@@ -1546,4 +1546,46 @@ body.light-mode .tool-btn:hover {
     color: #00ff66;
     background: rgba(0, 255, 102, 0.15);
     border: 1px solid rgba(0, 255, 102, 0.3);
+}
+
+.tool-btn-gear {
+        background: transparent;
+    border: 1px solid #334155;
+    color: #94a3b8;
+    padding: 15px 15px;
+    border-radius: 4px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.tool-btn-gear:hover {
+    background: rgba(0, 255, 102, 0.1);
+    border-color: #00ff66;
+    color: #00ff66;
+    box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+body.light-mode .tool-btn-gear {
+    background: #f8f9fa;
+    border-color: #2f3640;
+    color: #2f3640;
+}
+
+body.light-mode .tool-btn-gear:hover {
+    background: #2f3640;
+    color: #ffffff;
+    border-color: #2f3640;
+    box-shadow: none;
 }
