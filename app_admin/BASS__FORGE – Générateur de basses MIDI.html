@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>BASS//FORGE – Générateur de basses MIDI</title>
-<link rel="icon" type="image/png" href="img/BASSFORGE.png" />  
 <style>
 :root{--bg:#0a0710;--panel:#150d20;--line:#2d1d44;--tx:#e9dcff;--mut:#8f7bb0;--a:#ff2e88;--b:#19e3ff;--g:#b8ff3c;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:dark}
@@ -209,9 +208,9 @@ const G = {
  tresillo:({r,d,rng})=>{const n=[[0,2,r,122],[3,2,r,104],[6,2,rng()<d?r+12:r,112],[8,2,r,118],[11,2,r,104],[14,2,rng()<d?r+1:r,112]];return n}
 };
 
-let TPL=[];
+let TPL={n:0,bars:[],mel:0};
 Object.assign(G,{
- imp:({r})=>TPL.map(([s,l,o,v])=>[s,l,r+o,v]),
+ imp:({r,b})=>(TPL.bars[b%TPL.n]||[]).map(([s,l,o,v])=>[s,l,r+(TPL.mel?o:0),v]),
  lofi:({r,sc,d,rng})=>nol([[0,3,r,92],[4,1,r+pick(rng,[sc[4],12]),70],[6,2,r+(rng()<d?sc[2]:0),84],[9,2,r,88],[12,2,r+pick(rng,[sc[4],sc[6]-12]),76]]),
  lofiwalk:({r,sc,d,rng,last})=>{const W=[0,sc[2],sc[4],sc[2]],n=[];for(let k=0;k<4;k++){n.push([4*k,3,r+W[k],k%2?82:96]);if(rng()<.3+d*.4)n.push([4*k+3,1,r+W[(k+1)%4],64])}if(last)n.push([15,1,r-1,70]);return nol(n)},
  trip:({r,sc,d,rng})=>nol([[0,3,r,112],[4,1,r,66,'g'],[6,2,r+(rng()<d?sc[2]:0),100],[10,4,r,108],[15,1,r+pick(rng,[1,7]),70]]),
@@ -238,7 +237,7 @@ function build(){
  base=12*(+$("oct").value+1)+(+$("root").value); S=bars*16; notes=[];
  const rng=mulberry(seed), t=$("type").value;
  for(let b=0;b<bars;b++){
-  const r=base+prog[b%prog.length];if($("struct").value!="i"){struct(b,bars,{r,sc,d,rng,hum,t,prog});continue}
+  const r=base+prog[b%prog.length];if($("struct").value!="i"&&t!="imp"){struct(b,bars,{r,sc,d,rng,hum,t,prog});continue}
   G[t]({r,sc,d,rng,b,last:b==bars-1}).forEach(([s,l,p,v,a])=>notes.push({s:b*16+s,l:Math.min(l,16-s),p,a,v:Math.max(1,Math.min(127,v+Math.round((rng()-.5)*hum*40)))}));
  }
  notes.sort((x,y)=>x.s-y.s);if($("slide").checked){const R=+$("pbr").value;notes.forEach((n,i)=>{const nx=notes[i+1];if(nx&&nx.s>n.s&&nx.p!=n.p&&Math.abs(nx.p-n.p)<=R&&nx.s<=n.s+n.l+1&&rng()<d*.5)n.sl=true})}
@@ -334,13 +333,18 @@ nt.innerHTML=`<div id="help">
 <li><b>Gamme en surbrillance</b> : lignes éclaircies = dans la tonalité ; <span style="color:#ff3b30">point rouge</span> sur une note = hors gamme.</li>
 <li><b>Batterie du style</b> : kick, caisse claire et charleston pour juger le groove (écoute seulement, non exportée).</li></ul></section>
 <section><h4>Import MIDI</h4><ul>
-<li><b>Accords</b> : la basse suit les accords estimés du fichier (BPM et tonalité réglés aussi).</li>
-<li><b>Rythme</b> : la 1<sup>re</sup> mesure fournie sert de gabarit (type « Gabarit importé »).</li>
-<li>Hypothèses : 4/4, 8 mesures max, canal 10 ignoré. Vérifie les accords annoncés.</li></ul></section>
+<li>Pensé pour des <b>motifs de basse de 1 à 4 mesures</b> (inspiration). La note de basse dominante de chaque mesure sert de fondamentale.</li>
+<li><b>Rythme + intervalles</b> : la forme de ta ligne est reprise sur ta tonalité et ta progression. <b>Rythme seul</b> : mêmes positions, sur la fondamentale. <b>Progression seule</b> : suit les fondamentales du fichier. <b>Tout</b> : les trois.</li>
+<li>Le motif se répète s’il est plus court que le nombre de mesures. « Référence + variations » ne s’applique pas au motif importé.</li>
+<li>Hypothèses : 4/4, 4 mesures max, canal 10 ignoré.</li></ul></section>
+<section><h4>Bibliothèque perso</h4><ul>
+<li><b>💾 Garder l’import</b> : garde le fichier MIDI dans le navigateur (même nom = remplace, 100 Ko max).</li>
+<li><b>▶ Appliquer</b> : réanalyse l’entrée choisie selon le mode d’import.</li>
+<li><b>⬇ library.json</b> : sauvegarde toute la bibliothèque. Remplace le <code>library.json</code> de ton dépôt ; la page le charge au démarrage.</li></ul></section>
 <section><h4>Export</h4><ul>
 <li><b>⬇ Exporter MIDI</b> ou glisse le bloc « ⠿ glisser le .mid » (certains navigateurs de bureau seulement).</li>
 <li>« Export des articulations » : vélocité, keyswitch ou canaux séparés. Règle la plage de pitch bend sur celle de ton instrument.</li></ul></section>
-<p class="more">📘 <a href="doc/BASS FORGE – Guide des paramètres.pdf" target="_blank" rel="noopener">En savoir plus : guide complet des paramètres (PDF)</a></p>
+<p class="more">📘 <a href="app_admin/BASS FORGE – Guide des paramètres.pdf" target="_blank" rel="noopener">En savoir plus : guide complet des paramètres (PDF)</a></p>
 </div>`;
 $("zoom").oninput=()=>{zm=$("zoom").value/100;draw()};
 
@@ -439,7 +443,7 @@ fill("scale",Object.keys(SC),k=>`<option>${k}</option>`);
 fill("prog",Object.keys(PROG),k=>`<option>${k}</option>`);
 function setStyle(s){
  style=s;[["sDark","dark",""],["sFr","fr","fr"],["sSyn","syn","syn"],["sDoom","doom","doom"],["sLo","lofi","lo"],["sTr","trip","tr"],["sDe","deep","de"],["sPh","phonk","ph"]].forEach(([id,k,c])=>$(id).className=(s==k?"on ":"")+c);
- fill("type",TYPES[s],t=>`<option value="${t[0]}">${t[1]}</option>`);if(TPL.length)$("type").insertAdjacentHTML("beforeend",'<option value="imp">Gabarit importé (MIDI)</option>');
+ fill("type",TYPES[s],t=>`<option value="${t[0]}">${t[1]}</option>`);if(TPL.n)$("type").insertAdjacentHTML("beforeend",'<option value="imp">Motif importé (MIDI)</option>');
  const p=SOUND[s];["bpm","cut","res","drv","dec"].forEach(k=>$(k).value=p[k]);
  $("side").checked=p.side;$("art").value=s=="fr"?"a":"n";$("swing").value=p.sw||0;$("prog").value=p.prog;$("scale").value=p.scale;
  labels();seed=1+Math.floor(Math.random()*9999);build();
@@ -501,32 +505,58 @@ function parseMid(u){const dv=new DataView(u.buffer,u.byteOffset,u.byteLength);l
    else{rs=st;const k=st>>4,c=st&15;if(k===12||k===13)p++;else{const a=u[p++],b=u[p++],key=c+':'+a;if(k===9&&b>0)on[key]=[tk,b];else if(k===8||k===9){const o=on[key];if(o&&c!==9&&tk>o[0])out.push({s:o[0],e:tk,p:a,v:o[1]});delete on[key]}}}}
   p=end}
  return{notes:out,div,bpm:60000000/tempo}}
-function doImport(m,mode,name){
- const N=m.notes;if(!N.length)throw 0;const q=m.div/4,B=m.div*4,nbars=Math.max(1,Math.min(8,Math.ceil(N.reduce((a,n)=>Math.max(a,n.e),0)/B)));
- $('bpm').value=Math.max(70,Math.min(200,Math.round(m.bpm)));
- if(mode!=='r'){const roots=[],minor=[];
-  for(let b=0;b<nbars;b++){const w=Array(12).fill(0);let low=127,tot=0;
-   N.forEach(n=>{const o=Math.min(n.e,(b+1)*B)-Math.max(n.s,b*B);if(o>0){w[n.p%12]+=o;tot+=o;if(o>B/8&&n.p<low)low=n.p}});
-   if(!tot){roots.push(roots.length?roots[roots.length-1]:0);minor.push(0);continue}
-   let best=0,bs=-1;for(let r=0;r<12;r++){const s=3*w[r]+2*w[(r+7)%12]+1.5*(w[(r+3)%12]+w[(r+4)%12])+.5*w[(r+10)%12]+(low<127&&low%12==r?tot*.8:0);if(s>bs){bs=s;best=r}}
-   roots.push(best);minor.push(w[(best+3)%12]>w[(best+4)%12]?1:0)}
-  const bars=[1,2,4,8].filter(x=>x<=nbars).pop(),r0=roots[0];
-  PROG['Importé (MIDI)']=roots.slice(0,bars).map(r=>(r-r0+12)%12);
+function analyze(m,name){
+ const N=m.notes;if(!N.length)throw 0;const q=m.div/4,B=m.div*4,end=N.reduce((a,n)=>Math.max(a,n.e),0),nb=Math.max(1,Math.min(4,Math.round(end/B))),roots=[],bars=[];let c3=0,c4=0;
+ for(let b=0;b<nb;b++){const bn=N.filter(n=>n.e>b*B&&n.s<(b+1)*B);
+  if(!bn.length){roots.push(roots.length?roots[roots.length-1]:0);bars.push([]);continue}
+  const w=Array(12).fill(0),a0=b*B,a1=(b+1)*B;
+  bn.forEach(n=>{w[n.p%12]+=Math.min(n.e,a1)-Math.max(n.s,a0)+(n.s>=a0&&n.s<a0+B/8?B/4:0)});
+  let r=0;for(let i=1;i<12;i++)if(w[i]>w[r])r=i;
+  const rm=Math.min(...bn.filter(n=>n.p%12==r).map(n=>n.p)),by={};roots.push(r);
+  bn.forEach(n=>{const s=Math.round((Math.max(n.s,a0)-a0)/q);if(s<16&&(!by[s]||n.p<by[s].p))by[s]=n});
+  bars.push(nol(Object.keys(by).map(k=>{const s=+k,n=by[k],i=(n.p-rm+120)%12;if(i==3)c3++;if(i==4)c4++;return[s,Math.max(1,Math.min(Math.round((Math.min(n.e,a1)-Math.max(n.s,a0))/q),16-s)),Math.max(-12,Math.min(24,n.p-rm)),n.v]}).sort((x,y)=>x[0]-y[0])))}
+ if(!bars.some(x=>x.length))throw 0;const r0=roots[0];
+ return{name:name.replace(/\.midi?$/i,'').slice(0,80),bpm:Math.max(70,Math.min(200,Math.round(m.bpm))),root:r0,n:nb,bars,prog:roots.map(r=>(r-r0+12)%12),minor:c3>c4?1:c4>c3?0:-1}}
+function applyEntry(a,mode){
+ const p=[];$('bpm').value=a.bpm;
+ if(mode=='p'||mode=='a'){PROG['Importé (MIDI)']=a.prog;
   if(![...$('prog').options].some(o=>o.value==='Importé (MIDI)'))$('prog').insertAdjacentHTML('beforeend','<option>Importé (MIDI)</option>');
-  $('prog').value='Importé (MIDI)';$('root').value=r0;$('bars').value=bars;$('scale').value=minor[0]?'Mineur naturel':'Majeur';
-  msg('Importé : '+name+' – accords détectés : '+roots.slice(0,bars).map(r=>NN[r]).join(' ')+' (estimation, à vérifier).')}
- if(mode!=='c'){let tp=[];
-  for(let b=0;b<nbars&&tp.length<3;b++){const bn=N.filter(n=>n.s>=b*B&&n.s<(b+1)*B);if(!bn.length)continue;const low=Math.min(...bn.map(n=>n.p)),by={};
-   bn.forEach(n=>{const s=Math.round((n.s-b*B)/q);if(s<16&&(!by[s]||n.p<by[s].p))by[s]=n});
-   tp=Object.keys(by).map(k=>{const s=+k,n=by[k];return[s,Math.max(1,Math.min(Math.round((n.e-n.s)/q),16-s)),n.p-low>=12?12:0,n.v]})}
-  TPL=nol(tp.sort((a,b)=>a[0]-b[0]));if(!TPL.length)throw 0;
-  if(!$('type').querySelector('[value=imp]'))$('type').insertAdjacentHTML('beforeend','<option value="imp">Gabarit importé (MIDI)</option>');
-  $('type').value='imp';msg('Importé : '+name+' – rythme extrait ('+TPL.length+' notes sur 1 mesure).')}
- labels();build()}
+  $('prog').value='Importé (MIDI)';$('root').value=a.root;$('bars').value=a.n<2?1:a.n<3?2:4;if(a.minor>=0)$('scale').value=a.minor?'Mineur naturel':'Majeur';
+  p.push('progression : '+a.prog.map(o=>NN[(a.root+o)%12]).join(' '))}
+ if(mode!='p'){TPL={n:a.n,bars:a.bars,mel:mode=='r'?0:1};
+  if(!$('type').querySelector('[value=imp]'))$('type').insertAdjacentHTML('beforeend','<option value="imp">Motif importé (MIDI)</option>');
+  $('type').value='imp';p.push((mode=='r'?'rythme seul':'rythme + intervalles')+' sur '+a.n+' mesure'+(a.n>1?'s':''))}
+ labels();build();msg(a.name+' – '+p.join(' · ')+'.')}
+let lastImp=null;
+function doImport(u,mode,name){const a=analyze(parseMid(u),name);lastImp={name:a.name,u};applyEntry(a,mode)}
 const imp=document.createElement('span');imp.style.cssText='display:flex;gap:6px;align-items:center;flex-wrap:wrap';
-imp.innerHTML='<select id="imode"><option value="c">Import : accords</option><option value="r">Import : rythme (gabarit)</option><option value="b">Import : accords + rythme</option></select><button id="imb">📂 Importer un .mid</button><input type="file" id="mf" accept=".mid,.midi,audio/midi" hidden>';
+imp.innerHTML='<select id="imode"><option value="m">Import : rythme + intervalles</option><option value="r">Import : rythme seul</option><option value="p">Import : progression seule</option><option value="a">Import : tout (progression + motif)</option></select><button id="imb">📂 Importer un .mid</button><input type="file" id="mf" accept=".mid,.midi,audio/midi" hidden>';
 xr.append(imp);$('imb').onclick=()=>$('mf').click();
-$('mf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{doImport(parseMid(new Uint8Array(await f.arrayBuffer())),$('imode').value,f.name)}catch(x){msg('Import impossible : fichier MIDI illisible, vide, ou en temps SMPTE.')}};
+$('mf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{doImport(new Uint8Array(await f.arrayBuffer()),$('imode').value,f.name)}catch(x){msg('Import impossible : fichier MIDI illisible, vide, ou en temps SMPTE.')}};
+
+/* ===== Bibliothèque MIDI perso (navigateur + library.json) ===== */
+const LK='bassforge:lib',DK='bassforge:del',esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const b64=u=>{let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s)},unb64=t=>Uint8Array.from(atob(t),c=>c.charCodeAt(0));
+const lsGet=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){msg('Stockage du navigateur indisponible : utilise l’export .json pour sauvegarder.')}};
+const okE=e=>e&&typeof e.id=='string'&&typeof e.name=='string'&&typeof e.mid=='string'&&e.mid.length<140000&&/^[A-Za-z0-9+\/=]+$/.test(e.mid);
+let LIB=lsGet(LK,[]).filter(okE),DEL=lsGet(DK,[]);
+const libSave=()=>{lsSet(LK,LIB);lsSet(DK,DEL)};
+function libFill(sel){const s=$('lib');s.innerHTML=LIB.length?LIB.map((e,i)=>`<option value="${i}">${esc(e.name)}</option>`).join(''):'<option value="">(bibliothèque vide)</option>';if(sel>=0)s.value=sel}
+function libPut(e,force){const i=LIB.findIndex(x=>x.id===e.id);if(i<0)LIB.push(e);else if(force||(e.t||0)>(LIB[i].t||0))LIB[i]=e;else return false;DEL=DEL.filter(x=>x!==e.id);return true}
+const lb=document.createElement('span');lb.style.cssText='display:flex;gap:6px;align-items:center;flex-wrap:wrap';
+lb.innerHTML='<select id="lib" title="Bibliothèque MIDI perso" style="max-width:240px"></select><button id="libgo" title="Applique l’entrée choisie (selon le mode d’import ci-dessus)">▶ Appliquer</button><button id="libadd" title="Ajoute le dernier fichier importé à la bibliothèque (même nom = remplace)">💾 Garder l’import</button><button id="libdel" title="Supprime l’entrée choisie">🗑</button><button id="libex" class="exp" title="Télécharge toute la bibliothèque en library.json">⬇ library.json</button><button id="libim" title="Fusionne un library.json dans la bibliothèque">⬆ Importer .json</button><input type="file" id="jf" accept=".json,application/json" hidden>';
+xr.append(lb);
+$('libgo').onclick=()=>{const e=LIB[$('lib').value];if(!e)return msg('Bibliothèque vide.');try{const u=unb64(e.mid);lastImp={name:e.name,u};applyEntry(analyze(parseMid(u),e.name),$('imode').value)}catch(x){msg('Entrée illisible : '+e.name+'.')}};
+$('libadd').onclick=()=>{if(!lastImp)return msg('Importe d’abord un .mid (ou applique une entrée).');if(lastImp.u.length>100000)return msg('Fichier trop gros pour la bibliothèque (100 Ko max).');libPut({v:2,t:Date.now(),id:lastImp.name,name:lastImp.name,mid:b64(lastImp.u)},true);libSave();libFill(LIB.findIndex(x=>x.id===lastImp.name));msg('« '+lastImp.name+' » gardé ('+LIB.length+' en bibliothèque).')};
+$('libdel').onclick=()=>{const i=+$('lib').value,e=LIB[i];if(!e)return;LIB.splice(i,1);DEL.push(e.id);libSave();libFill();msg('« '+e.name+' » supprimé.')};
+$('libex').onclick=async()=>{if(!LIB.length)return msg('Bibliothèque vide.');const txt=JSON.stringify({app:'bassforge',v:2,library:LIB});let d=null;try{d=window.claude&&await window.claude.use('downloads')}catch(e){}
+ if(d){try{await d.save({filename:'library.zip',data:zip('library.json',new TextEncoder().encode(txt))});msg('ZIP envoyé : dézippe-le pour obtenir library.json.')}catch(e){if(e&&e.code!=='declined')msg('Export impossible.')}}
+ else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'application/json'}));a.download='library.json';a.click();msg(LIB.length+' entrées exportées : remplace library.json dans ton dépôt.')}};
+$('libim').onclick=()=>$('jf').click();
+$('jf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const j=JSON.parse(await f.text());if(!Array.isArray(j.library))throw 0;const ok=j.library.filter(okE).slice(0,200);if(!ok.length)throw 0;ok.forEach(x=>libPut({...x,name:x.name.slice(0,80)},true));libSave();libFill();msg(ok.length+' entrée(s) importée(s) sur '+j.library.length+'.')}catch(x){msg('Import impossible : fichier .json non reconnu (ou ancien format sans fichier MIDI).')}};
+libFill();
+fetch('library.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(j=>{if(!j||!Array.isArray(j.library))return;let n=0;j.library.filter(okE).forEach(x=>{if(!DEL.includes(x.id)&&libPut(x))n++});if(n){libSave();libFill();msg(n+' entrée(s) chargée(s) ou mise(s) à jour depuis library.json.')}}).catch(()=>{});
 
 window.addEventListener("resize",draw);
 setStyle("dark");
