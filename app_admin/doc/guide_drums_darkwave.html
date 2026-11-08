@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carpenter Brut — Guide de traitement des drums</title>
+<style>
+:root{--bg:#0b0c10;--panel:#14161d;--panel2:#1b1e27;--text:#ececf1;--muted:#a9adba;--accent:#ff4d6d;--accent2:#62d9ff;--line:#303441;--good:#70e0a0}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#090a0e,#11131a 55%,#090a0e);color:var(--text);font:16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1100px;margin:auto;padding:48px 24px 80px} h1{font-size:clamp(34px,6vw,64px);line-height:1.02;margin:0 0 16px} h2{margin-top:52px;border-bottom:1px solid var(--line);padding-bottom:10px} h3{color:var(--accent2);margin-top:30px}
+.lead{font-size:20px;color:#d5d7df;max-width:850px}.badge{display:inline-block;border:1px solid #63303d;background:#24151a;color:#ff9bad;padding:5px 10px;border-radius:999px;font-size:13px;margin:4px 5px 4px 0}
+.note,.warning,.tip,.source{padding:18px 20px;border:1px solid var(--line);border-radius:12px;background:var(--panel);margin:20px 0}.warning{border-color:#674a23;background:#211b12}.tip{border-color:#24566a}.source{background:#101219}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}.card b{color:var(--accent)}
+pre{white-space:pre-wrap;background:#08090c;border:1px solid var(--line);padding:18px;border-radius:10px;overflow:auto}
+code{color:#bfefff} table{width:100%;border-collapse:collapse;margin:18px 0;background:var(--panel)} th,td{text-align:left;padding:12px;border:1px solid var(--line);vertical-align:top} th{background:var(--panel2)}
+.small{font-size:14px;color:var(--muted)} .meter{height:10px;background:#252833;border-radius:20px;overflow:hidden}.meter span{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:70%}
+ol li,ul li{margin:7px 0}.pill{font-family:ui-monospace,monospace;background:#20232c;padding:2px 6px;border-radius:5px}
+a{color:#7cddff} footer{margin-top:60px;color:var(--muted);font-size:13px}
+details{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin:14px 0;padding:0 18px}
+summary{cursor:pointer;font-weight:700;font-size:18px;padding:14px 0;color:var(--accent);list-style-position:inside}
+details[open]>summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+.tw{overflow-x:auto} details table{margin:10px 0 16px} details th,details td{font-size:15px} details th{white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+<div>
+<span class="badge">Synthwave / darksynth</span>
+<span class="badge">Ableton / plugins</span>
+<span class="badge">Drums : méthode reconstruite</span>
+</div>
+<h1>Carpenter Brut<br>Traitement des drums</h1>
+<p class="lead">Un guide pratique pour approcher la sensation de batterie massive, sèche, agressive et cinématique associée à Carpenter Brut — sans prétendre connaître ses chaînes privées exactes.</p>
+
+<p class="small">Les réglages détaillés (EQ, saturation, compresseur, clipper, transient shapers, méthodes) sont dans la section 19, dépliable.</p>
+<div class="warning">
+<strong>Point important :</strong> il n’existe pas, dans les interviews publiques consultées, de « preset Carpenter Brut » ou de chaîne complète de drums publiée par Franck Hueso. Les réglages ci-dessous sont donc une <strong>reconstruction technique</strong> à partir de ce qu’il a déclaré sur son workflow, son approche du mix et ses influences metal, complétée par des méthodes de production cohérentes avec ce son.
+</div>
+
+<h2>1. Ce qui est réellement documenté</h2>
+<div class="grid">
+<div class="card"><b>Workflow</b><br>Il travaille principalement dans Ableton Live et utilise beaucoup de plugins. En 2026, il indique même travailler quasiment entièrement « in the box » sur certaines productions récentes.</div>
+<div class="card"><b>Départ par le beat</b><br>Il a expliqué qu’il commençait souvent par un beat simple kick/snare parce que le rythme lui permet de construire les riffs.</div>
+<div class="card"><b>Mix pendant la composition</b><br>Dans une interview plus ancienne, il dit mixer en même temps qu’il compose, plutôt que de séparer strictement composition et mixage.</div>
+<div class="card"><b>Logique metal</b><br>Pour Leather Terror, il explique avoir transposé des techniques de production metal aux synthés : plusieurs sources, plusieurs grains, puis mélange des couches.</div>
+<div class="card"><b>Pas de recette vintage obligatoire</b><br>Il a explicitement critiqué l’usage systématique d’effets « VHS » ou d’effets rétro servant seulement à donner une esthétique de surface.</div>
+<div class="card"><b>Le morceau avant la démonstration technique</b><br>Son discours récurrent est que le son doit servir la composition, pas masquer une composition faible.</div>
+</div>
+
+<h2>2. La philosophie du drum sound</h2>
+<p>Pour approcher le résultat, pense moins « vieille boîte à rythmes » et davantage <strong>« batterie de film + metal + synthwave »</strong>.</p>
+<pre>
+             DRUM BUS
+                │
+      ┌─────────┼─────────┐
+      │         │         │
+    KICK      SNARE     PERC/TOMS
+      │         │         │
+  sub + click  body +    attack +
+              crack      texture
+      │         │         │
+      └─────────┼─────────┘
+                │
+       SATURATION / GLUE
+                │
+        PARALLEL CRUSH
+                │
+       MIX BUS / MASTER
+</pre>
+
+<div class="tip"><strong>Principe clé :</strong> ne cherche pas à rendre chaque élément énorme isolément. Le kick peut être relativement court, la snare très présente et les textures plus sales ; c’est leur addition qui crée l’impression de puissance.</div>
+
+<h2>3. Kick : construire le « moteur »</h2>
+<p>Un kick de ce style doit généralement fournir trois informations : <strong>sub</strong> (poids), <strong>corps</strong> (impact) et <strong>click</strong> (lecture sur petits haut-parleurs).</p>
+
+<table>
+<tr><th>Zone</th><th>Point de départ</th><th>But</th></tr>
+<tr><td>Sub</td><td>45–70 Hz selon le morceau</td><td>Poids physique. Évite d'accumuler cette zone avec le bass synth.</td></tr>
+<tr><td>Body</td><td>80–130 Hz</td><td>Donne la sensation de « coup ».</td></tr>
+<tr><td>Boxiness</td><td>200–450 Hz</td><td>Coupe seulement si le kick devient carton.</td></tr>
+<tr><td>Click</td><td>2–6 kHz</td><td>Permet au kick de traverser les synthés distordus.</td></tr>
+</table>
+
+<h3>Chaîne de départ</h3>
+<pre>
+KICK
+ → EQ correctif
+ → saturation légère
+ → compression 3–5:1
+ → clipper léger
+ → EQ final si nécessaire
+</pre>
+
+<p><strong>Compression :</strong> commence avec 10–30 ms d’attaque et 40–100 ms de release. Ajuste surtout à l’oreille : le but est de garder le transient tout en stabilisant le corps.</p>
+<p><strong>Astuce :</strong> si le kick manque d’agressivité, ajoute une petite couche de click ou de bruit court plutôt que de booster 5 kHz de façon massive.</p>
+
+<h2>4. Snare : le point central</h2>
+<p>Dans ce type de production, la snare doit rester lisible même quand les synthés sont très denses.</p>
+<table>
+<tr><th>Zone</th><th>Rôle</th></tr>
+<tr><td>120–220 Hz</td><td>Corps / profondeur. À surveiller pour éviter le conflit avec le kick et la basse.</td></tr>
+<tr><td>500 Hz–1 kHz</td><td>Boîte / matière. Coupe si elle devient sourde ou « carton ».</td></tr>
+<tr><td>1.5–3 kHz</td><td>Présence et attaque.</td></tr>
+<tr><td>5–10 kHz</td><td>Air / bruit / caractère.</td></tr>
+</table>
+
+<h3>Deux couches plutôt qu'une snare sur-traitée</h3>
+<pre>
+SNARE A = corps
+   EQ → compression → saturation
+
+SNARE B = crack / noise
+   HPF → distortion → transient shaping
+
+A + B → SNARE BUS → compression légère → clipper
+</pre>
+
+<p>La couche B peut être très faible. Son rôle est de faire apparaître la snare dans un mix saturé, pas de devenir un deuxième instrument évident.</p>
+
+<h2>5. Le « secret » probablement le plus important : le layering</h2>
+<p>Carpenter Brut a décrit pour <em>Leather Terror</em> une logique directement inspirée du metal : multiplier les sources et mélanger leurs grains. Cette philosophie peut être appliquée aux drums.</p>
+
+<div class="grid">
+<div class="card"><b>Layer 1 — Impact</b><br>Kick/snare propre, relativement court. Il définit le timing.</div>
+<div class="card"><b>Layer 2 — Sale</b><br>Une copie fortement saturée/distordue, filtrée et mélangée très bas.</div>
+<div class="card"><b>Layer 3 — Texture</b><br>Noise, clap, room synthétique, tom ou percussion traitée.</div>
+<div class="card"><b>Layer 4 — Stéréo</b><br>Une texture plus large, mais sans élargir le bas du spectre.</div>
+</div>
+
+<div class="tip"><strong>Technique metal transposée :</strong> au lieu de demander à une seule snare de fournir corps + attaque + violence + largeur, donne ces fonctions à plusieurs couches.</div>
+
+<h2>6. Saturation et distortion</h2>
+<p>La saturation est essentielle pour donner aux drums une densité compatible avec les synthés agressifs. Mais distingue deux usages :</p>
+<ul>
+<li><strong>Saturation parallèle :</strong> conserve le transient original et ajoute du grain.</li>
+<li><strong>Distortion destructive :</strong> transforme volontairement le son, souvent utile sur une couche secondaire.</li>
+</ul>
+
+<pre>
+DRUM BUS
+   ├── CLEAN
+   │
+   └── PARALLEL DISTORTION
+         → saturation forte
+         → HPF ~100 Hz
+         → LPF ~8–12 kHz
+         → compression forte
+         → retour à faible niveau
+</pre>
+
+<p>Une couche parallèle fortement écrasée peut être étonnamment efficace : quand tu la montes, les drums semblent avancer dans les haut-parleurs ; quand tu la baisses, tu récupères la propreté.</p>
+
+<h2>7. Compression parallèle</h2>
+<p>Point de départ volontairement extrême :</p>
+<table>
+<tr><th>Paramètre</th><th>Essai</th></tr>
+<tr><td>Ratio</td><td>8:1 à 20:1</td></tr>
+<tr><td>Attack</td><td>10–30 ms</td></tr>
+<tr><td>Release</td><td>50–150 ms</td></tr>
+<tr><td>Gain reduction</td><td>10–20 dB sur le bus parallèle</td></tr>
+<tr><td>Blend</td><td>Très faible au départ, puis monte jusqu'à sentir l'énergie</td></tr>
+</table>
+<p>Ce ne sont pas des réglages « Carpenter Brut » documentés : ce sont des <strong>points de départ de sound design</strong>.</p>
+
+<h2>8. Clipper : rendre les transients denses</h2>
+<p>Après saturation et compression, un clipper peut attraper les crêtes très courtes. Le but n'est pas de faire disparaître le transient, mais de contrôler les pics suffisamment pour que le drum bus puisse rester très énergique.</p>
+<pre>
+Snare/Kick → saturation → comp → clip léger
+                         ↓
+                   DRUM BUS
+                         ↓
+                  mix / limiter
+</pre>
+<p>Si la snare perd toute sa sensation de coup, tu as probablement trop écrasé la chaîne.</p>
+
+<h2>9. EQ du Drum Bus</h2>
+<table>
+<tr><th>Action</th><th>Idée</th></tr>
+<tr><td>HPF</td><td>Uniquement si du sub inutile s'accumule. Ne coupe pas automatiquement le bas.</td></tr>
+<tr><td>200–400 Hz</td><td>Zone à contrôler si le bus devient épais ou boueux.</td></tr>
+<tr><td>1–3 kHz</td><td>Zone d'attaque et de présence. Attention aux synthés.</td></tr>
+<tr><td>6–10 kHz</td><td>Brillance/crack. Peut vite devenir agressif.</td></tr>
+</table>
+
+<h2>10. Relation kick / basse</h2>
+<p>Une grosse erreur serait de traiter le kick indépendamment du bass synth.</p>
+<pre>
+KICK                 BASS
+50–70 Hz  ◀──────▶  50–100 Hz
+    │                   │
+    └── sidechain léger ─┘
+</pre>
+
+<p>Commence avec 1–3 dB de ducking sur la basse, puis ajuste le release au tempo. Si le pumping devient audible et gênant, réduis la profondeur avant de changer tout le mix.</p>
+
+<h2>11. Groove et programmation</h2>
+<p>Le son Carpenter Brut ne vient pas seulement des plugins. Une batterie trop parfaitement quantifiée peut perdre son caractère.</p>
+<ul>
+<li>Commence par un pattern très simple kick/snare.</li>
+<li>Construis le riff autour du groove.</li>
+<li>Ajoute les ghost notes et percussions seulement si elles servent l'arrangement.</li>
+<li>Utilise de petites variations de vélocité plutôt que des variations énormes.</li>
+<li>Pour les passages agressifs, garde le kick et la snare très stables : les synthés peuvent fournir le chaos.</li>
+</ul>
+
+<h2>12. Reverb : plutôt courte et contrôlée</h2>
+<p>Pour conserver l'impact, évite d'envoyer tout le kit dans une grosse reverb longue.</p>
+<pre>
+SNARE SEND
+ → short plate / room
+ → HPF 250–500 Hz
+ → LPF 5–9 kHz
+ → éventuellement compression
+</pre>
+<p>Automatise la reverb sur les fills, transitions et fins de phrases plutôt que de la laisser constante à fort niveau.</p>
+
+<h2>13. Stéréo</h2>
+<table>
+<tr><th>Élément</th><th>Approche conseillée</th></tr>
+<tr><td>Kick</td><td>Centre</td></tr>
+<tr><td>Sub</td><td>Centre / mono</td></tr>
+<tr><td>Snare principale</td><td>Centre</td></tr>
+<tr><td>Hi-hats</td><td>Modérément stéréo</td></tr>
+<tr><td>Textures / rooms</td><td>Peuvent être larges</td></tr>
+<tr><td>Distortion parallèle</td><td>Peut être élargie, mais filtre le bas</td></tr>
+</table>
+
+<h2>14. Chaîne complète à reproduire dans Ableton</h2>
+<pre>
+KICK
+EQ → Saturator → Compressor → Clipper
+
+SNARE
+EQ → Saturator/Overdrive → Compressor → Clipper
+
+PERC
+EQ → Saturation légère → Transient shaping
+
+DRUM BUS
+  ├─ EQ correctif
+  ├─ Saturation légère
+  ├─ Glue / Bus compression
+  ├─ Clipper léger
+  └─ éventuellement Limiter avec très peu de travail
+
+PARALLEL DRUM CRUSH
+  ├─ Compressor 10–20 dB GR
+  ├─ Saturation / distortion
+  ├─ EQ (HPF + LPF)
+  └─ Blend discret
+
+REVERB SEND
+  ├─ Short room / plate
+  ├─ HPF
+  └─ LPF
+</pre>
+
+<h2>15. Réglage de départ « Carpenter Brut-ish »</h2>
+<p>Encore une fois, ce preset est une <strong>reconstruction</strong>, pas un réglage authentifié par Carpenter Brut.</p>
+<table>
+<tr><th>Bus</th><th>Starting point</th></tr>
+<tr><td>Kick</td><td>Compression 3:1, attack 20 ms, release 70 ms, 2–4 dB GR</td></tr>
+<tr><td>Snare</td><td>Compression 4:1, attack 15 ms, release 80 ms, 3–5 dB GR</td></tr>
+<tr><td>Drum Bus</td><td>Ratio 2:1, attack 20–30 ms, release auto ou ~100 ms, 1–2 dB GR</td></tr>
+<tr><td>Parallel</td><td>Ratio 10:1+, attaque 10–20 ms, release 60–120 ms, 10–20 dB GR</td></tr>
+<tr><td>Reverb</td><td>0.3–0.8 s, filtrée, niveau bas</td></tr>
+<tr><td>Clipper</td><td>Juste assez pour attraper les crêtes</td></tr>
+</table>
+
+<h2>16. Le test « Leather Terror »</h2>
+<p>Pour obtenir une sensation plus proche de son approche metal/synthwave, fais volontairement un test :</p>
+<ol>
+<li>Programme un kick + snare extrêmement simple.</li>
+<li>Choisis un kick sec et une snare agressive.</li>
+<li>Duplique la snare.</li>
+<li>Sur la copie : distortion forte + HPF + LPF.</li>
+<li>Mélange la copie jusqu'à ce que la snare devienne plus « méchante », puis baisse-la légèrement.</li>
+<li>Ajoute un layer de texture très large uniquement dans les médiums/aigus.</li>
+<li>Compresse légèrement le bus.</li>
+<li>Clippe les crêtes.</li>
+<li>Écris ensuite le riff de synthé autour de la batterie.</li>
+</ol>
+
+<h2>17. Ce qu'il ne faut surtout pas copier</h2>
+<div class="grid">
+<div class="card"><b>❌ « Plus de distortion = plus Carpenter Brut »</b><br>Non. Trop de distortion détruit la séparation kick/snare/basse.</div>
+<div class="card"><b>❌ Tout mettre dans une reverb vintage</b><br>Son esthétique ne repose pas simplement sur un filtre VHS ou une reverb rétro.</div>
+<div class="card"><b>❌ Un kick énorme seul</b><br>Le poids vient de la relation kick/basse/synthés et du niveau global.</div>
+<div class="card"><b>❌ Copier des réglages au chiffre près</b><br>Le tempo, la tonalité, le sample et l'arrangement changent complètement le résultat.</div>
+</div>
+
+<h2>18. La vraie recette à retenir</h2>
+<pre>
+COMPOSITION SIMPLE
+      ↓
+KICK + SNARE LISIBLES
+      ↓
+LAYERS DE GRAINS DIFFÉRENTS
+      ↓
+SATURATION / DISTORTION
+      ↓
+COMPRESSION PARALLÈLE
+      ↓
+DRUM BUS CONTRÔLÉ
+      ↓
+CLIPPER
+      ↓
+SYNTHS QUI RÉPONDENT AUX DRUMS
+      ↓
+MIX GLOBAL
+</pre>
+
+<div class="note">
+<strong>En une phrase :</strong> pour approcher Carpenter Brut, pense « batterie très lisible + couches de textures agressives + logique de production metal + contrôle dynamique », plutôt que « trouver le plugin magique ».
+</div>
+
+<h2>19. Réglages détaillés (annexe dépliable)</h2>
+<div class="warning"><strong>Niveau de certitude :</strong> aucune valeur de cette annexe n’est un réglage documenté de Carpenter Brut. Ce sont des points de départ courants en mix rock/metal/électronique ; le sample, le tempo et la tonalité les changent. L’oreille, à niveau égal, décide.</div>
+<details>
+<summary>19.1 — Avant de régler : gain staging et ordre de chaîne</summary>
+<ul>
+<li><strong>Niveau d’entrée :</strong> vise des pics de kick/snare vers −10 à −6 dBFS sur la piste. Les saturateurs et clippers réagissent au niveau : un signal trop chaud change le résultat de tout ce qui suit.</li>
+<li><strong>Compensation de gain :</strong> après chaque saturation/compression, ramène le niveau de sortie au niveau d’entrée avant de comparer on/off. Sinon tu choisis « le plus fort », pas « le meilleur ».</li>
+<li><strong>Ordre conseillé (kick/snare) :</strong> EQ correctif → transient shaper → compresseur → saturation → clipper → EQ final. Ce n’est pas une loi : mets le shaper après la saturation si tu veux resculpter l’attaque salie.</li>
+<li><strong>Ordre de travail :</strong> choix des samples → polarité/phase entre couches → EQ correctif → dynamique → saturation → clipper → bus. Corriger un sample mal choisi à l’EQ coûte toujours plus cher.</li>
+<li><strong>Jugement :</strong> écoute en solo pour corriger, mais valide toujours avec basse et synthés en jeu : c’est là que la snare et le kick doivent exister.</li>
+</ul>
+</details>
+<details>
+<summary>19.2 — EQ — par élément</summary>
+<h3>Kick</h3>
+<div class="tw"><table>
+<tr><th>Bande</th><th>Type</th><th>Fréquence</th><th>Gain</th><th>Q</th><th>But</th></tr>
+<tr><td>Sub-sonique</td><td>HPF 12 dB/oct</td><td>25–30 Hz</td><td>—</td><td>—</td><td>Retire l’énergie inutile qui mange du headroom.</td></tr>
+<tr><td>Poids</td><td>Cloche</td><td>50–65 Hz</td><td>+1 à +3 dB</td><td>0,8–1,2</td><td>Fondamentale. À accorder avec la tonalité du morceau.</td></tr>
+<tr><td>Carton</td><td>Cloche</td><td>250–400 Hz</td><td>−2 à −5 dB</td><td>1,5–2</td><td>Balaye pour trouver la fréquence exacte avant de couper.</td></tr>
+<tr><td>Click</td><td>Cloche</td><td>3–5 kHz</td><td>+1 à +3 dB</td><td>1–1,5</td><td>Lisibilité sous les synthés. Préfère une couche de click à un gros boost.</td></tr>
+<tr><td>Haut</td><td>LPF (optionnel)</td><td>12–16 kHz</td><td>—</td><td>—</td><td>Seulement si le sample a du bruit/souffle aigu.</td></tr>
+</table></div>
+<h3>Snare (couche corps / couche crack)</h3>
+<div class="tw"><table>
+<tr><th>Bande</th><th>Type</th><th>Fréquence</th><th>Gain</th><th>Q</th><th>But</th></tr>
+<tr><td>Nettoyage</td><td>HPF</td><td>70–100 Hz (corps) · 800 Hz–1,5 kHz (crack)</td><td>—</td><td>—</td><td>Laisse le bas au kick et à la basse.</td></tr>
+<tr><td>Corps</td><td>Cloche</td><td>160–220 Hz</td><td>+1 à +3 dB</td><td>1</td><td>Profondeur. Surveille le conflit avec le kick.</td></tr>
+<tr><td>Boîte</td><td>Cloche</td><td>400–600 Hz</td><td>−2 à −4 dB</td><td>2</td><td>Enlève le côté sourd/carton.</td></tr>
+<tr><td>Résonance</td><td>Cloche étroite</td><td>variable (balayage)</td><td>−3 à −6 dB</td><td>6–10</td><td>Seulement si une note parasite « sonne » à chaque coup.</td></tr>
+<tr><td>Présence</td><td>Cloche</td><td>2–4 kHz</td><td>+1 à +3 dB</td><td>1</td><td>Attaque. Zone partagée avec les synthés : vérifie en contexte.</td></tr>
+<tr><td>Air</td><td>Shelf haut</td><td>8–10 kHz</td><td>+1 à +2 dB</td><td>—</td><td>Grain/bruit. LPF vers 10–12 kHz sur la couche sale.</td></tr>
+</table></div>
+<h3>Toms, hats, cymbales</h3>
+<div class="tw"><table>
+<tr><th>Élément</th><th>Réglages de départ</th></tr>
+<tr><td>Toms</td><td>HPF 60–80 Hz · cloche +2 dB vers 100–200 Hz (corps) · −3 dB vers 300–500 Hz · +2 dB vers 3–5 kHz (attaque)</td></tr>
+<tr><td>Hi-hats</td><td>HPF 300–500 Hz · −2 à −4 dB vers 2–4 kHz si agressif · LPF 14–16 kHz facultatif</td></tr>
+<tr><td>Cymbales/ride</td><td>HPF 200–400 Hz · coupe les médiums brouillons (500 Hz–1 kHz) avant de booster l’air</td></tr>
+</table></div>
+<h3>Drum bus (EQ correctif, avant la compression)</h3>
+<p>Retouches de ±1 à 2 dB maximum : si tu dois faire plus, le problème est dans une piste, pas dans le bus. Zones à surveiller : 200–400 Hz (boue), 1–3 kHz (conflit synthés), 6–10 kHz (agressivité).</p>
+<p class="small">Règle générale : couper pour dégager, booster seulement ensuite, en larges cloches. Un EQ à phase minimale est le choix par défaut ; la phase linéaire ajoute du pré-écho et ne se justifie que pour travailler des couches proches en parallèle.</p>
+</details>
+<details>
+<summary>19.3 — Saturation / distortion</summary>
+<div class="tw"><table>
+<tr><th>Cible</th><th>Type de courbe</th><th>Drive</th><th>Mix</th><th>Filtrage</th></tr>
+<tr><td>Kick (série)</td><td>Soft/tanh ou analogique doux</td><td>2–5 dB</td><td>100 % ou 30–50 % en parallèle</td><td>Idéalement multibande : sature au-dessus de 100–150 Hz pour garder le sub propre.</td></tr>
+<tr><td>Snare corps</td><td>Analogique / courbe moyenne</td><td>4–8 dB</td><td>100 %</td><td>Aucun, ou HPF léger après.</td></tr>
+<tr><td>Snare crack (couche B)</td><td>Distortion dure / clip numérique</td><td>15–25 dB</td><td>100 % sur la couche, couche mixée très bas</td><td>HPF 800 Hz–1,5 kHz avant, LPF 8–12 kHz après.</td></tr>
+<tr><td>Toms / perc</td><td>Doux</td><td>2–4 dB</td><td>100 %</td><td>HPF 100 Hz après.</td></tr>
+<tr><td>Bus (glue)</td><td>Doux</td><td>1–3 dB</td><td>100 %</td><td>Rien : ce n’est pas là qu’on salit.</td></tr>
+<tr><td>Parallèle « crush »</td><td>Dur, plusieurs étages possibles</td><td>10–20 dB</td><td>Blend à régler au fader du retour</td><td>HPF ~100 Hz avant, LPF 8–12 kHz après, compression forte à la suite.</td></tr>
+</table></div>
+<h3>Repères dans Ableton (stock)</h3>
+<ul>
+<li><strong>Saturator :</strong> modes Analog Clip, Soft Sine, Medium Curve, Hard Curve, Sinoid Fold, Digital Clip ; réglages Drive, Color, Soft Clip, Dry/Wet, Output. Soft Sine/Analog Clip pour le doux, Hard Curve/Digital Clip pour le dur.</li>
+<li><strong>Drum Buss :</strong> Drive 10–30 %, Crunch 10–25 %, Boom à 0 sauf besoin, Damp ~10–14 kHz. Pratique en bus de départ, pas indispensable.</li>
+</ul>
+<p class="small">Pourquoi filtrer le sub avant de saturer : la distortion sur des basses crée des harmoniques inter-modulées qui salissent kick et basse. Active l’oversampling sur les saturateurs durs pour limiter l’aliasing (au prix du CPU).</p>
+</details>
+<details>
+<summary>19.4 — Compresseur — par élément et sur les bus</summary>
+<div class="tw"><table>
+<tr><th>Cible</th><th>Ratio</th><th>Attack</th><th>Release</th><th>Knee</th><th>GR visée</th><th>Remarque</th></tr>
+<tr><td>Kick</td><td>3–5:1</td><td>10–30 ms</td><td>40–100 ms</td><td>0–3 dB</td><td>2–4 dB</td><td>Plus l’attaque est lente, plus le click passe.</td></tr>
+<tr><td>Snare corps</td><td>4:1</td><td>10–20 ms</td><td>60–100 ms</td><td>0–3 dB</td><td>3–5 dB</td><td>Release assez court pour revenir avant le coup suivant.</td></tr>
+<tr><td>Snare crack</td><td>6–10:1</td><td>1–5 ms</td><td>30–60 ms</td><td>0 dB</td><td>6–10 dB</td><td>Compression rapide pour densifier la couche sale.</td></tr>
+<tr><td>Toms</td><td>3–4:1</td><td>15–30 ms</td><td>80–150 ms</td><td>3 dB</td><td>3–6 dB</td><td>Le gate/expander est souvent plus utile que la compression.</td></tr>
+<tr><td>Drum bus (glue)</td><td>2:1</td><td>20–30 ms</td><td>auto ou ~100 ms</td><td>doux</td><td>1–2 dB</td><td>Cible la cohésion, pas le niveau.</td></tr>
+<tr><td>Bus parallèle</td><td>10:1 à 20:1</td><td>10–20 ms</td><td>60–120 ms</td><td>0–3 dB</td><td>10–20 dB</td><td>Monte le blend jusqu’à sentir l’énergie, puis recule un peu.</td></tr>
+</table></div>
+<h3>Repères dans Ableton</h3>
+<ul>
+<li><strong>Compressor :</strong> mode Peak ou RMS, Knee, Auto Release, Lookahead, Dry/Wet intégré (utile pour la compression parallèle sans bus de retour).</li>
+<li><strong>Glue Compressor :</strong> attaques et releases à positions fixes (attack 0,01–30 ms, release 0,1–1,2 s ou Auto), ratios 2/4/10 ; le paramètre Range limite la réduction maximale.</li>
+</ul>
+<h3>Régler le release avec le tempo</h3>
+<p>Le compresseur doit avoir « relâché » avant le coup suivant, sinon il pompe. Intervalle d’une croche = <code>30 000 / BPM</code> ms (à 120 BPM : 250 ms) ; d’une double-croche = <code>15 000 / BPM</code> ms (à 120 BPM : 125 ms). Pars d’un release un peu inférieur à cet intervalle et ajuste à l’oreille.</p>
+<div class="tip"><strong>Contrôle rapide :</strong> si le compresseur ôte le « coup » à l’attaque, rallonge l’attack. S’il laisse le corps flotter ou pomper, raccourcis le release ou baisse le ratio.</div>
+</details>
+<details>
+<summary>19.5 — Clipper</summary>
+<div class="tw"><table>
+<tr><th>Où</th><th>Clipping visé (pics)</th><th>Type</th><th>Remarque</th></tr>
+<tr><td>Kick</td><td>1–3 dB</td><td>Doux, puis dur si besoin</td><td>Un clip marqué sur un kick à fort sub distord le sub : vérifie à l’oreille et à l’analyseur, ou clippe seulement la bande haute.</td></tr>
+<tr><td>Snare</td><td>1–4 dB</td><td>Dur ou doux selon le grain voulu</td><td>Le dur raccourcit le transient et ajoute des harmoniques impaires (plus agressif).</td></tr>
+<tr><td>Drum bus</td><td>0,5–2 dB</td><td>Doux</td><td>Sert à gagner quelques dB de niveau perçu, pas à sculpter.</td></tr>
+<tr><td>Master</td><td>≤ 1 dB</td><td>Doux</td><td>À n’utiliser que si le mix s’y prête ; ne remplace pas le limiter.</td></tr>
+</table></div>
+<ul>
+<li><strong>Méthode :</strong> règle le seuil jusqu’à ce que les pics les plus hauts soient légèrement rabotés (regarde la forme d’onde de sortie : les sommets sont plats). Compense ensuite le gain de sortie pour comparer à niveau égal.</li>
+<li><strong>Oversampling :</strong> active-le (2× à 4×) pour éviter l’aliasing du clip dur.</li>
+<li><strong>Position :</strong> en fin de chaîne de piste ou de bus, avant le limiter. Le clipper s’occupe des pics très courts ; le limiter ne fait que le travail restant.</li>
+<li><strong>Signal que tu en fais trop :</strong> kick ou snare sans « coup », distortion audible sur le sub, ou transients plats à l’écoute.</li>
+</ul>
+<p class="small">À ma connaissance, Ableton Live n’a pas de clipper dédié en stock : on s’en approche avec Saturator (Soft Clip, Hard Curve ou Digital Clip) ou on utilise un plugin tiers. Je n’ai pas vérifié l’état actuel de ta version : contrôle dans ton propre Live.</p>
+</details>
+<details>
+<summary>19.6 — Transient shapers</summary>
+<div class="tw"><table>
+<tr><th>Cible</th><th>Attack</th><th>Sustain</th><th>But</th></tr>
+<tr><td>Kick (manque de click)</td><td>+10 à +40 %</td><td>−10 à −30 %</td><td>Plus de définition, corps plus court pour laisser de la place à la basse.</td></tr>
+<tr><td>Kick (trop claquant)</td><td>−10 à −20 %</td><td>0 à +10 %</td><td>Adoucit l’impact.</td></tr>
+<tr><td>Snare principale</td><td>+10 à +30 %</td><td>0 à +20 %</td><td>Plus de crack ; le sustain ramène le corps ou la room.</td></tr>
+<tr><td>Couche texture / room</td><td>0 à −20 %</td><td>+20 à +50 %</td><td>Épaissit sans doubler l’attaque.</td></tr>
+<tr><td>Bus parallèle « crush »</td><td>−20 à −40 %</td><td>+0 à +20 %</td><td>Évite que la distortion double le transient et le sature trop.</td></tr>
+<tr><td>Toms</td><td>+10 à +30 %</td><td>−10 à −40 %</td><td>Attaque nette, queue contrôlée.</td></tr>
+<tr><td>Hi-hats</td><td>−10 à −20 %</td><td>0 %</td><td>Réduit le tic si la hat sort trop.</td></tr>
+</table></div>
+<ul>
+<li><strong>Repère Ableton :</strong> le bouton Transients du Drum Buss va de −100 % à +100 % ; reste sur ±20 à 40 %.</li>
+<li><strong>Avant ou après compression :</strong> avant, il redonne de la dynamique que le compresseur va resserrer ; après, il re-sculpte une attaque déjà contrôlée. Teste les deux.</li>
+<li><strong>Sensibilité au niveau :</strong> certains shapers réagissent au niveau d’entrée, d’autres sont indépendants du niveau. Si tu changes le gain en amont, vérifie que l’effet est resté le même.</li>
+</ul>
+</details>
+<details>
+<summary>19.7 — Autres méthodes pour faire tes propres traitements</summary>
+<ul>
+<li><strong>Polarité et phase des couches :</strong> inverse la polarité de chaque couche et décale-la de 0,1–3 ms. Garde la position où le sub et le corps sont les plus pleins.</li>
+<li><strong>Accorder le kick :</strong> repère sa fondamentale à l’analyseur et accorde-la sur la tonalité du morceau ou sur la note de basse la plus jouée. Un kick à contre-ton rend la basse boueuse.</li>
+<li><strong>Mono check :</strong> écoute en mono et vérifie que le kick et la snare ne perdent pas de corps. Garde le bas du spectre (sous 120–150 Hz) au centre.</li>
+<li><strong>EQ dynamique/carving des synthés :</strong> au lieu de couper les synthés en permanence, creuse-les de 1–3 dB aux fréquences de la snare (2–4 kHz) et du kick (click) uniquement quand ils jouent ensemble.</li>
+<li><strong>A/B à niveau égal :</strong> compense le volume entre chaque version (bypass vs traité). Un plugin qui rend « plus fort » donne toujours l’impression de mieux sonner.</li>
+<li><strong>Morceau de référence :</strong> choisis un titre du même style, cale son niveau sur ton mix, et compare à l’analyseur (spectre moyen) puis à l’oreille. Compare des tendances, pas des courbes à copier.</li>
+<li><strong>Gating :</strong> sur les toms, un gate ou expander retire les fuites et resserre le groove sans toucher à l’attaque.</li>
+<li><strong>Bruit et ambiance :</strong> une couche courte de bruit filtré (HPF 2–4 kHz), mixée très bas, renforce la snare dans un mix saturé et coûte moins que de pousser l’EQ.</li>
+<li><strong>Automation :</strong> automatise le blend du parallèle et les sends de reverb par section : sature plus dans les refrains/passages intenses, moins dans les couplets.</li>
+</ul>
+</details>
+
+<h2>Sources et niveau de certitude</h2>
+<div class="source">
+<p><strong>Sources publiques utilisées :</strong></p>
+<ul>
+<li>Interview guitarguitar, 2026 : workflow, Ableton, plugins, démarrage fréquent par kick/snare, travail principalement in-the-box.</li>
+<li>Interview Discovery Records, 2015 : composition prioritaire et mix réalisé parallèlement au travail.</li>
+<li>Music Waves, 2022 : explication de la densité de <em>Leather Terror</em> par empilage de synthés selon une logique proche du multi-ampli metal.</li>
+<li>Louder, 2022 : Carpenter Brut explique avoir utilisé jusqu'à une dizaine de synthés pour certains riffs et les avoir traités comme des guitares.</li>
+<li>Bring The Noise / Metalorgie : éléments de workflow et philosophie de composition.</li>
+</ul>
+<p class="small">Les chaînes de drums, fréquences et paramètres chiffrés de cette page sont des propositions pédagogiques. Ils ne doivent pas être présentés comme les réglages personnels exacts de Carpenter Brut.</p>
+</div>
+
+<footer>
+Guide pédagogique — reconstruction sonore, pas une fiche technique officielle. Les valeurs sont des points de départ à adapter au sample, au tempo et au morceau.
+</footer>
+</main>
+</body>
+</html>
