@@ -301,3 +301,56 @@ document.addEventListener("DOMContentLoaded", () => {
         if (themeIcon) themeIcon.className = "fas fa-moon";
     }
 });
+
+// ==========================================================================
+// GESTION DES SOUS-ONGLETS DE LA SECTION DEV (APTITUDES VS OUTILS) AVEC ANIMATION SMOOTH
+// ==========================================================================
+function switchDevTab(tabName) {
+    const btnAptitudes = document.querySelector('.dev-tab-btn:nth-child(1)');
+    const btnOutils = document.querySelector('.dev-tab-btn:nth-child(2)');
+    const contentAptitudes = document.getElementById('dev-tab-aptitudes');
+    const contentOutils = document.getElementById('dev-tab-outils');
+
+    if (!contentAptitudes || !contentOutils) return;
+
+    // Détermination de l'élément cible et de l'élément source
+    const targetContent = tabName === 'aptitudes' ? contentAptitudes : contentOutils;
+    const activeContent = tabName === 'aptitudes' ? contentOutils : contentOutils === targetContent ? contentAptitudes : contentAptitudes; // Ajustement logique
+
+    // Gestion des classes actives sur les boutons
+    if (tabName === 'aptitudes') {
+        btnAptitudes.classList.add('active');
+        btnOutils.classList.remove('active');
+    } else {
+        btnOutils.classList.add('active');
+        btnAptitudes.classList.remove('active');
+    }
+
+    // Animation smooth de transition
+    if (activeContent.style.display !== 'none') {
+        activeContent.style.opacity = '1';
+        activeContent.style.transition = 'opacity 0.25s ease';
+        activeContent.style.opacity = '0';
+
+        setTimeout(() => {
+            activeContent.style.display = 'none';
+            targetContent.style.opacity = '0';
+            targetContent.style.display = 'block';
+            
+            // Force le reflow pour relancer l'animation d'apparition
+            void targetContent.offsetWidth;
+            
+            targetContent.style.transition = 'opacity 0.3s ease';
+            targetContent.style.opacity = '1';
+        }, 250);
+    } else {
+        contentAptitudes.style.display = 'none';
+        contentOutils.style.display = 'none';
+        targetContent.style.opacity = '0';
+        targetContent.style.display = 'block';
+        setTimeout(() => {
+            targetContent.style.transition = 'opacity 0.3s ease';
+            targetContent.style.opacity = '1';
+        }, 10);
+    }
+}
