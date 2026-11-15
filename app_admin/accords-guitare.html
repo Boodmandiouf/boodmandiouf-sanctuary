@@ -3,94 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
 <title>Accords guitare</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎸</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600;700&display=swap">
 <style>
-:root{--bg:#0b0b12;--card:#11121b;--card2:#171827;--tx:#e8e8f0;--mut:#8a8ca0;--red:#e11d2e;--teal:#00e5c0;--bd:#1f4a47;--dot:#00e5c0;--dotink:#04110f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3f4f8;--card:#fff;--card2:#eef0f6;--tx:#14151f;--mut:#5d6075;--red:#c4121f;--teal:#007f6a;--bd:#9ccfc6;--dot:#14151f;--dotink:#fff}}
-:root[data-theme="dark"]{--bg:#0b0b12;--card:#11121b;--card2:#171827;--tx:#e8e8f0;--mut:#8a8ca0;--red:#e11d2e;--teal:#00e5c0;--bd:#1f4a47;--dot:#00e5c0;--dotink:#04110f}
+/* ---- Palette sombre (reprise de ton admin.css) ---- */
+:root{
+  --bg-primary:#0a0a0f;--bg-secondary:#12121c;--panel-bg:rgba(18,18,28,.95);
+  --text-primary:#e0e0e0;--text-muted:#a0a0b0;
+  --accent-color:#df162b;--accent-glow:rgba(223,22,43,.4);--border-color:rgba(223,22,43,.3);--input-bg:#0e0e15;
+  color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 "Rajdhani","Segoe UI",system-ui,sans-serif}
-.app{max-width:760px;margin:0 auto;padding:14px 14px 76px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:14px}
-h2{margin:0 0 12px;color:var(--red);font-size:1.35rem;letter-spacing:.04em;border-bottom:1px solid color-mix(in srgb,var(--red) 40%,transparent);padding-bottom:8px}
-h3{margin:0;font-size:1.1rem}
-.mut{color:var(--mut);margin:8px 0}
-.sw{position:relative}
-#q{width:100%;font:inherit;font-size:1.1rem;padding:12px 40px 12px 14px;border-radius:10px;border:1px solid var(--bd);background:var(--card2);color:var(--tx);outline:none}
-#q:focus,select:focus-visible{border-color:var(--teal);box-shadow:0 0 0 2px color-mix(in srgb,var(--teal) 35%,transparent);outline:none}
-#x{position:absolute;right:6px;top:6px;width:34px;height:34px;border:0;background:none;color:var(--mut);font-size:1.3rem;cursor:pointer}
-.sel{display:grid;grid-template-columns:1.2fr 1.5fr .8fr;gap:8px;margin-top:10px}.sel.one{grid-template-columns:1fr;margin:0 0 4px}.sel label{min-width:0}
-.sel label{display:block;font-size:.8rem;color:var(--mut)}
-.sel select{width:100%;margin-top:15px;margin-bottom: 15px;font:inherit;padding:9px 8px;border-radius:10px;border:1px solid var(--bd);background:var(--card2);color:var(--tx)}
-#sd{font-size:.92rem}
-.chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 2px}
-.chip{border:1px solid var(--bd);background:var(--card2);color:var(--tx);border-radius:999px;padding:5px 11px;font:inherit;cursor:pointer}
-.chip small{opacity:.6;margin-left:4px}
-.chip.on{background:var(--teal);color:var(--dotink);border-color:var(--teal);font-weight:700}
-#roots{border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:4px}
-.hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0}
-.nm{font-size:1.5rem;font-weight:700}.nm small{font-size:1rem;color:var(--mut);font-weight:500;margin-left:6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
-.v{position:relative;background:var(--card2);border:1px solid transparent;border-radius:10px;padding:6px 4px 8px;text-align:center;cursor:pointer;color:var(--tx);font:inherit}
-.v:hover,.v:focus-visible{border-color:var(--teal);outline:none}
-.v svg{width:100%;height:auto;display:block}
-.v span{display:block;font-size:.85rem;color:var(--mut)}
-.v b{display:block;font-size:1.1rem}
-.v i{position:absolute;top:4px;left:7px;font-style:normal;color:var(--teal)}
-.v .rm{position:absolute;top:2px;right:4px;border:0;background:none;color:var(--mut);font-size:1.1rem;cursor:pointer;padding:2px 6px}
-.v.ed{border-color:var(--red)}
-.btn{border:1px solid var(--red);background:none;color:var(--red);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
-.empty{color:var(--mut);padding:10px 0}
-.note{color:var(--red);font-size:.95rem}
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--teal)}
-.bar[hidden]{display:none}
-.bar button{width:100%;display:flex;gap:10px;align-items:center;border:0;background:none;color:var(--tx);font:inherit;cursor:pointer;text-align:left}
-.bar b{background:var(--teal);color:var(--dotink);border-radius:999px;min-width:26px;text-align:center;padding:1px 8px}
-.bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-.hd select{max-width:48%;font:inherit;padding:7px 8px;border-radius:10px;border:1px solid var(--bd);background:var(--card2);color:var(--tx)}
-.tb{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
-details.card>summary{cursor:pointer;font-weight:700;font-size:1.1rem}
-details.card[open]>summary{margin-bottom:10px}
-.pr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--bd)}
-.pr div{min-width:0}.pr b{display:block}.pr span{display:block;font-size:.88rem;color:var(--mut)}
-#tm{min-height:1.2em;margin:4px 0}
+body{margin:0;background:var(--bg-primary);color:var(--text-primary);font-family:'Rajdhani',sans-serif}
+.pv{max-width:760px;margin:0 auto;padding:16px 14px 90px}
+.panel-box{padding:18px;background:var(--panel-bg);border:1px solid var(--border-color);box-shadow:0 0 15px var(--accent-glow);border-radius:4px}
+.pv h1{margin:0 0 14px;padding-bottom:10px;font-family:'Orbitron',sans-serif;font-size:1.15rem;letter-spacing:3px;color:var(--accent-color);border-bottom:1px solid var(--border-color)}
+input,select{background:var(--input-bg);color:var(--text-primary);border:1px solid var(--border-color)}
+/* ---- Outil accords ---- */
+/* ==========================================================================
+   OUTIL ACCORDS GUITARE — DA cyber / MAO (à charger après admin.css)
+   Tous les sélecteurs sont préfixés gc- : aucun risque de collision.
+   ========================================================================== */
+.gc,.gc-bar{--gc-teal:#00ffcc;--gc-red:var(--accent-color,#df162b);--gc-hot:#ff5577;--gc-tx:#e2e8f0;--gc-mut:#94a3b8;--gc-line:rgba(0,255,204,.25);--gc-field:var(--input-bg,#0e0e15);--dot:#00ffcc;--dotink:#04110f;font-family:'Rajdhani',sans-serif}
+.gc{color:var(--gc-tx);font-size:1rem;line-height:1.45}
+.gc *,.gc *::before,.gc *::after{box-sizing:border-box}
+.gc [hidden],.gc-bar[hidden]{display:none!important}
+
+/* Recherche */
+.gc-sw{position:relative}
+.gc-sw input{width:100%;margin:0;padding:12px 42px 12px 14px;font:inherit;font-size:1.05rem;color:#fff;background:var(--gc-field);border:1px solid var(--gc-line);border-radius:4px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s}
+.gc-sw input::-webkit-search-cancel-button{display:none}
+.gc-sw input:focus,.gc-sel select:focus-visible,.gc-hd select:focus-visible{border-color:var(--gc-teal);box-shadow:0 0 8px rgba(0,255,204,.3);outline:none}
+.gc-sw button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;background:none;color:var(--gc-mut);font-size:1.3rem;cursor:pointer}
+.gc-sw button:hover{color:var(--gc-teal)}
+
+/* Menus Style / Accordage / Capo */
+.gc-sel{display:grid;grid-template-columns:1.2fr 1.5fr .8fr;gap:8px;margin-top:12px}
+.gc-sel.gc-one{grid-template-columns:1fr;margin:0 0 6px}
+.gc-sel label{display:block;min-width:0;font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gc-mut)}
+.gc-sel select,.gc-hd select{width:100%;margin:8px 0 12px;padding:9px 8px;font:inherit;font-size:.95rem;color:var(--gc-tx);background:var(--gc-field);border:1px solid var(--gc-line);border-radius:4px}
+.gc-hd select{width:auto;max-width:48%;margin:0}
+.gc-mut{margin:8px 0;color:var(--gc-mut);font-size:.9rem}
+.gc-note{margin:8px 0;color:var(--gc-hot);font-size:.92rem}
+.gc-empty{padding:10px 0;color:var(--gc-mut)}
+
+/* Pastilles (notes, types d'accords) — même logique que .filter-btn */
+.gc-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 2px}
+.gc-chip{padding:6px 11px;font:inherit;font-size:.92rem;font-weight:600;color:var(--gc-mut);background:transparent;border:1px solid #334155;border-radius:4px;cursor:pointer;transition:all .2s ease}
+.gc-chip small{margin-left:4px;font-size:.75em;opacity:.65}
+.gc-chip:hover{border-color:var(--gc-teal);color:var(--gc-teal)}
+.gc-chip.on{color:var(--gc-teal);background:rgba(0,255,204,.1);border-color:var(--gc-teal);box-shadow:0 0 8px rgba(0,255,204,.2)}
+#gc-roots{margin-bottom:6px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+
+/* Résultats */
+.gc-hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0}
+.gc-nm{font-family:'Orbitron',sans-serif;font-size:1.15rem;letter-spacing:1px;color:#fff}
+.gc-nm small{margin-left:8px;font-family:'Rajdhani',sans-serif;font-size:.95rem;letter-spacing:0;color:var(--gc-mut)}
+.gc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.gc-v{position:relative;padding:6px 4px 8px;font:inherit;color:#cbd5e1;text-align:center;background:rgba(0,255,204,.03);border:1px solid rgba(0,255,204,.2);border-radius:6px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+.gc-v:hover,.gc-v:focus-visible{border-color:var(--gc-teal);box-shadow:0 0 15px rgba(0,255,204,.2);outline:none}
+.gc-v svg{display:block;width:100%;height:auto}
+.gc-v b{display:block;font-size:1rem;color:#fff}
+.gc-v span{display:block;font-size:.82rem;color:var(--gc-mut)}
+.gc-v i{position:absolute;top:4px;left:7px;font-style:normal;color:var(--gc-teal)}
+.gc-v.ed{border-color:var(--gc-red);box-shadow:0 0 12px var(--accent-glow,rgba(223,22,43,.4))}
+.gc-rm{position:absolute;top:2px;right:4px;padding:2px 6px;border:0;background:none;color:var(--gc-mut);font-size:1.1rem;cursor:pointer}
+.gc-rm:hover{color:var(--gc-hot)}
+
+/* Boutons — même logique que .btn-vault */
+.gc-btn{padding:7px 12px;font-family:'Orbitron',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--gc-red);background:transparent;border:1px solid var(--gc-red);border-radius:4px;cursor:pointer;transition:all .3s}
+.gc-btn:hover{color:#fff;background:var(--gc-red)}
+
+/* Progressions (accordéon sans <details> pour éviter les règles globales) */
+.gc-pg{margin-top:16px}
+.gc-pgb{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:13px 16px;font:inherit;font-weight:700;color:var(--gc-teal);text-align:left;background:rgba(0,255,204,.1);border:1px solid rgba(0,255,204,.4);border-radius:8px;cursor:pointer;user-select:none}
+.gc-pgb::after{content:"▼";flex:none;font-size:.8rem;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.gc-pgb[aria-expanded="true"]::after{transform:rotate(180deg)}
+.gc-pgp{padding:14px 4px 0}
+.gc-pr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.08)}
+.gc-pr div{min-width:0}
+.gc-pr b{display:block;color:#fff}
+.gc-pr span{display:block;font-size:.86rem;color:var(--gc-mut)}
+
+/* Ma suite d'accords */
+.gc-suite{margin-top:18px;padding:16px;background:rgba(15,15,25,.8);border:1px solid rgba(0,255,204,.3);border-radius:6px}
+.gc-h{margin:0;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;color:var(--gc-teal)}
+.gc-tb{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px}
+#gc-tm{min-height:1.2em}
+
+/* Barre fixe (déplacée dans <body> par le script) */
+.gc-bar{position:fixed;left:0;right:0;bottom:0;z-index:9000;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(17,17,21,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(0,255,204,.4);box-shadow:0 -5px 20px rgba(0,0,0,.6)}
+.gc-bar button{display:flex;align-items:center;gap:10px;width:100%;font:inherit;color:#e2e8f0;text-align:left;background:none;border:0;cursor:pointer}
+.gc-bar b{min-width:26px;padding:1px 8px;color:#04110f;text-align:center;background:#00ffcc;border-radius:4px}
+.gc-bar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+@media (max-width:480px){.gc-sel{grid-template-columns:1fr 1fr}.gc-sel label:last-child{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){.gc *{transition:none!important}}
+
 </style>
 </head>
 <body>
-<main class="app" id="guitar-chords">
- <section class="card">
-  <h2>ACCORDS GUITARE</h2>
-  <div class="sw">
-   <input id="q" type="search" placeholder="Do, Ré7, Mi9m, A, Em, F#m7…" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Rechercher un accord">
-   <button id="x" aria-label="Effacer" hidden>×</button>
-  </div>
-  <div class="sel">
-   <label>Style<select id="st"></select></label>
-   <label>Accordage<select id="tu"></select></label>
-   <label>Capo<select id="cp"></select></label>
-  </div>
-  <p class="mut" id="sd" hidden></p>
-  <div class="chips" id="roots" aria-label="Note"></div>
-  <div class="chips" id="chips" aria-label="Type d’accord"></div>
-  <div id="res"></div>
- </section>
- <details class="card" id="pg">
-  <summary id="pgt">Progressions types</summary>
-  <p class="mut">Progressions courantes, à adapter à ton oreille. Elles utilisent l’accordage et le capo choisis.</p>
-  <div class="sel one"><label>Tonalité<select id="tn"></select></label></div>
-  <div id="pgl"></div>
- </details>
- <section class="card" id="suite">
-  <div class="hd"><h3>Ma suite d’accords</h3><button class="btn" id="empty" hidden>Vider</button></div>
-  <div class="tb" id="tb" hidden><button class="chip" id="dn">− ½ ton</button><button class="chip" id="up">+ ½ ton</button><span class="mut" id="ci"></span></div>
-  <p class="note" id="tm" role="status"></p>
-  <div class="grid" id="prog"></div>
- </section>
+<main class="pv">
+<div class="panel-box">
+<h1>ACCORDS GUITARE</h1>
+<div class="gc" id="gc-root">
+      <div class="gc-sw">
+        <input id="gc-q" type="search" placeholder="Do, Ré7, Mi9m, A, Em, F#m7, Do/Sol…" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Rechercher un accord">
+        <button id="gc-x" aria-label="Effacer" hidden>×</button>
+      </div>
+      <div class="gc-sel">
+        <label>Style<select id="gc-st"></select></label>
+        <label>Accordage<select id="gc-tu"></select></label>
+        <label>Capo<select id="gc-cp"></select></label>
+      </div>
+      <p class="gc-mut" id="gc-sd" hidden></p>
+      <div class="gc-chips" id="gc-roots" aria-label="Note"></div>
+      <div class="gc-chips" id="gc-chips" aria-label="Type d’accord"></div>
+      <div id="gc-res"></div>
+
+      <div class="gc-pg">
+        <button class="gc-pgb" id="gc-pgb" aria-expanded="false" aria-controls="gc-pgp"><span id="gc-pgt">Progressions types</span></button>
+        <div class="gc-pgp" id="gc-pgp" hidden>
+          <p class="gc-mut">Progressions courantes, à adapter à ton oreille. Elles utilisent l’accordage et le capo choisis.</p>
+          <div class="gc-sel gc-one"><label>Tonalité<select id="gc-tn"></select></label></div>
+          <div id="gc-pgl"></div>
+        </div>
+      </div>
+
+      <section class="gc-suite" id="gc-suite">
+        <div class="gc-hd"><h3 class="gc-h">Ma suite d’accords</h3><button class="gc-btn" id="gc-empty" hidden>Vider</button></div>
+        <div class="gc-tb" id="gc-tb" hidden><button class="gc-chip" id="gc-dn">− ½ ton</button><button class="gc-chip" id="gc-up">+ ½ ton</button><span class="gc-mut" id="gc-ci"></span></div>
+        <p class="gc-note" id="gc-tm" role="status"></p>
+        <div class="gc-grid" id="gc-prog"></div>
+      </section>
+    </div>
+</div>
 </main>
-<div class="bar" id="bar" hidden></div>
 <script>
+/* Outil accords guitare — à charger en fin de <body>, après le bloc HTML (voir guitar-chords.snippet.html) */
+(function(){
+'use strict';
+const root=document.getElementById('gc-root');
+if(!root||root.dataset.gcInit)return;
+root.dataset.gcInit='1';
+const barEl=document.createElement('div');
+barEl.className='gc-bar';barEl.hidden=true;
+document.body.appendChild(barEl); /* hors de la section : position:fixed fiable malgré les animations de ton CSS */
 const FR=['Do','Do#','Ré','Ré#','Mi','Fa','Fa#','Sol','Sol#','La','La#','Si'],
 FRb=['Do','Réb','Ré','Mib','Mi','Fa','Solb','Sol','Lab','La','Sib','Si'],
 EN=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
@@ -127,28 +190,28 @@ STYLES={
 OD={C:'x32010',C7:'x32310',Cmaj7:'x32000',Cadd9:'x32030',D:'xx0232',Dm:'xx0231',D7:'xx0212',Dmaj7:'xx0222',Dsus2:'xx0230',Dsus4:'xx0233',Dm7:'xx0211',E:'022100',Em:'022000',E7:'020100',Em7:'020000',Emaj7:'021100',Esus4:'022200',G:'320003',G7:'320001',Gmaj7:'320002',G6:'320000',A:'x02220',Am:'x02210',A7:'x02020',Am7:'x02010',Amaj7:'x02120',Asus2:'x02200',Asus4:'x02230',Aadd9:'x02420',B7:'x21202',Fmaj7:'xx3210'},
 SH={e:{'':'022100',m:'022000',7:'020100',m7:'020000',maj7:'021100',sus4:'022200',m6:'022020',5:'022xxx'},
  a:{'':'x02220',m:'x02210',7:'x02020',m7:'x02010',maj7:'x02120',sus4:'x02230',sus2:'x02200',m7b5:'x0101x',dim:'x0121x',5:'x022xx'}};
-const $=s=>document.querySelector(s);
+const $=s=>root.querySelector(s);
 let OPEN,TI=0,CAPO=0;
 const setOpen=()=>{OPEN=TUN[TI].p.map(x=>(x+CAPO)%12)};setOpen();
 const BASES={do:0,re:2,mi:4,fa:5,sol:7,la:9,si:11,c:0,d:2,e:4,f:5,g:7,a:9,b:11},
 TE=['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'],
 TON=[['Do',0],['Réb',1],['Ré',2],['Mib',3],['Mi',4],['Fa',5],['Fa#',6],['Sol',7],['Lab',8],['La',9],['Sib',10],['Si',11]],
 PR={
- '':[['Pop','I V vi IV'],['Cadence simple','I IV V I'],['II–V–I','ii7 V7 Imaj7']],
- triade:[['Cadence simple','I IV V I'],['Pop','I V vi IV'],['Années 50','I vi IV V'],['Pop inversé','vi IV I V']],
- classique:[['Cadence parfaite','I IV V7 I'],['Canon (Pachelbel)','I V vi iii IV I IV V'],['Mineur classique','i iv V i'],['Cadence andalouse','i bVII bVI V']],
- moderne:[['Pop','I V vi IV'],['Pop inversé','vi IV I V'],['Années 50','I vi IV V'],['Pop colorée','Iadd9 V vi7 IVmaj7']],
- rock:[['Rock mixolydien','I bVII IV'],['Rock classique','I bIII IV I'],['Power chords','I5 IV5 V5 I5'],['Rock mineur','i bVII bVI bVII']],
- emo:[['Pop colorée','Iadd9 Vsus4 vi7 IVmaj7'],['Pop colorée inversée','vi7 IVmaj7 Iadd9 Vsus4']],
- metal:[['Éolien (i–bVI–bVII)','I5 bVI5 bVII5 I5'],['Phrygien','I5 bII5 I5 bIII5'],['Triton','I5 bV5 I5 bVII5']],
- djent:[['Mineur étendu','i9 bVImaj7 bIIImaj7 bVII'],['Power chords graves','I5 bVI5 bIII5 bVII5'],['Phrygien coloré','iadd9 bII iadd9 bIII']],
- blues:[['Blues 12 mesures','I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7'],['Blues mineur 12 mesures','i7 i7 i7 i7 iv7 iv7 i7 i7 bVI7 V7 i7 i7']],
- jazz:[['II–V–I majeur','ii7 V7 Imaj7'],['II–V–I mineur','iim7b5 V7b9 i'],['Turnaround','Imaj7 vi7 ii7 V7']],
- bossa:[['II–V–I–VI','ii7 V7 Imaj7 vi7'],['Passage diminué','Imaj7 #idim7 ii7 V7']],
- funk:[['Vamp dominante','I9 IV9'],['Vamp dorien','i7 IV7'],['Vamp mineur','i9 iv7']],
- soul:[['I–vi–ii–V','Imaj7 vi7 ii7 V7'],['IV–iii–ii–I','IVmaj7 iii7 ii7 Imaj7']],
- lofi:[['II–V–I–VI','ii7 V7 Imaj7 vi7'],['I–iii–vi–ii','Imaj7 iii7 vi7 ii7']],
- japonais:[['Royal road (王道進行)','IVmaj7 V7 iii7 vi7'],['Marunouchi (丸サ進行)','IVmaj7 III7 vi7 v7 I7'],['Komuro (小室進行)','vi IV V I']]
+ '':[['Pop','I V vi IV'],['Années 50','I vi IV V'],['Cadence simple','I IV V I'],['II–V–I','ii7 V7 Imaj7'],['Canon','I V vi iii IV I IV V'],['Blues 12 mesures','I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7'],['Cadence andalouse','i bVII bVI V']],
+ triade:[['Cadence simple','I IV V I'],['Pop','I V vi IV'],['Années 50','I vi IV V'],['Pop inversé','vi IV I V'],['I–IV–vi–V','I IV vi V'],['I–V–IV','I V IV'],['II–V–I','ii V I'],['Cadence plagale','I IV I']],
+ classique:[['Cadence parfaite','I IV V7 I'],['Cadence plagale','I IV I'],['Cadence rompue','I IV V vi'],['Canon (Pachelbel)','I V vi iii IV I IV V'],['Cycle des quintes','I IV viidim iii vi ii V I'],['Mineur classique','i iv V i'],['Cadence andalouse','i bVII bVI V']],
+ moderne:[['Pop','I V vi IV'],['Pop inversé','vi IV I V'],['Années 50','I vi IV V'],['Pop colorée','Iadd9 V vi7 IVmaj7'],['Pop punk','IV I V vi'],['Descente','vi V IV I'],['vi–I–V–IV','vi I V IV'],['Montée','I ii7 iii7 IV'],['I–IV–vi–V','I IV vi V']],
+ rock:[['Rock mixolydien','I bVII IV'],['Rock classique','I bIII IV I'],['Power chords','I5 IV5 V5 I5'],['Rock mineur','i bVII bVI bVII'],['I–V–bVII–IV','I V bVII IV'],['I–bVII–IV–I','I bVII IV I'],['Power chords mixolydien','I5 bIII5 IV5 bVII5'],['I–IV–V','I IV V']],
+ emo:[['Pop colorée','Iadd9 Vsus4 vi7 IVmaj7'],['Pop colorée inversée','vi7 IVmaj7 Iadd9 Vsus4'],['Descente aérienne','vi7 IVadd9 Iadd9 Vsus4'],['Pop punk colorée','IVmaj7 Iadd9 Vsus4 vi7']],
+ metal:[['Éolien (i–bVI–bVII)','I5 bVI5 bVII5 I5'],['Phrygien','I5 bII5 I5 bIII5'],['Triton','I5 bV5 I5 bVII5'],['Éolien alterné','I5 bIII5 bVII5 bVI5'],['Andalouse power','I5 bVII5 bVI5 V5'],['Descente','I5 bVII5 bVI5 bVII5']],
+ djent:[['Mineur étendu','i9 bVImaj7 bIIImaj7 bVII'],['Power chords graves','I5 bVI5 bIII5 bVII5'],['Phrygien coloré','iadd9 bII iadd9 bIII'],['Pédale grave','I5 bII5 I5 bV5'],['Mineur 9','i9 iv9 bVII9 bIIImaj7']],
+ blues:[['Blues 12 mesures','I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7'],['Blues rapide (quick change)','I7 IV7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7'],['Blues mineur 12 mesures','i7 i7 i7 i7 iv7 iv7 i7 i7 bVI7 V7 i7 i7'],['Blues 8 mesures','I7 V7 IV7 IV7 I7 V7 I7 V7'],['Blues jazz 12 mesures','I7 IV7 I7 I7 IV7 #IVdim7 I7 VI7 ii7 V7 I7 V7'],['Shuffle en 9e','I9 IV9 I9 V9']],
+ jazz:[['II–V–I majeur','ii7 V7 Imaj7'],['II–V–I mineur','iim7b5 V7b9 i6'],['Turnaround','Imaj7 vi7 ii7 V7'],['Cycle des quintes (7e)','Imaj7 IVmaj7 viim7b5 iii7 vi7 ii7 V7 Imaj7'],['Autumn Leaves (mineur)','iv7 bVII7 bIIImaj7 bVImaj7 iim7b5 V7 i'],['Rhythm changes (A)','Imaj7 vi7 ii7 V7 iii7 VI7 ii7 V7'],['Substitution tritonique','ii7 bII7 Imaj7']],
+ bossa:[['II–V–I–VI','ii7 V7 Imaj7 vi7'],['Passage diminué','Imaj7 #idim7 ii7 V7'],['Backdoor','iv7 bVII7 Imaj7'],['II–V–I mineur','iim7b5 V7b9 i6']],
+ funk:[['Vamp dominante','I9 IV9'],['Vamp dorien','i7 IV7'],['Vamp mineur','i9 iv7'],['I9–IV9–I9–V9','I9 IV9 I9 V9'],['Funk jazzy','ii9 V13 Imaj9']],
+ soul:[['I–vi–ii–V','Imaj7 vi7 ii7 V7'],['IV–iii–ii–I','IVmaj7 iii7 ii7 Imaj7'],['Années 50','I vi IV V'],['Soul jazzy','ii9 V13 Imaj9']],
+ lofi:[['II–V–I–VI','ii7 V7 Imaj7 vi7'],['I–iii–vi–ii','Imaj7 iii7 vi7 ii7'],['vi–ii–V–I','vi7 ii7 V7 Imaj7'],['I–vi–IV–V','Imaj7 vi7 IVmaj7 V7'],['II–V–I (9e)','ii9 V13 Imaj9']],
+ japonais:[['Royal road (王道進行)','IVmaj7 V7 iii7 vi7'],['Marunouchi (丸サ進行)','IVmaj7 III7 vi7 v7 I7'],['Komuro (小室進行)','vi IV V I'],['Canon japonais','I V vi iii IV I ii V'],['Let It Be (I–V–vi–IV)','I V vi7 IV'],['IV–V–#Vdim–vi','IV V #vdim vi'],['Pop punk (IV–I–V–vi)','IV I V vi'],['vi–ii–iii–vi','vi7 ii7 iii vi7']]
 };
 
 function note(t){
@@ -279,38 +342,38 @@ function svg(v){
 let prog=[],cur=null,edit=-1,style='',suiteVis=false,ft;
 try{prog=JSON.parse(localStorage.getItem('gc_prog')||'[]');CAPO=+localStorage.getItem('gc_capo')||0;setOpen()}catch(e){}
 const save=()=>{try{localStorage.setItem('gc_prog',JSON.stringify(prog));localStorage.setItem('gc_capo',CAPO)}catch(e){}};
-function flash(m){const e=$('#tm');e.textContent=m;clearTimeout(ft);ft=setTimeout(()=>{e.textContent=''},6000)}
+function flash(m){const e=$('#gc-tm');e.textContent=m;clearTimeout(ft);ft=setTimeout(()=>{e.textContent=''},6000)}
 const item=(p,v,t)=>({fr:p.fr,en:p.en,f:v.f,barre:v.barre,t:t});
 
 function showSearch(){
- const val=$('#q').value,S=STYLES[style];cur=parse(val);$('#x').hidden=!val;
- $('#sd').hidden=!S;if(S)$('#sd').textContent=S.d+' (repère courant, pas une règle)';
- $('#roots').innerHTML=FR.map((n,i)=>`<button class="chip${cur&&cur.root===i?' on':''}" data-r="${i}">${n}<small>${EN[i]}</small></button>`).join('');
- const chips=$('#chips'),res=$('#res');
+ const val=$('#gc-q').value,S=STYLES[style];cur=parse(val);$('#gc-x').hidden=!val;
+ $('#gc-sd').hidden=!S;if(S)$('#gc-sd').textContent=S.d+' (repère courant, pas une règle)';
+ $('#gc-roots').innerHTML=FR.map((n,i)=>`<button class="gc-chip${cur&&cur.root===i?' on':''}" data-r="${i}">${n}<small>${EN[i]}</small></button>`).join('');
+ const chips=$('#gc-chips'),res=$('#gc-res');
  showPg();
- if(!cur){chips.innerHTML='';res.innerHTML=val.trim()?'<p class="note">Accord non reconnu. Exemples : Do, Ré7, Mi9m, A, Em, F#m7, Do/Sol.</p>':'<p class="empty">Choisis une note ou tape un accord pour voir ses positions.</p>';return}
- chips.innerHTML=(S?S.q:QS).map(q=>`<button class="chip${q===cur.sfx?' on':''}" data-q="${q}">${cur.rf}${q?' '+q:''}</button>`).join('');
+ if(!cur){chips.innerHTML='';res.innerHTML=val.trim()?'<p class="gc-note">Accord non reconnu. Exemples : Do, Ré7, Mi9m, A, Em, F#m7, Do/Sol.</p>':'<p class="gc-empty">Choisis une note ou tape un accord pour voir ses positions.</p>';return}
+ chips.innerHTML=(S?S.q:QS).map(q=>`<button class="gc-chip${q===cur.sfx?' on':''}" data-q="${q}">${cur.rf}${q?' '+q:''}</button>`).join('');
  const vs=voicings(cur),tones=cur.pcs.filter(x=>x!==cur.root),nf=x=>(cur.flat?FRb:FR)[x];
- res.innerHTML=`<div class="hd"><div class="nm">${cur.fr}<small>${cur.en}</small></div>${tones.length?`<select id="bs" aria-label="Basse"><option value="">Basse : fondamentale</option>${tones.map(x=>`<option value="${x}"${x===cur.bass?' selected':''}>Basse : ${nf(x)}</option>`).join('')}</select>`:''}</div>`+
-  (CAPO?`<p class="mut">Capo case ${CAPO} : les cases sont comptées à partir du capo.</p>`:'')+
-  (edit>=0?`<p class="note">Choisis la position qui remplacera l’accord n°${edit+1} de ta suite.</p>`:'')+
-  (vs.length?`<div class="grid">${vs.map((v,i)=>`<button class="v" data-i="${i}" aria-label="Ajouter ${cur.fr}, position ${i+1}">${v.std?'<i title="Forme classique">★</i>':''}${svg(v)}<b>${v.pos?'Case '+v.pos:'Position ouverte'}</b><span>${edit>=0?'Remplacer':'Ajouter'}</span></button>`).join('')}</div>${vs.some(v=>v.std)?'<p class="mut">★ forme classique. Les chiffres indiquent les doigts proposés (1 = index).</p>':'<p class="mut">Les chiffres indiquent les doigts proposés (1 = index).</p>'}`:'<p class="empty">Aucune position trouvée pour cet accord dans cet accordage.</p>');
+ res.innerHTML=`<div class="gc-hd"><div class="gc-nm">${cur.fr}<small>${cur.en}</small></div>${tones.length?`<select id="gc-bs" aria-label="Basse"><option value="">Basse : fondamentale</option>${tones.map(x=>`<option value="${x}"${x===cur.bass?' selected':''}>Basse : ${nf(x)}</option>`).join('')}</select>`:''}</div>`+
+  (CAPO?`<p class="gc-mut">Capo case ${CAPO} : les cases sont comptées à partir du capo.</p>`:'')+
+  (edit>=0?`<p class="gc-note">Choisis la position qui remplacera l’accord n°${edit+1} de ta suite.</p>`:'')+
+  (vs.length?`<div class="gc-grid">${vs.map((v,i)=>`<button class="gc-v" data-i="${i}" aria-label="Ajouter ${cur.fr}, position ${i+1}">${v.std?'<i title="Forme classique">★</i>':''}${svg(v)}<b>${v.pos?'Case '+v.pos:'Position ouverte'}</b><span>${edit>=0?'Remplacer':'Ajouter'}</span></button>`).join('')}</div>${vs.some(v=>v.std)?'<p class="gc-mut">★ forme classique. Les chiffres indiquent les doigts proposés (1 = index).</p>':'<p class="gc-mut">Les chiffres indiquent les doigts proposés (1 = index).</p>'}`:'<p class="gc-empty">Aucune position trouvée pour cet accord dans cet accordage.</p>');
 }
 
 function showPg(){
- const S=STYLES[style],list=PR[style]||PR[''],tn=+$('#tn').value;
- $('#pgt').textContent='Progressions types'+(S?' ('+S.n+')':'');
- $('#pgl').innerHTML=list.map((p,i)=>{const t=p[1].split(' ');return`<div class="pr"><div><b>${p[0]}</b><span>${t.join(' – ')}</span><span>${t.map(x=>roman(x,tn)).join(' – ')}</span></div><button class="btn" data-p="${i}">Ajouter</button></div>`}).join('');
+ const S=STYLES[style],list=PR[style]||PR[''],tn=+$('#gc-tn').value;
+ $('#gc-pgt').textContent='Progressions types'+(S?' ('+S.n+')':'');
+ $('#gc-pgl').innerHTML=list.map((p,i)=>{const t=p[1].split(' ');return`<div class="gc-pr"><div><b>${p[0]}</b><span>${t.join(' – ')}</span><span>${t.map(x=>roman(x,tn)).join(' – ')}</span></div><button class="gc-btn" data-p="${i}">Ajouter</button></div>`}).join('');
 }
 
 function showProg(){
- $('#empty').hidden=!prog.length;$('#tb').hidden=!prog.length;
- $('#ci').textContent=CAPO?'Capo case '+CAPO:'';
- $('#prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Modifier ${c.fr}">${svg(c)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span><button class="rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button></div>`).join(''):'<p class="empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
+ $('#gc-empty').hidden=!prog.length;$('#gc-tb').hidden=!prog.length;
+ $('#gc-ci').textContent=CAPO?'Capo case '+CAPO:'';
+ $('#gc-prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="gc-v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Modifier ${c.fr}">${svg(c)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span><button class="gc-rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button></div>`).join(''):'<p class="gc-empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
  showBar();
 }
 function showBar(){
- const b=$('#bar');b.hidden=!prog.length||suiteVis;
+ const b=barEl;b.hidden=!prog.length||suiteVis;
  b.innerHTML=`<button aria-label="Voir ma suite d’accords"><b>${prog.length}</b><span>${prog.map(c=>c.fr).join(', ')}</span>↓</button>`;
 }
 
@@ -324,51 +387,53 @@ function shift(it,n){const p=parse(it.en),L=n<0?ENb:EN;return L[(p.root+n+12)%12
 
 (function(){
  const g={};for(const[k,s]of Object.entries(STYLES)){(g[s.g]=g[s.g]||[]).push(`<option value="${k}">${s.n}</option>`)}
- $('#st').innerHTML='<option value="">Tous les styles</option>'+Object.entries(g).map(([n,o])=>`<optgroup label="${n}">${o.join('')}</optgroup>`).join('');
- $('#tu').innerHTML=TUN.map((t,i)=>`<option value="${i}">${t.n}</option>`).join('');
- $('#cp').innerHTML='<option value="0">Aucun</option>'+[1,2,3,4,5,6,7,8,9].map(i=>`<option value="${i}">${i}</option>`).join('');$('#cp').value=CAPO;
- $('#tn').innerHTML=TON.map(([n,pc])=>`<option value="${pc}">${n} (${TE[pc]})</option>`).join('');
+ $('#gc-st').innerHTML='<option value="">Tous les styles</option>'+Object.entries(g).map(([n,o])=>`<optgroup label="${n}">${o.join('')}</optgroup>`).join('');
+ $('#gc-tu').innerHTML=TUN.map((t,i)=>`<option value="${i}">${t.n}</option>`).join('');
+ $('#gc-cp').innerHTML='<option value="0">Aucun</option>'+[1,2,3,4,5,6,7,8,9].map(i=>`<option value="${i}">${i}</option>`).join('');$('#gc-cp').value=CAPO;
+ $('#gc-tn').innerHTML=TON.map(([n,pc])=>`<option value="${pc}">${n} (${TE[pc]})</option>`).join('');
 })();
-$('#st').onchange=e=>{style=e.target.value;showSearch()};
-$('#tu').onchange=e=>{TI=+e.target.value;setOpen();showSearch()};
-$('#cp').onchange=e=>{CAPO=+e.target.value;setOpen();revoice(it=>it.en,CAPO?'Suite recalculée pour un capo case '+CAPO+'.':'Suite recalculée sans capo.')};
-$('#tn').onchange=showPg;
-$('#dn').onclick=()=>revoice(it=>shift(it,-1),'Suite transposée de − ½ ton (position la plus classique choisie).');
-$('#up').onclick=()=>revoice(it=>shift(it,1),'Suite transposée de + ½ ton (position la plus classique choisie).');
-$('#q').addEventListener('input',()=>{edit=-1;showProg();showSearch()});
-$('#x').onclick=()=>{$('#q').value='';edit=-1;showProg();showSearch();$('#q').focus()};
-$('#roots').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;
- $('#q').value=FR[+b.dataset.r]+(cur?cur.sfx:(STYLES[style]?STYLES[style].q[0]:''));showSearch()};
-$('#chips').onclick=e=>{const b=e.target.closest('.chip');if(!b||!cur)return;$('#q').value=cur.rf+b.dataset.q;showSearch()};
-$('#res').onchange=e=>{if(e.target.id!=='bs'||!cur)return;const v=e.target.value;
- $('#q').value=cur.rf+cur.sfx+(v===''?'':'/'+(cur.flat?FRb:FR)[+v]);showSearch()};
-$('#res').onclick=e=>{
- const b=e.target.closest('.v');if(!b||!cur)return;
+$('#gc-st').onchange=e=>{style=e.target.value;showSearch()};
+$('#gc-tu').onchange=e=>{TI=+e.target.value;setOpen();showSearch()};
+$('#gc-cp').onchange=e=>{CAPO=+e.target.value;setOpen();revoice(it=>it.en,CAPO?'Suite recalculée pour un capo case '+CAPO+'.':'Suite recalculée sans capo.')};
+$('#gc-tn').onchange=showPg;
+$('#gc-dn').onclick=()=>revoice(it=>shift(it,-1),'Suite transposée de − ½ ton (position la plus classique choisie).');
+$('#gc-up').onclick=()=>revoice(it=>shift(it,1),'Suite transposée de + ½ ton (position la plus classique choisie).');
+$('#gc-q').addEventListener('input',()=>{edit=-1;showProg();showSearch()});
+$('#gc-x').onclick=()=>{$('#gc-q').value='';edit=-1;showProg();showSearch();$('#gc-q').focus()};
+$('#gc-roots').onclick=e=>{const b=e.target.closest('.gc-chip');if(!b)return;
+ $('#gc-q').value=FR[+b.dataset.r]+(cur?cur.sfx:(STYLES[style]?STYLES[style].q[0]:''));showSearch()};
+$('#gc-chips').onclick=e=>{const b=e.target.closest('.gc-chip');if(!b||!cur)return;$('#gc-q').value=cur.rf+b.dataset.q;showSearch()};
+$('#gc-res').onchange=e=>{if(e.target.id!=='gc-bs'||!cur)return;const v=e.target.value;
+ $('#gc-q').value=cur.rf+cur.sfx+(v===''?'':'/'+(cur.flat?FRb:FR)[+v]);showSearch()};
+$('#gc-res').onclick=e=>{
+ const b=e.target.closest('.gc-v');if(!b||!cur)return;
  const it=item(cur,voicings(cur)[+b.dataset.i],TI);
  if(edit>=0){prog[edit]=it;edit=-1}else prog.push(it);
  save();showProg();showSearch();
 };
-$('#pgl').onclick=e=>{
+$('#gc-pgl').onclick=e=>{
  const b=e.target.closest('[data-p]');if(!b)return;
- const tn=+$('#tn').value,miss=[],added=[];
+ const tn=+$('#gc-tn').value,miss=[],added=[];
  (PR[style]||PR['']) [+b.dataset.p][1].split(' ').forEach(t=>{
   const p=parse(roman(t,tn)||''),v=p&&voicings(p)[0];
   if(!v){miss.push(t);return}prog.push(item(p,v,TI));added.push(p.fr)});
  save();showProg();showSearch();
  flash(miss.length?'Aucune position pour : '+miss.join(', ')+'.':'Ajouté à ta suite : '+added.join(', ')+'.');
 };
-$('#prog').onclick=e=>{
+$('#gc-prog').onclick=e=>{
  const d=e.target.closest('[data-d]');
  if(d){prog.splice(+d.dataset.d,1);edit=-1;save();showProg();showSearch();return}
  const c=e.target.closest('[data-e]');if(!c)return;
- edit=+c.dataset.e;TI=prog[edit].t||0;setOpen();$('#tu').value=TI;$('#q').value=prog[edit].en;
- showProg();showSearch();$('#q').scrollIntoView({behavior:'smooth',block:'start'});
+ edit=+c.dataset.e;TI=prog[edit].t||0;setOpen();$('#gc-tu').value=TI;$('#gc-q').value=prog[edit].en;
+ showProg();showSearch();$('#gc-q').scrollIntoView({behavior:'smooth',block:'start'});
 };
-$('#prog').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.e!==undefined){e.preventDefault();e.target.click()}};
-$('#empty').onclick=()=>{prog=[];edit=-1;save();showProg();showSearch()};
-$('#bar').onclick=()=>$('#suite').scrollIntoView({behavior:'smooth',block:'start'});
-if('IntersectionObserver' in window)new IntersectionObserver(([e])=>{suiteVis=e.isIntersecting;showBar()}).observe($('#suite'));
+$('#gc-prog').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.e!==undefined){e.preventDefault();e.target.click()}};
+$('#gc-empty').onclick=()=>{prog=[];edit=-1;save();showProg();showSearch()};
+barEl.onclick=()=>$('#gc-suite').scrollIntoView({behavior:'smooth',block:'start'});
+if('IntersectionObserver' in window)new IntersectionObserver(([e])=>{suiteVis=e.isIntersecting;showBar()}).observe($('#gc-suite'));
+$('#gc-pgb').onclick=()=>{const p=$('#gc-pgp'),o=p.hidden;p.hidden=!o;$('#gc-pgb').setAttribute('aria-expanded',String(o))};
 showProg();showSearch();
+})();
 </script>
 </body>
 </html>
