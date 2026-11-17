@@ -49,7 +49,7 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 .gc-sel select,.gc-hd select{width:100%;margin:8px 0 12px;padding:9px 8px;font:inherit;font-size:.95rem;color:var(--gc-tx);background:var(--gc-field);border:1px solid var(--gc-line);border-radius:4px}
 .gc-hd select{width:auto;max-width:48%;margin:0}
 .gc-mut{margin:8px 0;color:var(--gc-mut);font-size:.9rem}
-.gc-note{margin:8px 0;color:var(--gc-hot);font-size:.92rem}
+.gc-note{margin: 20px 0px 15px 0;color:var(--gc-hot);font-size:.95rem;padding-top: 8px;border-top: 2px solid rgba(255, 255, 255, .08)}
 .gc-empty{padding:10px 0;color:var(--gc-mut)}
 
 /* Pastilles (notes, types d'accords) — même logique que .filter-btn */
@@ -58,7 +58,7 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 .gc-chip small{margin-left:4px;font-size:.75em;opacity:.65}
 .gc-chip:hover{border-color:var(--gc-teal);color:var(--gc-teal)}
 .gc-chip.on{color:var(--gc-teal);background:rgba(0,255,204,.1);border-color:var(--gc-teal);box-shadow:0 0 8px rgba(0,255,204,.2)}
-#gc-roots{margin-bottom:6px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+#gc-roots{margin-bottom:6px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.08)}
 
 /* Résultats */
 .gc-hd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0}
@@ -67,7 +67,7 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 .gc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
 .gc-v{position:relative;padding:6px 4px 8px;font:inherit;color:#cbd5e1;text-align:center;background:rgba(0,255,204,.03);border:1px solid rgba(0,255,204,.2);border-radius:6px;cursor:pointer;transition:border-color .2s,box-shadow .2s}
 .gc-v:hover,.gc-v:focus-visible{border-color:var(--gc-teal);box-shadow:0 0 15px rgba(0,255,204,.2);outline:none}
-.gc-v svg{display:block;width:100%;height:auto}
+.gc-v svg{padding-top: 18px;display:block;width:100%;height:auto}
 .gc-v b{display:block;font-size:1rem;color:#fff}
 .gc-v span{display:block;font-size:.82rem;color:var(--gc-mut)}
 .gc-v i{position:absolute;top:4px;left:7px;font-style:normal;color:var(--gc-teal)}
@@ -76,6 +76,8 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 .gc-rm:hover{color:var(--gc-hot)}
 
 /* Boutons — même logique que .btn-vault */
+.gc-tb select{padding:6px 8px;font:inherit;font-size:.92rem;color:var(--gc-tx);background:var(--gc-field);border:1px solid var(--gc-line);border-radius:4px}
+.gc-tb select:focus-visible{border-color:var(--gc-teal);box-shadow:0 0 8px rgba(0,255,204,.3);outline:none}
 .gc-btn{padding:7px 12px;font-family:'Orbitron',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--gc-red);background:transparent;border:1px solid var(--gc-red);border-radius:4px;cursor:pointer;transition:all .3s}
 .gc-btn:hover{color:#fff;background:var(--gc-red)}
 
@@ -93,8 +95,8 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 /* Ma suite d'accords */
 .gc-suite{margin-top:18px;padding:16px;background:rgba(15,15,25,.8);border:1px solid rgba(0,255,204,.3);border-radius:6px}
 .gc-h{margin:0;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;color:var(--gc-teal)}
-.gc-tb{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px}
-#gc-tm{min-height:1.2em}
+.gc-tb{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:15px}
+.gc-fl{min-height:1.2em}
 
 /* Barre fixe (déplacée dans <body> par le script) */
 .gc-bar{position:fixed;left:0;right:0;bottom:0;z-index:9000;padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));background:rgba(17,17,21,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(0,255,204,.4);box-shadow:0 -5px 20px rgba(0,0,0,.6)}
@@ -102,6 +104,31 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 .gc-bar b{min-width:26px;padding:1px 8px;color:#04110f;text-align:center;background:#00ffcc;border-radius:4px}
 .gc-bar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+.gc-n{position:absolute;top:4px;left:5px;min-width:13px;padding:1px;font:700 .7rem/12px 'Orbitron',sans-serif;font-style:normal;text-align:center;color:#04110f;background:var(--gc-teal);border-radius:3px;pointer-events:none}
+.gc-key{padding:12px 6px}
+.gc-mv{display:flex;justify-content:center;gap:4px;margin-top:6px}
+.gc-mv button{width:30px;height:28px;padding:0;font:inherit;line-height:1;color:var(--gc-mut);background:transparent;border:1px solid #334155;border-radius:4px;cursor:pointer}
+.gc-mv button:hover:not(:disabled){color:var(--gc-teal);border-color:var(--gc-teal)}
+.gc-mv button:disabled{opacity:.3;cursor:default}
+.gc-act{display:flex;flex:none;align-items:center;gap:6px}
+.gc-rm2{padding:2px 8px;border:0;background:none;color:var(--gc-mut);font-size:1.2rem;cursor:pointer}
+.gc-rm2:hover{color:var(--gc-hot)}
+#gc-io{display:block;width:100%;margin-top:10px;padding:10px;font:inherit;font-size:.85rem;color:var(--gc-tx);background:var(--gc-field);border:1px solid var(--gc-line);border-radius:4px;resize:vertical}
+#gc-io:focus-visible{border-color:var(--gc-teal);box-shadow:0 0 8px rgba(0,255,204,.3);outline:none}
+.gc-opt{display:flex;flex-wrap:wrap;align-items:center;gap:2px 16px;margin:2px 0 6px}
+.gc-opt>span{font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--gc-mut)}
+.gc-opt label{display:inline-flex;align-items:center;gap:6px;padding:5px 0;font-size:.92rem;color:var(--gc-tx);cursor:pointer}
+.gc-opt input{width:18px;height:18px;margin:0;accent-color:#00ffcc;cursor:pointer}
+.gc-seg{display:inline-flex}
+.gc-seg button{padding:5px 12px;font:inherit;font-size:.88rem;font-weight:600;color:var(--gc-mut);background:transparent;border:1px solid #334155;cursor:pointer}
+.gc-seg button:first-child{border-radius:4px 0 0 4px}
+.gc-seg button:last-child{margin-left:-1px;border-radius:0 4px 4px 0}
+.gc-seg button[aria-pressed="true"]{position:relative;color:var(--gc-teal);background:rgba(0,255,204,.1);border-color:var(--gc-teal)}
+.gc-tb .gc-mut{margin:0}
+.gc-pl{position: absolute;top: 4px;right: 4px;width: 26px;height: 26px;padding: 0px 0px 0px 2px;font-size: .55rem;line-height: 1;color: var(--gc-teal);background: rgba(0, 255, 204, .08);border: 1px solid rgba(0, 255, 204, .35);border-radius: 50%;cursor: pointer;}
+.gc-pl:hover{color:#04110f;background:var(--gc-teal)}
+.gc-v.pl{border-color:var(--gc-teal);box-shadow:0 0 15px rgba(0,255,204,.4)}
+#gc-pl[aria-pressed="true"]{color:#fff;background:var(--gc-red)}
 @media (max-width:480px){.gc-sel{grid-template-columns:1fr 1fr}.gc-sel label:last-child{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){.gc *{transition:none!important}}
 
@@ -121,10 +148,26 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
         <label>Accordage<select id="gc-tu"></select></label>
         <label>Capo<select id="gc-cp"></select></label>
       </div>
+      <div class="gc-opt" role="group" aria-label="Affichage des diagrammes"><span>Afficher</span><label><input type="checkbox" id="gc-of"> Doigts</label><label><input type="checkbox" id="gc-on"> Notes</label><label><input type="checkbox" id="gc-od"> Degrés</label></div>
       <p class="gc-mut" id="gc-sd" hidden></p>
       <div class="gc-chips" id="gc-roots" aria-label="Note"></div>
       <div class="gc-chips" id="gc-chips" aria-label="Type d’accord"></div>
       <div id="gc-res"></div>
+
+      <div class="gc-pg">
+        <button class="gc-pgb" id="gc-kyb" aria-expanded="false" aria-controls="gc-kyp"><span>Accords de la tonalité</span></button>
+        <div class="gc-pgp" id="gc-kyp" hidden>
+          <p class="gc-mut">Les 7 accords qui vont ensemble dans une tonalité (mineur = mineur naturel). Appuie sur un accord pour l’ajouter à ta suite.</p>
+          <div class="gc-sel">
+            <label>Tonique<select id="gc-kt"></select></label>
+            <label>Mode<select id="gc-km"><option value="maj">Majeur</option><option value="min">Mineur</option></select></label>
+            <label>Accords<select id="gc-ks"><option value="3">Triades</option><option value="7">7e</option></select></label>
+          </div>
+          <div class="gc-grid" id="gc-kl"></div>
+          <p class="gc-note gc-fl" role="status"></p>
+          <button class="gc-btn" id="gc-ka">Tout ajouter</button>
+        </div>
+      </div>
 
       <div class="gc-pg">
         <button class="gc-pgb" id="gc-pgb" aria-expanded="false" aria-controls="gc-pgp"><span id="gc-pgt">Progressions types</span></button>
@@ -137,10 +180,24 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 
       <section class="gc-suite" id="gc-suite">
         <div class="gc-hd"><h3 class="gc-h">Ma suite d’accords</h3><button class="gc-btn" id="gc-empty" hidden>Vider</button></div>
-        <div class="gc-tb" id="gc-tb" hidden><button class="gc-chip" id="gc-dn">− ½ ton</button><button class="gc-chip" id="gc-up">+ ½ ton</button><span class="gc-mut" id="gc-ci"></span></div>
-        <p class="gc-note" id="gc-tm" role="status"></p>
+        <div class="gc-tb" id="gc-tb" hidden><button class="gc-chip" id="gc-dn">− ½ ton</button><button class="gc-chip" id="gc-up">+ ½ ton</button><select id="gc-trg" aria-label="Transposer vers une tonalité"></select><span class="gc-mut" id="gc-ci"></span></div>
+        <div class="gc-tb" id="gc-tb2" hidden><button class="gc-btn" id="gc-pl" aria-pressed="false">▶ Écouter la suite</button><span class="gc-seg" role="group" aria-label="Mode de lecture"><button data-pm="chord" aria-pressed="true">Accord</button><button data-pm="arp" aria-pressed="false">Arpège</button></span></div>
+        <p class="gc-note gc-fl" id="gc-tm" role="status"></p>
         <div class="gc-grid" id="gc-prog"></div>
       </section>
+
+      <div class="gc-pg">
+        <button class="gc-pgb" id="gc-svb" aria-expanded="false" aria-controls="gc-svp"><span>Mes suites enregistrées</span></button>
+        <div class="gc-pgp" id="gc-svp" hidden>
+          <p class="gc-mut">Enregistre la suite actuelle sous un nom. « Charger » remplace la suite en cours. Les suites restent dans ce navigateur : utilise « Exporter » pour les sauvegarder ou les copier sur un autre appareil.</p>
+          <div class="gc-sw"><input id="gc-sn" type="text" placeholder="Nom de la suite" maxlength="40" autocomplete="off" aria-label="Nom de la suite"></div>
+          <div class="gc-tb" style="margin-top:10px"><button class="gc-btn" id="gc-sv">Enregistrer la suite actuelle</button></div>
+          <p class="gc-note gc-fl" role="status"></p>
+          <div id="gc-sl"></div>
+          <div class="gc-tb" style="margin-top:12px"><button class="gc-chip" id="gc-tx">Copier en texte</button><button class="gc-chip" id="gc-ex">Exporter tout</button><button class="gc-chip" id="gc-im">Importer</button></div>
+          <textarea id="gc-io" rows="4" placeholder="Export / import : colle ici un export, puis appuie sur Importer" aria-label="Zone d’export et d’import"></textarea>
+        </div>
+      </div>
     </div>
 </div>
 </main>
@@ -322,27 +379,43 @@ function fing(v){
  return out;
 }
 
-function svg(v){
+function degName(i,p){
+ const s=p.sfx;
+ if(i===1)return s.includes('b9')?'b9':'b2';
+ if(i===2)return /9|11|13/.test(s)?'9':'2';
+ if(i===3)return s.includes('#9')?'#9':'b3';
+ if(i===5)return s.includes('11')?'11':'4';
+ if(i===9)return s.includes('13')?'13':s.includes('dim7')?'bb7':'6';
+ return['R','b2','2','b3','3','4','b5','5','#5','6','b7','7'][i];
+}
+function svg(v,p,t){
  const pl=v.f.filter(x=>x>0),mx=Math.max(0,...pl),mn=pl.length?Math.min(...pl):1,base=mx>4?mn:1,fg=fing(v);
+ const rows=p?(SHOW.n?1:0)+(SHOW.d?1:0):0,H=114+(rows?rows*12+2:0);
  const X=i=>18+i*13,Y=r=>28+r*20,cy=f=>Y(f-base)+10;
  const tx=(x,y,t)=>`<text x="${x}" y="${y+3}" text-anchor="middle" font-size="8" font-weight="700" fill="var(--dotink)" stroke="none">${t}</text>`;
- let s='<svg viewBox="0 0 100 114" aria-hidden="true" stroke="currentColor" fill="none">';
+ const lt=(x,y,t,c)=>`<text x="${x}" y="${y+3}" text-anchor="middle" font-size="8" font-weight="600" fill="${c}" stroke="none">${t}</text>`;
+ let s=`<svg viewBox="0 0 100 ${H}" aria-hidden="true" stroke="currentColor" fill="none">`;
  for(let r=0;r<=4;r++)s+=`<line x1="${X(0)}" x2="${X(5)}" y1="${Y(r)}" y2="${Y(r)}" stroke-width="${r===0&&base===1?3:1}" opacity="${r===0&&base===1?1:.45}"/>`;
  for(let i=0;i<6;i++)s+=`<line x1="${X(i)}" x2="${X(i)}" y1="${Y(0)}" y2="${Y(4)}" stroke-width="1" opacity=".7"/>`;
  v.f.forEach((f,i)=>{
   if(f<0)s+=`<path d="M${X(i)-3.5} 11l7 7m0-7l-7 7" stroke-width="1.6"/>`;
   else if(f===0)s+=`<circle cx="${X(i)}" cy="14.5" r="3.6" stroke-width="1.4"/>`;
-  else if(!(v.barre&&f===v.barre.f&&i>=v.barre.a&&i<=v.barre.b))s+=`<circle cx="${X(i)}" cy="${cy(f)}" r="5.2" fill="var(--dot)" stroke="none"/>`+(fg[i]?tx(X(i),cy(f),fg[i]):'');
+  else if(!(v.barre&&f===v.barre.f&&i>=v.barre.a&&i<=v.barre.b))s+=`<circle cx="${X(i)}" cy="${cy(f)}" r="5.2" fill="var(--dot)" stroke="none"/>`+(SHOW.f&&fg[i]?tx(X(i),cy(f),fg[i]):'');
  });
- if(v.barre)s+=`<rect x="${X(v.barre.a)-5.2}" y="${cy(v.barre.f)-5.2}" width="${X(v.barre.b)-X(v.barre.a)+10.4}" height="10.4" rx="5.2" fill="var(--dot)" stroke="none"/>`+tx(X(v.barre.a),cy(v.barre.f),1);
+ if(v.barre)s+=`<rect x="${X(v.barre.a)-5.2}" y="${cy(v.barre.f)-5.2}" width="${X(v.barre.b)-X(v.barre.a)+10.4}" height="10.4" rx="5.2" fill="var(--dot)" stroke="none"/>`+(SHOW.f?tx(X(v.barre.a),cy(v.barre.f),1):'');
  if(base>1)s+=`<text x="2" y="${cy(base)+4}" font-size="11" fill="currentColor" stroke="none" opacity=".8">${base}</text>`;
+ if(rows){
+  const P=TUN[t||0].p,pcs=v.f.map((f,i)=>f<0?-1:(P[i]+CAPO+f)%12);let y=120;
+  if(SHOW.n){pcs.forEach((pc,i)=>{if(pc>=0)s+=lt(X(i),y,(p.flat?ENb:EN)[pc],pc===p.root?'var(--gc-hot)':'currentColor')});y+=12}
+  if(SHOW.d)pcs.forEach((pc,i)=>{if(pc>=0)s+=lt(X(i),y,degName((pc-p.root+12)%12,p),pc===p.root?'var(--gc-hot)':'var(--gc-teal)')});
+ }
  return s+'</svg>';
 }
 
 let prog=[],cur=null,edit=-1,style='',suiteVis=false,ft;
-try{prog=JSON.parse(localStorage.getItem('gc_prog')||'[]');CAPO=+localStorage.getItem('gc_capo')||0;setOpen()}catch(e){}
+try{CAPO=+localStorage.getItem('gc_capo')||0;setOpen();prog=JSON.parse(localStorage.getItem('gc_prog')||'[]').map(clean).filter(Boolean)}catch(e){}
 const save=()=>{try{localStorage.setItem('gc_prog',JSON.stringify(prog));localStorage.setItem('gc_capo',CAPO)}catch(e){}};
-function flash(m){const e=$('#gc-tm');e.textContent=m;clearTimeout(ft);ft=setTimeout(()=>{e.textContent=''},6000)}
+function flash(m){const L=root.querySelectorAll('.gc-fl');L.forEach(e=>{e.textContent=m});clearTimeout(ft);ft=setTimeout(()=>{L.forEach(e=>{e.textContent=''})},6000)}
 const item=(p,v,t)=>({fr:p.fr,en:p.en,f:v.f,barre:v.barre,t:t});
 
 function showSearch(){
@@ -355,9 +428,9 @@ function showSearch(){
  chips.innerHTML=(S?S.q:QS).map(q=>`<button class="gc-chip${q===cur.sfx?' on':''}" data-q="${q}">${cur.rf}${q?' '+q:''}</button>`).join('');
  const vs=voicings(cur),tones=cur.pcs.filter(x=>x!==cur.root),nf=x=>(cur.flat?FRb:FR)[x];
  res.innerHTML=`<div class="gc-hd"><div class="gc-nm">${cur.fr}<small>${cur.en}</small></div>${tones.length?`<select id="gc-bs" aria-label="Basse"><option value="">Basse : fondamentale</option>${tones.map(x=>`<option value="${x}"${x===cur.bass?' selected':''}>Basse : ${nf(x)}</option>`).join('')}</select>`:''}</div>`+
-  (CAPO?`<p class="gc-mut">Capo case ${CAPO} : les cases sont comptées à partir du capo.</p>`:'')+
+  segRow()+(CAPO?`<p class="gc-mut">Capo case ${CAPO} : les cases sont comptées à partir du capo.</p>`:'')+
   (edit>=0?`<p class="gc-note">Choisis la position qui remplacera l’accord n°${edit+1} de ta suite.</p>`:'')+
-  (vs.length?`<div class="gc-grid">${vs.map((v,i)=>`<button class="gc-v" data-i="${i}" aria-label="Ajouter ${cur.fr}, position ${i+1}">${v.std?'<i title="Forme classique">★</i>':''}${svg(v)}<b>${v.pos?'Case '+v.pos:'Position ouverte'}</b><span>${edit>=0?'Remplacer':'Ajouter'}</span></button>`).join('')}</div>${vs.some(v=>v.std)?'<p class="gc-mut">★ forme classique. Les chiffres indiquent les doigts proposés (1 = index).</p>':'<p class="gc-mut">Les chiffres indiquent les doigts proposés (1 = index).</p>'}`:'<p class="gc-empty">Aucune position trouvée pour cet accord dans cet accordage.</p>');
+  (vs.length?`<div class="gc-grid">${vs.map((v,i)=>`<div class="gc-v" data-i="${i}" tabindex="0" role="button" aria-label="Ajouter ${cur.fr}, position ${i+1}">${v.std?'<i title="Forme classique">★</i>':''}${svg(v,cur,TI)}<b>${v.pos?'Case '+v.pos:'Position ouverte'}</b><span>${edit>=0?'Remplacer':'Ajouter'}</span><button class="gc-pl" data-pl="${i}" aria-label="Écouter ${cur.fr}, position ${i+1}">▶</button></div>`).join('')}</div>${legend(vs.some(v=>v.std))}`:'<p class="gc-empty">Aucune position trouvée pour cet accord dans cet accordage.</p>');
 }
 
 function showPg(){
@@ -367,9 +440,9 @@ function showPg(){
 }
 
 function showProg(){
- $('#gc-empty').hidden=!prog.length;$('#gc-tb').hidden=!prog.length;
+ stopPlay();$('#gc-empty').hidden=!prog.length;$('#gc-tb').hidden=!prog.length;$('#gc-tb2').hidden=!prog.length;
  $('#gc-ci').textContent=CAPO?'Capo case '+CAPO:'';
- $('#gc-prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="gc-v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Modifier ${c.fr}">${svg(c)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span><button class="gc-rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button></div>`).join(''):'<p class="gc-empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
+ $('#gc-prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="gc-v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Accord ${i+1} : modifier ${c.fr}"><em class="gc-n" aria-hidden="true">${i+1}</em>${svg(c,parse(c.en),c.t||0)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span><button class="gc-rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button><div class="gc-mv"><button data-m="-1"${i===0?' disabled':''} aria-label="Déplacer ${c.fr} vers la gauche">‹</button><button data-c aria-label="Dupliquer ${c.fr}">⧉</button><button data-m="1"${i===prog.length-1?' disabled':''} aria-label="Déplacer ${c.fr} vers la droite">›</button></div></div>`).join(''):'<p class="gc-empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
  showBar();
 }
 function showBar(){
@@ -383,19 +456,156 @@ function revoice(fn,msg){
  save();showProg();showSearch();
  flash(miss.length?'Aucune position pour : '+miss.join(', ')+' (accord laissé tel quel).':msg);
 }
-function shift(it,n){const p=parse(it.en),L=n<0?ENb:EN;return L[(p.root+n+12)%12]+p.sfx+(p.bass!==null?'/'+L[(p.bass+n+12)%12]:'')}
+function shift(it,n,fl){const p=parse(it.en),L=(fl===undefined?n<0:fl)?ENb:EN;return L[(p.root+n+12)%12]+p.sfx+(p.bass!==null?'/'+L[(p.bass+n+12)%12]:'')}
 
 (function(){
  const g={};for(const[k,s]of Object.entries(STYLES)){(g[s.g]=g[s.g]||[]).push(`<option value="${k}">${s.n}</option>`)}
  $('#gc-st').innerHTML='<option value="">Tous les styles</option>'+Object.entries(g).map(([n,o])=>`<optgroup label="${n}">${o.join('')}</optgroup>`).join('');
  $('#gc-tu').innerHTML=TUN.map((t,i)=>`<option value="${i}">${t.n}</option>`).join('');
  $('#gc-cp').innerHTML='<option value="0">Aucun</option>'+[1,2,3,4,5,6,7,8,9].map(i=>`<option value="${i}">${i}</option>`).join('');$('#gc-cp').value=CAPO;
+ $('#gc-trg').innerHTML='<option value="">Transposer vers…</option>'+TON.map(([n,pc])=>`<option value="${pc}">${n} (${TE[pc]})</option>`).join('');
  $('#gc-tn').innerHTML=TON.map(([n,pc])=>`<option value="${pc}">${n} (${TE[pc]})</option>`).join('');
 })();
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function clean(it){
+ try{const p=parse(String(it.en));if(!p)return null;
+  const t=Number.isInteger(it.t)&&it.t>=0&&it.t<TUN.length?it.t:0;
+  if(!(Array.isArray(it.f)&&it.f.length===6&&it.f.every(x=>Number.isInteger(x)&&x>=-1&&x<=24))){const v=vFor(p,t)[0];return v?{fr:p.fr,en:p.en,f:v.f,barre:v.barre,t}:null}
+  const b=it.barre,barre=b&&[b.f,b.a,b.b].every(Number.isInteger)&&b.f>0&&b.f<=24&&b.a>=0&&b.b<=5&&b.a<b.b?{f:b.f,a:b.a,b:b.b}:null;
+  return{fr:p.fr,en:p.en,f:it.f.slice(),barre,t};
+ }catch(e){return null}
+}
+function cleanSuite(s){
+ try{const items=(Array.isArray(s.items)?s.items:[]).map(clean).filter(Boolean);if(!items.length)return null;
+  return{name:String(s.name||'').trim().slice(0,40)||'Suite',capo:Number.isInteger(s.capo)&&s.capo>=0&&s.capo<=9?s.capo:0,items};
+ }catch(e){return null}
+}
+/* --- Affichage (doigts / notes / degrés) --- */
+const SHOW={f:true,n:false,d:false};let MODE='chord';
+try{const o=JSON.parse(localStorage.getItem('gc_opts')||'{}');['f','n','d'].forEach(k=>{if(typeof o[k]==='boolean')SHOW[k]=o[k]});if(o.m==='arp')MODE='arp'}catch(e){}
+const saveOpts=()=>{try{localStorage.setItem('gc_opts',JSON.stringify({...SHOW,m:MODE}))}catch(e){}};
+function legend(std){
+ const t=(std?'★ forme classique. ':'')+(SHOW.f?'Les chiffres dans les points sont les doigts proposés (1 = index). ':'')+(SHOW.n?'Sous le diagramme : notes (notation universelle). ':'')+(SHOW.d?'Degrés par rapport à l’accord (R = fondamentale, en rouge). ':'');
+ return t?'<p class="gc-mut">'+t.trim()+'</p>':'';
+}
+['f','n','d'].forEach(k=>{const el=$('#gc-o'+k);el.checked=SHOW[k];el.onchange=()=>{SHOW[k]=el.checked;saveOpts();showProg();showSearch()}});
+/* --- Aperçu sonore (synthèse simple, pas une vraie guitare) --- */
+let AC=null,WAVE=null,sess=null,tm=[];
+const STD=[40,45,50,55,59,64];
+function baseMidi(t){return TUN[t].p.map((pc,i)=>{let b=null;for(let k=0;k<=8;k++){const m=pc+12*k;if(b===null||Math.abs(m-STD[i])<Math.abs(b-STD[i]))b=m}return b})}
+function audio(){
+ if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+  AC=new C();const re=new Float32Array(25),im=new Float32Array(25);for(let n=1;n<=24;n++)im[n]=1/Math.pow(n,1.25);WAVE=AC.createPeriodicWave(re,im)}
+ if(AC.state==='suspended')AC.resume();
+ return AC;
+}
+function tone(ac,out,midi,t0,dur,vel){
+ const f=440*Math.pow(2,(midi-69)/12),o=ac.createOscillator(),fl=ac.createBiquadFilter(),g=ac.createGain();
+ o.setPeriodicWave(WAVE);o.frequency.value=f;
+ fl.type='lowpass';fl.Q.value=.6;fl.frequency.setValueAtTime(Math.min(8000,f*10),t0);fl.frequency.exponentialRampToValueAtTime(Math.max(600,f*2.2),t0+.7);
+ g.gain.setValueAtTime(.0001,t0);g.gain.linearRampToValueAtTime(vel,t0+.005);g.gain.exponentialRampToValueAtTime(vel*.4,t0+.3);g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+ o.connect(fl);fl.connect(g);g.connect(out);o.start(t0);o.stop(t0+dur+.05);
+}
+function schedule(it,ac,out,t0){
+ const base=baseMidi(it.t||0),arp=MODE==='arp';let k=0;
+ it.f.forEach((f,i)=>{if(f<0)return;tone(ac,out,base[i]+CAPO+f,t0+k*(arp?.2:.022),arp?2.2:2,arp?.55:.45);k++});
+}
+function begin(){
+ const ac=audio();if(!ac){flash('Le son n’est pas disponible sur ce navigateur.');return null}
+ stopPlay();const m=ac.createGain();m.gain.value=.2;m.connect(ac.destination);sess={m};return{ac,m};
+}
+function stopPlay(){
+ tm.forEach(clearTimeout);tm=[];
+ if(sess){const s=sess;sess=null;try{s.m.gain.cancelScheduledValues(0);s.m.gain.setTargetAtTime(0,AC.currentTime,.03);setTimeout(()=>{try{s.m.disconnect()}catch(e){}},400)}catch(e){}}
+ root.querySelectorAll('.gc-v.pl').forEach(e=>e.classList.remove('pl'));
+ const b=$('#gc-pl');b.textContent='▶ Écouter la suite';b.setAttribute('aria-pressed','false');
+}
+function playVoicing(v){const s=begin();if(s)schedule({f:v.f,t:TI},s.ac,s.m,s.ac.currentTime+.03)}
+function playSuite(){
+ if(!prog.length){flash('Ta suite est vide.');return}
+ const s=begin();if(!s)return;const t0=s.ac.currentTime+.05,step=2;
+ prog.forEach((it,i)=>{schedule(it,s.ac,s.m,t0+i*step);tm.push(setTimeout(()=>{root.querySelectorAll('#gc-prog .gc-v').forEach((e,j)=>e.classList.toggle('pl',j===i))},i*step*1000+50))});
+ tm.push(setTimeout(stopPlay,(prog.length*step+.4)*1000));
+ const b=$('#gc-pl');b.textContent='■ Stop';b.setAttribute('aria-pressed','true');
+}
+$('#gc-pl').onclick=()=>{if(sess)stopPlay();else playSuite()};
+function setMode(m){MODE=m;saveOpts();root.querySelectorAll('[data-pm]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pm===MODE)))}
+const segHTML=()=>`<span class="gc-seg" role="group" aria-label="Mode de lecture"><button data-pm="chord" aria-pressed="${MODE==='chord'}">Accord</button><button data-pm="arp" aria-pressed="${MODE==='arp'}">Arpège</button></span>`;
+const segRow=()=>`<div class="gc-tb"><span class="gc-mut">Écoute :</span>${segHTML()}</div>`;
+root.addEventListener('click',e=>{const b=e.target.closest('[data-pm]');if(b)setMode(b.dataset.pm)});
+$('#gc-res').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('gc-v')){e.preventDefault();e.target.click()}};
+setMode(MODE);
+/* --- Accords de la tonalité --- */
+const KEYS={
+ maj:{iv:[0,2,4,5,7,9,11],tri:['','m','m','','','m','dim'],sev:['maj7','m7','m7','maj7','7','m7','m7b5'],rn:['I','ii','iii','IV','V','vi','vii°'],rn7:['Imaj7','ii7','iii7','IVmaj7','V7','vi7','viiø7'],fl:[5,10,3,8,1]},
+ min:{iv:[0,2,3,5,7,8,10],tri:['m','dim','','m','m','',''],sev:['m7','m7b5','maj7','m7','m7','maj7','7'],rn:['i','ii°','III','iv','v','VI','VII'],rn7:['i7','iiø7','IIImaj7','iv7','v7','VImaj7','VII7'],fl:[2,7,0,5,10,3]}
+};
+function keyChords(t,m,sev){
+ const K=KEYS[m],nm=K.fl.includes(t)?FRb:FR;
+ return K.iv.map((x,i)=>{const pc=(t+x)%12,sx=(sev?K.sev:K.tri)[i];return{name:nm[pc]+sx,fr:nm[pc]+(sx?' '+sx:''),rn:(sev?K.rn7:K.rn)[i]}});
+}
+function fillKT(sel){
+ const K=KEYS[$('#gc-km').value];
+ $('#gc-kt').innerHTML=[0,1,2,3,4,5,6,7,8,9,10,11].map(pc=>{const f=K.fl.includes(pc);return`<option value="${pc}">${(f?FRb:FR)[pc]} (${(f?ENb:EN)[pc]})</option>`}).join('');
+ $('#gc-kt').value=String(sel);
+}
+function showKeys(){
+ const ch=keyChords(+$('#gc-kt').value,$('#gc-km').value,$('#gc-ks').value==='7');
+ $('#gc-kl').innerHTML=ch.map((c,i)=>`<button class="gc-v gc-key" data-k="${i}" aria-label="Ajouter ${c.fr}"><b>${c.fr}</b><span>${c.rn}</span></button>`).join('');
+}
+function addKey(ix){
+ const ch=keyChords(+$('#gc-kt').value,$('#gc-km').value,$('#gc-ks').value==='7'),ok=[],miss=[];
+ ix.forEach(i=>{const p=parse(ch[i].name),v=p&&voicings(p)[0];if(!v){miss.push(ch[i].fr);return}prog.push(item(p,v,TI));ok.push(p.fr)});
+ save();showProg();showSearch();
+ flash(miss.length?'Aucune position pour : '+miss.join(', ')+'.':'Ajouté à ta suite : '+ok.join(', ')+'.');
+}
+fillKT(0);
+$('#gc-km').onchange=()=>{fillKT($('#gc-kt').value);showKeys()};
+$('#gc-kt').onchange=showKeys;$('#gc-ks').onchange=showKeys;
+$('#gc-kl').onclick=e=>{const b=e.target.closest('[data-k]');if(b)addKey([+b.dataset.k])};
+$('#gc-ka').onclick=()=>addKey([0,1,2,3,4,5,6]);
+/* --- Suites enregistrées --- */
+let suites=[];
+try{suites=JSON.parse(localStorage.getItem('gc_suites')||'[]').map(cleanSuite).filter(Boolean)}catch(e){}
+const saveS=()=>{try{localStorage.setItem('gc_suites',JSON.stringify(suites))}catch(e){}};
+function showSuites(){
+ $('#gc-sl').innerHTML=suites.length?suites.map((s,i)=>`<div class="gc-pr"><div><b>${esc(s.name)}</b><span>${s.items.length} accords : ${esc(s.items.map(c=>c.fr).join(', '))}${s.capo?' (capo '+s.capo+')':''}</span></div><div class="gc-act"><button class="gc-btn" data-l="${i}">Charger</button><button class="gc-rm2" data-x="${i}" aria-label="Supprimer ${esc(s.name)}">×</button></div></div>`).join(''):'<p class="gc-empty">Aucune suite enregistrée.</p>';
+}
+function copyOut(text,msg){
+ const fb=()=>{const t=$('#gc-io');t.value=text;t.focus();t.select();flash('Copie automatique impossible ici : le texte est sélectionné dans la zone ci-dessous, copie-le à la main.')};
+ try{navigator.clipboard.writeText(text).then(()=>flash(msg),fb)}catch(err){fb()}
+}
+$('#gc-sv').onclick=()=>{
+ if(!prog.length){flash('Ta suite est vide : ajoute des accords avant de l’enregistrer.');return}
+ const name=($('#gc-sn').value.trim()||'Suite '+(suites.length+1)).slice(0,40),s={name,capo:CAPO,items:JSON.parse(JSON.stringify(prog))},i=suites.findIndex(x=>x.name===name);
+ if(i>=0)suites[i]=s;else if(suites.length>=50){flash('Limite de 50 suites atteinte : supprime-en une.');return}else suites.push(s);
+ saveS();showSuites();$('#gc-sn').value='';flash('Suite « '+name+(i>=0?' » mise à jour.':' » enregistrée.'));
+};
+$('#gc-sl').onclick=e=>{
+ const l=e.target.closest('[data-l]'),x=e.target.closest('[data-x]');
+ if(l){const s=suites[+l.dataset.l];if(!s)return;CAPO=s.capo;setOpen();$('#gc-cp').value=String(CAPO);prog=s.items.map(c=>({...c}));edit=-1;save();showProg();showSearch();flash('Suite « '+s.name+' » chargée.')}
+ else if(x){const s=suites.splice(+x.dataset.x,1)[0];saveS();showSuites();flash('Suite « '+(s?s.name:'')+' » supprimée.')}
+};
+$('#gc-tx').onclick=()=>{if(!prog.length){flash('Ta suite est vide.');return}copyOut(prog.map(c=>c.fr).join(' – ')+'\n'+prog.map(c=>c.en).join(' – '),'Suite copiée en texte.')};
+$('#gc-ex').onclick=()=>{if(!suites.length){flash('Aucune suite à exporter.');return}const j=JSON.stringify({gc:1,suites},null,1);$('#gc-io').value=j;copyOut(j,'Export copié : colle-le dans un fichier ou un message pour le garder.')};
+$('#gc-im').onclick=()=>{
+ try{const d=JSON.parse($('#gc-io').value),a=Array.isArray(d)?d:d.suites;if(!Array.isArray(a))throw new Error('format');
+  let n=0;a.forEach(s=>{const c=cleanSuite(s);if(!c)return;const i=suites.findIndex(x=>x.name===c.name);if(i>=0)suites[i]=c;else if(suites.length<50)suites.push(c);else return;n++});
+  saveS();showSuites();flash(n?n+' suite(s) importée(s).':'Rien d’importable dans ce texte.');
+ }catch(err){flash('Import impossible : le texte n’est pas un export valide.')}
+};
 $('#gc-st').onchange=e=>{style=e.target.value;showSearch()};
 $('#gc-tu').onchange=e=>{TI=+e.target.value;setOpen();showSearch()};
 $('#gc-cp').onchange=e=>{CAPO=+e.target.value;setOpen();revoice(it=>it.en,CAPO?'Suite recalculée pour un capo case '+CAPO+'.':'Suite recalculée sans capo.')};
 $('#gc-tn').onchange=showPg;
+$('#gc-trg').onchange=e=>{
+ const v=e.target.value;e.target.value='';if(v===''||!prog.length)return;
+ const to=+v,p0=parse(prog[0].en);if(!p0)return;
+ let n=(to-p0.root+12)%12;if(!n){flash('La suite est déjà en '+TON.find(t=>t[1]===to)[0]+' (premier accord).');return}
+ if(n>6)n-=12;
+ const fl=[1,3,5,8,10].includes(to),nm=TON.find(t=>t[1]===to)[0];
+ revoice(it=>shift(it,n,fl),'Suite transposée vers '+nm+' ('+(n>0?'+':'')+n+' demi-tons, d’après le premier accord).');
+};
 $('#gc-dn').onclick=()=>revoice(it=>shift(it,-1),'Suite transposée de − ½ ton (position la plus classique choisie).');
 $('#gc-up').onclick=()=>revoice(it=>shift(it,1),'Suite transposée de + ½ ton (position la plus classique choisie).');
 $('#gc-q').addEventListener('input',()=>{edit=-1;showProg();showSearch()});
@@ -406,6 +616,7 @@ $('#gc-chips').onclick=e=>{const b=e.target.closest('.gc-chip');if(!b||!cur)retu
 $('#gc-res').onchange=e=>{if(e.target.id!=='gc-bs'||!cur)return;const v=e.target.value;
  $('#gc-q').value=cur.rf+cur.sfx+(v===''?'':'/'+(cur.flat?FRb:FR)[+v]);showSearch()};
 $('#gc-res').onclick=e=>{
+ const pb=e.target.closest('[data-pl]');if(pb&&cur){const v=voicings(cur)[+pb.dataset.pl];if(v)playVoicing(v);return}
  const b=e.target.closest('.gc-v');if(!b||!cur)return;
  const it=item(cur,voicings(cur)[+b.dataset.i],TI);
  if(edit>=0){prog[edit]=it;edit=-1}else prog.push(it);
@@ -421,6 +632,11 @@ $('#gc-pgl').onclick=e=>{
  flash(miss.length?'Aucune position pour : '+miss.join(', ')+'.':'Ajouté à ta suite : '+added.join(', ')+'.');
 };
 $('#gc-prog').onclick=e=>{
+ const mv=e.target.closest('[data-m]'),dp=e.target.closest('[data-c]');
+ if(mv||dp){const i=+e.target.closest('[data-e]').dataset.e;
+  if(mv){const j=i+(+mv.dataset.m);if(j<0||j>=prog.length)return;[prog[i],prog[j]]=[prog[j],prog[i]]}
+  else prog.splice(i+1,0,JSON.parse(JSON.stringify(prog[i])));
+  edit=-1;save();showProg();showSearch();return}
  const d=e.target.closest('[data-d]');
  if(d){prog.splice(+d.dataset.d,1);edit=-1;save();showProg();showSearch();return}
  const c=e.target.closest('[data-e]');if(!c)return;
@@ -431,8 +647,8 @@ $('#gc-prog').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.
 $('#gc-empty').onclick=()=>{prog=[];edit=-1;save();showProg();showSearch()};
 barEl.onclick=()=>$('#gc-suite').scrollIntoView({behavior:'smooth',block:'start'});
 if('IntersectionObserver' in window)new IntersectionObserver(([e])=>{suiteVis=e.isIntersecting;showBar()}).observe($('#gc-suite'));
-$('#gc-pgb').onclick=()=>{const p=$('#gc-pgp'),o=p.hidden;p.hidden=!o;$('#gc-pgb').setAttribute('aria-expanded',String(o))};
-showProg();showSearch();
+[['pgb','pgp'],['kyb','kyp'],['svb','svp']].forEach(([b,p])=>{$('#gc-'+b).onclick=()=>{const o=$('#gc-'+p).hidden;$('#gc-'+p).hidden=!o;$('#gc-'+b).setAttribute('aria-expanded',String(o))}});
+showProg();showSearch();showKeys();showSuites();
 })();
 </script>
 </body>
