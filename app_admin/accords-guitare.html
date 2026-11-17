@@ -132,28 +132,155 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 @media (max-width:480px){.gc-sel{grid-template-columns:1fr 1fr}.gc-sel label:last-child{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){.gc *{transition:none!important}}
 
+/* ==========================================================================
+   RESPONSIVE — desktop 2 colonnes (suite sticky) / mobile en modules (onglets)
+   ========================================================================== */
+.gc-tabs{--gc-teal:#00ffcc;--gc-mut:#94a3b8;font-family:'Rajdhani',sans-serif}
+html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
+.pv{max-width:min(1760px,96vw);padding:20px 16px 96px}
+.panel-box{padding:clamp(14px,1.6vw,28px)}
+.gc-sw input{font-size:1.1rem;padding:14px 46px 14px 16px}
+.gc-sw button{width:42px;height:42px}
+.gc-sel select,.gc-hd select{font-size:1rem;padding:11px 10px;min-height:44px}
+.gc-tb select{font-size:1rem;padding:10px;min-height:44px}
+.gc-btn{font-size:.78rem;padding:11px 16px;min-height:44px}
+.gc-chip{font-size:1rem;padding:9px 15px;min-height:42px}
+.gc-seg button{padding:9px 16px;font-size:.95rem;min-height:42px}
+.gc-opt label{padding:9px 0;font-size:1rem}
+.gc-opt input{width:22px;height:22px}
+.gc-mut{font-size:1rem}
+.gc-nm{font-size:1.3rem}
+.gc-pgb{padding:15px 18px;font-size:1.05rem;min-height:50px}
+.gc-grid{grid-template-columns:repeat(auto-fill,minmax(clamp(112px,9vw,168px),1fr))}
+.gc-mv{gap:6px}
+.gc-mv button{flex:1 1 0;min-width:0;max-width:42px;height:38px}
+.gc-rm{padding:6px 10px;font-size:1.4rem}
+.gc-rm2{padding:6px 12px;font-size:1.5rem}
+.gc-pl{width:32px;height:32px;font-size:.65rem}
+#gc-io{font-size:1rem}
+#gc-prog:empty::before{content:"Aucun accord pour l’instant : appuie sur un diagramme pour l’ajouter.";color:var(--gc-mut)}
+
+/* Structure : colonnes transparentes par défaut */
+.gc-cols{display:block}
+.gc-col{display:contents}
+.gc-toast{display:none}
+.gc-tabs{display:none}
+
+/* Bouton « Réglages » (repliable, mobile/tablette seulement) */
+.gc-setb{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;margin-top:12px;padding:12px 14px;font:inherit;font-weight:600;color:var(--gc-tx);text-align:left;background:var(--gc-field);border:1px solid var(--gc-line);border-radius:6px;cursor:pointer}
+.gc-setb::before{content:"⚙";color:var(--gc-teal)}
+.gc-setb span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gc-setb::after{content:"▼";flex:none;font-size:.8rem;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.gc-setb[aria-expanded="true"]::after{transform:rotate(180deg)}
+
+/* ---------- DESKTOP ≥ 1000px : 2 colonnes ---------- */
+@media (min-width:1000px){
+  .pv{padding-bottom:40px}
+  .gc-cols{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(400px,1fr);gap:clamp(20px,2.4vw,40px);align-items:start}
+  .gc-col{display:block;min-width:0}
+  .gc-col-r{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;padding:0 6px 4px 0;scrollbar-width:thin;scrollbar-color:#334155 transparent}
+  .gc-suite{margin-top:0}
+  .gc-col-r .gc-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .gc-setb{display:none}
+  .gc #gc-setp[hidden]{display:block!important}
+  .gc-chip:hover,.gc-btn:hover,.gc-v:hover{filter:brightness(1.15)}
+}
+
+/* ---------- MOBILE / TABLETTE < 1000px : modules + barre d’onglets ---------- */
+@media (max-width:999px){
+  .pv{max-width:860px;padding:12px 12px calc(84px + env(safe-area-inset-bottom,0px))}
+  .panel-box{padding:14px}
+  .gc-mod{display:none}
+  .gc-mod.on{display:block}
+  .gc-mod[data-mod="suite"] .gc-suite{margin-top:0}
+  /* les accordéons deviennent des sections toujours ouvertes */
+  .gc .gc-pgp[hidden]{display:block!important}
+  .gc-pgp{padding:12px 0 0}
+  .gc-pg{margin-top:0}
+  .gc-pg+.gc-pg{margin-top:28px}
+  .gc-pgb{pointer-events:none;min-height:0;padding:4px 0 10px;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;background:none;border:0;border-bottom:1px solid rgba(0,255,204,.3);border-radius:0}
+  .gc-pgb::after{display:none}
+  #gc-roots{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #gc-roots::-webkit-scrollbar{display:none}
+  #gc-roots .gc-chip{flex:none}
+  .gc-chip{min-height:44px}
+  .gc-note.gc-fl{display:none}
+  .gc-toast:not(:empty){display:block;position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:9001;margin:0;padding:10px 14px;font-size:.95rem;color:#fff;background:rgba(10,10,15,.97);border:1px solid rgba(0,255,204,.5);border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.6);pointer-events:none}
+  .gc-tabs{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:9000;padding-bottom:env(safe-area-inset-bottom,0px);background:rgba(17,17,21,.96);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid rgba(0,255,204,.4);box-shadow:0 -5px 20px rgba(0,0,0,.6)}
+  .gc-tabs [hidden]{display:none!important}
+  .gc-tabs button{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:60px;padding:8px 2px;font:inherit;font-size:.74rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--gc-mut);background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .gc-tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .gc-tabs button[aria-pressed="true"]{color:var(--gc-teal)}
+  .gc-tabs button[aria-pressed="true"]::before{content:"";position:absolute;top:0;left:25%;right:25%;height:2px;background:var(--gc-teal);box-shadow:0 0 8px var(--gc-teal)}
+  .gc-tabn{position:absolute;top:5px;left:calc(50% + 6px);min-width:18px;padding:1px 5px;font:700 .68rem/1.3 'Orbitron',sans-serif;text-align:center;color:#04110f;background:var(--gc-teal);border-radius:9px}
+  .gc-tabn.pop{animation:gc-pop .35s ease}
+}
+@keyframes gc-pop{50%{transform:scale(1.4)}}
+@media (max-width:480px){.gc-sel{grid-template-columns:1fr 1fr}.gc-sel label:last-child{grid-column:1/-1}.gc-tabs button{font-size:.68rem}}
+
+/* ===== Ajouts : poubelle, haut de page, séparateur, centrage ===== */
+.panel-box{position:relative}
+.gc-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border-color)}
+.pv h1{margin:0;padding:0;border:0}
+.gc-trash{display:inline-flex;align-items:center;gap:8px;flex:none;min-width:44px;min-height:44px;padding:0 11px;font-family:'Orbitron',sans-serif;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--accent-color);background:transparent;border:1px solid var(--accent-color);border-radius:4px;cursor:pointer;transition:all .3s;-webkit-tap-highlight-color:transparent}
+.gc-trash svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gc-trash span{display:none}
+.gc-trash:hover,.gc-trash.arm{color:#fff;background:var(--accent-color)}
+.gc-trash.arm span{display:inline}
+.gc-gotop{position:fixed;right:16px;bottom:24px;z-index:8999;width:48px;height:48px;padding:0;display:flex;align-items:center;justify-content:center;color:#00ffcc;background:rgba(17,17,21,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(0,255,204,.55);border-radius:50%;box-shadow:0 4px 16px rgba(0,0,0,.55),0 0 10px rgba(0,255,204,.2);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s,transform .25s,visibility .25s;-webkit-tap-highlight-color:transparent}
+.gc-gotop.show{opacity:1;visibility:visible;transform:none}
+.gc-gotop:hover{color:#04110f;background:#00ffcc}
+.gc-gotop svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.gc-split{display:none}
+@media (min-width:1000px){
+  .gc-cols{grid-template-columns:minmax(0,calc((100% - 24px) * var(--lf,.6))) 24px minmax(0,1fr);gap:0}
+  .gc-split{display:block;position:relative;align-self:stretch;cursor:col-resize;touch-action:none;outline:none}
+  .gc-split::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:2px;margin-left:-1px;background:rgba(0,255,204,.18);border-radius:2px;transition:background .2s,box-shadow .2s}
+  .gc-split::after{content:"";position:sticky;top:45vh;display:block;width:6px;height:52px;margin:40vh auto 0;background:#334155;border-radius:3px;transition:background .2s}
+  .gc-split:hover::before,.gc-split:focus-visible::before,.gc-split.drag::before{background:#00ffcc;box-shadow:0 0 8px rgba(0,255,204,.5)}
+  .gc-split:hover::after,.gc-split:focus-visible::after,.gc-split.drag::after{background:#00ffcc}
+}
+@media (max-width:999px){
+  .gc-gotop{bottom:calc(76px + env(safe-area-inset-bottom,0px));right:12px}
+  #gc-ka{margin-top:24px}
+  .gc-tb{justify-content:center}
+  .gc-suite .gc-hd{justify-content:center;flex-wrap:wrap;gap:12px}
+  #gc-sl .gc-pr{flex-direction:column;align-items:center;text-align:center;gap:10px}
+  #gc-sl .gc-act{justify-content:center}
+  #gc-sl .gc-empty{text-align:center}
+}
+@media (prefers-reduced-motion:reduce){.gc-gotop{transition:none}}
+
 </style>
 </head>
 <body>
 <main class="pv">
 <div class="panel-box">
-<h1>ACCORDS GUITARE</h1>
+<div class="gc-top"><h1>ACCORDS GUITARE</h1>
+<button class="gc-trash" id="gc-reset" type="button" aria-label="Tout réinitialiser (sauf les suites enregistrées)" title="Tout réinitialiser (sauf les suites enregistrées)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>Confirmer ?</span></button></div>
 <div class="gc" id="gc-root">
+<div class="gc-cols"><div class="gc-col gc-col-l">
+<div class="gc-mod on" data-mod="search">
       <div class="gc-sw">
         <input id="gc-q" type="search" placeholder="Do, Ré7, Mi9m, A, Em, F#m7, Do/Sol…" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Rechercher un accord">
         <button id="gc-x" aria-label="Effacer" hidden>×</button>
       </div>
+      <button class="gc-setb" id="gc-setb" aria-expanded="false" aria-controls="gc-setp"><span id="gc-sets">Réglages</span></button>
+      <div id="gc-setp" hidden>
       <div class="gc-sel">
         <label>Style<select id="gc-st"></select></label>
         <label>Accordage<select id="gc-tu"></select></label>
         <label>Capo<select id="gc-cp"></select></label>
       </div>
       <div class="gc-opt" role="group" aria-label="Affichage des diagrammes"><span>Afficher</span><label><input type="checkbox" id="gc-of"> Doigts</label><label><input type="checkbox" id="gc-on"> Notes</label><label><input type="checkbox" id="gc-od"> Degrés</label></div>
+      </div>
       <p class="gc-mut" id="gc-sd" hidden></p>
       <div class="gc-chips" id="gc-roots" aria-label="Note"></div>
       <div class="gc-chips" id="gc-chips" aria-label="Type d’accord"></div>
       <div id="gc-res"></div>
 
+</div>
+<div class="gc-mod" data-mod="key">
       <div class="gc-pg">
         <button class="gc-pgb" id="gc-kyb" aria-expanded="false" aria-controls="gc-kyp"><span>Accords de la tonalité</span></button>
         <div class="gc-pgp" id="gc-kyp" hidden>
@@ -178,6 +305,10 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
         </div>
       </div>
 
+</div></div>
+<div class="gc-split" id="gc-split" role="separator" aria-orientation="vertical" aria-label="Ajuster la largeur des deux blocs" aria-valuemin="30" aria-valuemax="75" tabindex="0" title="Glisser pour ajuster · double-clic pour réinitialiser"></div>
+<div class="gc-col gc-col-r">
+<div class="gc-mod" data-mod="suite">
       <section class="gc-suite" id="gc-suite">
         <div class="gc-hd"><h3 class="gc-h">Ma suite d’accords</h3><button class="gc-btn" id="gc-empty" hidden>Vider</button></div>
         <div class="gc-tb" id="gc-tb" hidden><button class="gc-chip" id="gc-dn">− ½ ton</button><button class="gc-chip" id="gc-up">+ ½ ton</button><select id="gc-trg" aria-label="Transposer vers une tonalité"></select><span class="gc-mut" id="gc-ci"></span></div>
@@ -185,6 +316,8 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
         <p class="gc-note gc-fl" id="gc-tm" role="status"></p>
         <div class="gc-grid" id="gc-prog"></div>
       </section>
+</div>
+<div class="gc-mod" data-mod="save">
 
       <div class="gc-pg">
         <button class="gc-pgb" id="gc-svb" aria-expanded="false" aria-controls="gc-svp"><span>Mes suites enregistrées</span></button>
@@ -198,9 +331,18 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
           <textarea id="gc-io" rows="4" placeholder="Export / import : colle ici un export, puis appuie sur Importer" aria-label="Zone d’export et d’import"></textarea>
         </div>
       </div>
+</div></div></div>
+<p class="gc-fl gc-toast" role="status"></p>
     </div>
 </div>
 </main>
+<nav class="gc-tabs" id="gc-tabs" aria-label="Modules">
+<button data-tab="search" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>Chercher</button>
+<button data-tab="key" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>Tonalité</button>
+<button data-tab="suite" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12M4 12h10M4 18h8"/><path d="M18 14l4 3-4 3z"/></svg>Ma suite<b class="gc-tabn" id="gc-tabn" hidden>0</b></button>
+<button data-tab="save" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg>Sauvegardes</button>
+</nav>
+<button class="gc-gotop" id="gc-gotop" type="button" aria-label="Retour en haut"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <script>
 /* Outil accords guitare — à charger en fin de <body>, après le bloc HTML (voir guitar-chords.snippet.html) */
 (function(){
@@ -208,9 +350,8 @@ input,select{background:var(--input-bg);color:var(--text-primary);border:1px sol
 const root=document.getElementById('gc-root');
 if(!root||root.dataset.gcInit)return;
 root.dataset.gcInit='1';
-const barEl=document.createElement('div');
-barEl.className='gc-bar';barEl.hidden=true;
-document.body.appendChild(barEl); /* hors de la section : position:fixed fiable malgré les animations de ton CSS */
+const MQ=window.matchMedia('(max-width:999px)'),TABS=document.getElementById('gc-tabs'),TN=document.getElementById('gc-tabn');
+let lastN=0;
 const FR=['Do','Do#','Ré','Ré#','Mi','Fa','Fa#','Sol','Sol#','La','La#','Si'],
 FRb=['Do','Réb','Ré','Mib','Mi','Fa','Solb','Sol','Lab','La','Sib','Si'],
 EN=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],
@@ -446,8 +587,9 @@ function showProg(){
  showBar();
 }
 function showBar(){
- const b=barEl;b.hidden=!prog.length||suiteVis;
- b.innerHTML=`<button aria-label="Voir ma suite d’accords"><b>${prog.length}</b><span>${prog.map(c=>c.fr).join(', ')}</span>↓</button>`;
+ TN.textContent=prog.length;TN.hidden=!prog.length;
+ if(prog.length!==lastN){TN.classList.remove('pop');void TN.offsetWidth;TN.classList.add('pop');lastN=prog.length}
+ $('#gc-sets').textContent='Réglages · '+(style&&STYLES[style]?STYLES[style].n:'Tous styles')+' · '+TUN[TI].k+(CAPO?' · Capo '+CAPO:'');
 }
 
 function revoice(fn,msg){
@@ -641,13 +783,62 @@ $('#gc-prog').onclick=e=>{
  if(d){prog.splice(+d.dataset.d,1);edit=-1;save();showProg();showSearch();return}
  const c=e.target.closest('[data-e]');if(!c)return;
  edit=+c.dataset.e;TI=prog[edit].t||0;setOpen();$('#gc-tu').value=TI;$('#gc-q').value=prog[edit].en;
- showProg();showSearch();$('#gc-q').scrollIntoView({behavior:'smooth',block:'start'});
+ showProg();showSearch();setTab('search');$('#gc-q').scrollIntoView({behavior:'smooth',block:'start'});
 };
 $('#gc-prog').onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.e!==undefined){e.preventDefault();e.target.click()}};
 $('#gc-empty').onclick=()=>{prog=[];edit=-1;save();showProg();showSearch()};
-barEl.onclick=()=>$('#gc-suite').scrollIntoView({behavior:'smooth',block:'start'});
-if('IntersectionObserver' in window)new IntersectionObserver(([e])=>{suiteVis=e.isIntersecting;showBar()}).observe($('#gc-suite'));
-[['pgb','pgp'],['kyb','kyp'],['svb','svp']].forEach(([b,p])=>{$('#gc-'+b).onclick=()=>{const o=$('#gc-'+p).hidden;$('#gc-'+p).hidden=!o;$('#gc-'+b).setAttribute('aria-expanded',String(o))}});
+function setTab(n){
+ root.querySelectorAll('.gc-mod').forEach(m=>m.classList.toggle('on',m.dataset.mod===n));
+ TABS.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tab===n)));
+ if(MQ.matches)window.scrollTo(0,0);
+}
+TABS.onclick=e=>{const b=e.target.closest('[data-tab]');if(b)setTab(b.dataset.tab)};
+root.addEventListener('change',showBar);
+
+/* --- Retour en haut --- */
+(function(){
+ const g=document.getElementById('gc-gotop');
+ const upd=()=>g.classList.toggle('show',(window.scrollY||document.documentElement.scrollTop)>400);
+ window.addEventListener('scroll',upd,{passive:true});upd();
+ g.onclick=()=>{const rc=root.querySelector('.gc-col-r');if(rc)rc.scrollTop=0;window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'})};
+})();
+/* --- Séparateur redimensionnable (desktop) --- */
+(function(){
+ const sp=document.getElementById('gc-split'),cols=root.querySelector('.gc-cols');
+ let want=.6;try{const v=parseFloat(localStorage.getItem('gc_split'));if(v>0&&v<1)want=v}catch(e){}
+ const eff=()=>{const w=Math.max(cols.clientWidth-24,1);return Math.min(Math.max(want,Math.min(380/w,.5)),Math.max(1-340/w,.5))};
+ const paint=()=>{const f=eff();cols.style.setProperty('--lf',f);sp.setAttribute('aria-valuenow',Math.round(f*100))};
+ const set=f=>{want=f;paint()},keep=()=>{try{localStorage.setItem('gc_split',want)}catch(e){}};
+ sp.onpointerdown=e=>{sp.setPointerCapture(e.pointerId);sp.classList.add('drag');document.body.style.userSelect='none'};
+ sp.onpointermove=e=>{if(!sp.classList.contains('drag'))return;const r=cols.getBoundingClientRect();set((e.clientX-r.left-12)/(r.width-24))};
+ const end=()=>{if(sp.classList.contains('drag')){sp.classList.remove('drag');document.body.style.userSelect='';keep()}};
+ sp.onpointerup=end;sp.onpointercancel=end;
+ sp.ondblclick=()=>{set(.6);keep()};
+ sp.onkeydown=e=>{const d={ArrowLeft:-.03,ArrowRight:.03}[e.key];if(d){e.preventDefault();set(eff()+d);keep()}};
+ window.addEventListener('resize',paint);paint();
+})();
+/* --- Tout réinitialiser (les suites enregistrées sont conservées) --- */
+function resetAll(){
+ stopPlay();
+ prog=[];edit=-1;cur=null;style='';TI=0;CAPO=0;setOpen();
+ SHOW.f=true;SHOW.n=false;SHOW.d=false;saveOpts();setMode('chord');
+ $('#gc-q').value='';$('#gc-st').value='';$('#gc-tu').value='0';$('#gc-cp').value='0';$('#gc-trg').value='';$('#gc-sn').value='';$('#gc-io').value='';
+ ['f','n','d'].forEach(k=>{$('#gc-o'+k).checked=SHOW[k]});
+ $('#gc-km').value='maj';fillKT(0);$('#gc-ks').value='3';$('#gc-tn').value='0';
+ save();showProg();showSearch();showKeys();showPg();
+ setTab('search');if(!MQ.matches)window.scrollTo(0,0);
+ flash('Tout est réinitialisé. Les suites enregistrées sont conservées.');
+}
+(function(){
+ const RB=document.getElementById('gc-reset');let rt;
+ RB.onclick=()=>{
+  if(RB.classList.contains('arm')){clearTimeout(rt);RB.classList.remove('arm');resetAll();return}
+  RB.classList.add('arm');rt=setTimeout(()=>RB.classList.remove('arm'),3500);
+ };
+ RB.onblur=()=>{clearTimeout(rt);RB.classList.remove('arm')};
+})();
+setTab('search');
+[['pgb','pgp'],['kyb','kyp'],['svb','svp'],['setb','setp']].forEach(([b,p])=>{$('#gc-'+b).onclick=()=>{const o=$('#gc-'+p).hidden;$('#gc-'+p).hidden=!o;$('#gc-'+b).setAttribute('aria-expanded',String(o))}});
 showProg();showSearch();showKeys();showSuites();
 })();
 </script>
