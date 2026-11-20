@@ -215,8 +215,8 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
   .gc-pgp{padding:12px 0 0}
   .gc-pg{margin-top:0}
   .gc-pg+.gc-pg{margin-top:28px}
-  .gc-pgb:not(#gc-analysis-toggle):not(#gc-scale-toggle){pointer-events:none;min-height:0;padding:4px 0 10px;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;background:none;border:0;border-bottom:1px solid rgba(var(--gc-teal-rgb),.3);border-radius:0}
-  .gc-pgb:not(#gc-analysis-toggle):not(#gc-scale-toggle)::after{display:none}
+  .gc-pgb:not(#gc-analysis-toggle):not(#gc-scale-toggle):not(#gc-piano-toggle){pointer-events:none;min-height:0;padding:4px 0 10px;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;background:none;border:0;border-bottom:1px solid rgba(var(--gc-teal-rgb),.3);border-radius:0}
+  .gc-pgb:not(#gc-analysis-toggle):not(#gc-scale-toggle):not(#gc-piano-toggle)::after{display:none}
   #gc-roots{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   #gc-roots::-webkit-scrollbar{display:none}
   #gc-roots .gc-chip{flex:none}
@@ -281,7 +281,7 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
 
 /* Repère visuel piano — complément à l'outil guitare */
 .gc-piano{margin:14px 0;padding:0;background:var(--gc-surf);border:1px solid var(--gc-line);border-radius:6px;overflow:hidden}
-.gc-piano-toggle{margin:0;border:0;border-radius:0;padding:12px 14px;background:rgba(var(--gc-teal-rgb),.07)}
+.gc-piano-toggle{margin:0}
 .gc-piano-toggle[aria-expanded="true"]{border-bottom:1px solid var(--gc-line)}
 .gc-piano-panel{padding:12px}
 .gc-piano-panel[hidden]{display:none!important}
@@ -307,7 +307,7 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
 .gc-piano-dot.bass{background:var(--gc-gold)}
 .gc-piano-dot.root{background:#9874d8}
 @media(max-width:480px){.gc-piano-panel{padding:9px 6px}.gc-keys{height:150px}.gc-black{width:3.2%}.gc-white{font-size:.65rem}}
-@media(max-width:999px){#gc-caa{display:block;margin:10px auto 0}#gc-piano-toggle{pointer-events:auto;min-height:44px;padding:10px 12px;border:0;border-radius:0;background:rgba(var(--gc-teal-rgb),.07)}#gc-piano-toggle::after{display:block}#gc-piano-toggle[aria-expanded="true"]::after{transform:rotate(180deg)}}
+@media(max-width:999px){#gc-caa{display:block;margin:10px auto 0}#gc-piano-toggle{pointer-events:auto}}
 
 /* Sur grand écran, les positions d’accord adoptent une grille compacte proche des cartes de la suite. */
 @media (min-width:1000px){
@@ -363,20 +363,6 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
 @media(max-width:600px){.gc-scale-controls{grid-template-columns:1fr 1fr}.gc-analysis,.gc-scale-tool{padding:10px}.gc-fretboard-vertical{min-width:500px;grid-template-columns:52px repeat(6,74px);grid-template-rows:auto repeat(var(--gc-fret-count),48px)}.gc-fretboard-vertical .gc-fret-label{font-size:.72rem}.gc-fretboard-vertical .gc-fret-cell{min-height:48px}.gc-fretboard-vertical .gc-scale-note{width:31px;height:31px;font-size:.7rem}.gc-analysis #gc-analysis-panel[hidden],#gc-scale-panel[hidden]{display:none!important}}
 @media(max-width:999px){#gc-analysis-toggle{display:flex;width:100%}}
 
-
-@media(max-width:999px){
-  #gc-analysis-toggle,#gc-scale-toggle{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    width:100%;min-height:52px;padding:12px 10px;
-    pointer-events:auto;white-space:normal;text-align:left;
-    font-size:.82rem;line-height:1.35;letter-spacing:1px;
-    border:1px solid rgba(var(--gc-teal-rgb),.35);border-radius:6px;
-    background:rgba(var(--gc-teal-rgb),.05);
-  }
-  #gc-analysis-toggle::after,#gc-scale-toggle::after{display:block;flex:none}
-  #gc-analysis-toggle[aria-expanded="true"]::after,#gc-scale-toggle[aria-expanded="true"]::after{transform:rotate(180deg)}
-  #gc-analysis-panel[hidden],#gc-scale-panel[hidden]{display:none!important}
-}
 
 </style>
 <script>try{if(localStorage.getItem('gc_theme')==='light')document.documentElement.classList.add('gc-light')}catch(e){}</script>
@@ -1250,4 +1236,5 @@ showProg();showSearch();showKeys();showSuites();
 </body>
 </html>
 
+  
   
