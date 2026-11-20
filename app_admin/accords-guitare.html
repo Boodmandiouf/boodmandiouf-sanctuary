@@ -488,9 +488,22 @@ PR={
  funk:[['Vamp dominante','I9 IV9'],['Vamp dorien','i7 IV7'],['Vamp mineur','i9 iv7'],['I9–IV9–I9–V9','I9 IV9 I9 V9'],['Funk jazzy','ii9 V13 Imaj9']],
  soul:[['I–vi–ii–V','Imaj7 vi7 ii7 V7'],['IV–iii–ii–I','IVmaj7 iii7 ii7 Imaj7'],['Années 50','I vi IV V'],['Soul jazzy','ii9 V13 Imaj9']],
  lofi:[['II–V–I–VI','ii7 V7 Imaj7 vi7'],['I–iii–vi–ii','Imaj7 iii7 vi7 ii7'],['vi–ii–V–I','vi7 ii7 V7 Imaj7'],['I–vi–IV–V','Imaj7 vi7 IVmaj7 V7'],['II–V–I (9e)','ii9 V13 Imaj9']],
- westcoast:[['G-funk vamp','i9 IV9'],['West Coast classique','i7 bVII9'],['Cruising groove','i9 bVImaj7 bVII9'],['Talkbox soul','IVmaj7 iii7 ii9 V13'],['P-Funk bounce','i7 i7 IV9 i7'],['California sunset','i9 bVIImaj7 IVmaj7 V7']],
+ westcoast:[['G-funk vamp','i9 IV9 i9 IV9'],['West Coast classique','i7 bVII9 i7 bVII9'],['Cruising groove','i9 bVImaj7 bVII9 i9'],['Talkbox soul','IVmaj7 iii7 ii9 V13'],['P-Funk bounce','i7 i7 IV9 i7'],['California sunset','i9 bVIImaj7 IVmaj7 V7']],
  japonais:[['Royal road (王道進行)','IVmaj7 V7 iii7 vi7'],['Marunouchi (丸サ進行)','IVmaj7 III7 vi7 v7 I7'],['Komuro (小室進行)','vi IV V I'],['Canon japonais','I V vi iii IV I ii V'],['Let It Be (I–V–vi–IV)','I V vi7 IV'],['IV–V–#Vdim–vi','IV V #vdim vi'],['Pop punk (IV–I–V–vi)','IV I V vi'],['vi–ii–iii–vi','vi7 ii7 iii vi7']]
 };
+
+// Toutes les progressions proposées comportent au minimum 4 accords.
+// Les boucles déjà plus longues (blues 8/12 mesures, cycles, etc.) restent intactes.
+for(const entries of Object.values(PR)){
+ for(const entry of entries){
+  const tokens=entry[1].trim().split(/\s+/);
+  if(tokens.length>0 && tokens.length<4){
+   const original=tokens.slice();
+   while(tokens.length<4) tokens.push(original[tokens.length%original.length]);
+   entry[1]=tokens.join(' ');
+  }
+ }
+}
 
 function note(t){
  const m=t.match(/^(do|r[eé]|mi|fa|sol|la|si|[a-g])/i);if(!m)return null;
@@ -653,7 +666,26 @@ const persist=()=>{try{localStorage.setItem('gc_prog',JSON.stringify(prog));loca
 let undo=[],redo=[];const stateStr=()=>JSON.stringify({p:prog,c:CAPO});let snap=stateStr();
 const save=()=>{const s=stateStr();if(s!==snap){undo.push(snap);if(undo.length>60)undo.shift();redo=[];snap=s}persist();upUR()};
 function flash(m){const L=root.querySelectorAll('.gc-fl');L.forEach(e=>{e.textContent=m});clearTimeout(ft);ft=setTimeout(()=>{L.forEach(e=>{e.textContent=''})},6000)}
-const item=(p,v,t)=>({fr:p.fr,en:p.en,f:v.f,barre:v.barre,t:t});
+const item=(p,v,t)=>({fr:p.fr,en:p.en,f:v.f,barre:v.barre,t:t,approx:!!v.approx});
+// Les progressions peuvent contenir des extensions difficiles à placer intégralement
+// sur le manche. On conserve alors l'accord dans la suite avec une forme simplifiée.
+function progressionVoicing(p){
+ const s=p.sfx||'',candidates=[s];
+ if(/13|11|9/.test(s)){
+  if(s.includes('maj'))candidates.push(s.replace(/13|11|9/,'7'));
+  else candidates.push(s.replace(/13|11|9/,'7'));
+ }
+ if(s.includes('dim'))candidates.push('dim');
+ else if(s.includes('aug'))candidates.push('aug');
+ else if(/^m(?!aj)/.test(s))candidates.push('m');
+ else if(!s.includes('sus'))candidates.push('');
+ candidates.push('5');
+ for(const suffix of [...new Set(candidates)]){
+  const q=parse(p.rf+suffix);if(!q)continue;
+  const v=voicings(q)[0];if(v)return {...v,approx:suffix!==s};
+ }
+ return {f:[-1,-1,-1,-1,-1,-1],barre:null,approx:true};
+}
 
 function showSearch(){
  const val=$('#gc-q').value,S=STYLES[style];cur=parse(val);$('#gc-x').hidden=!val;
@@ -680,7 +712,7 @@ function showPg(){
 function showProg(){
  stopPlay();upUR();$('#gc-empty').hidden=!prog.length;$('#gc-tb').hidden=!prog.length;$('#gc-tb2').hidden=!prog.length;
  $('#gc-ci').textContent=CAPO?'Capo case '+CAPO:'';
- $('#gc-prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="gc-v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Accord ${i+1} : modifier ${c.fr}"><em class="gc-n" aria-hidden="true">${i+1}</em>${svg(c,parse(c.en),c.t||0)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span><button class="gc-rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button><div class="gc-mv"><button data-m="-1"${i===0?' disabled':''} aria-label="Déplacer ${c.fr} vers la gauche">‹</button><button data-c aria-label="Dupliquer ${c.fr}">⧉</button><button data-m="1"${i===prog.length-1?' disabled':''} aria-label="Déplacer ${c.fr} vers la droite">›</button></div></div>`).join(''):'<p class="gc-empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
+ $('#gc-prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="gc-v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Accord ${i+1} : modifier ${c.fr}"><em class="gc-n" aria-hidden="true">${i+1}</em>${svg(c,parse(c.en),c.t||0)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span>${c.approx?'<small class="gc-mut">Position simplifiée</small>':''}<button class="gc-rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button><div class="gc-mv"><button data-m="-1"${i===0?' disabled':''} aria-label="Déplacer ${c.fr} vers la gauche">‹</button><button data-c aria-label="Dupliquer ${c.fr}">⧉</button><button data-m="1"${i===prog.length-1?' disabled':''} aria-label="Déplacer ${c.fr} vers la droite">›</button></div></div>`).join(''):'<p class="gc-empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
  showBar();
 }
 function showBar(){
@@ -986,11 +1018,15 @@ $('#gc-res').onclick=e=>{
 $('#gc-pgl').onclick=e=>{
  const b=e.target.closest('[data-p]');if(!b)return;
  const tn=+$('#gc-tn').value,miss=[],added=[];
- (PR[style]||PR['']) [+b.dataset.p][1].split(' ').forEach(t=>{
-  const p=parse(roman(t,tn)||''),v=p&&voicings(p)[0];
-  if(!v){miss.push(t);return}prog.push(item(p,v,TI));added.push(p.fr)});
+ const selected=(PR[style]||PR['']) [+b.dataset.p];
+ selected[1].split(/\s+/).filter(Boolean).forEach(t=>{
+  const p=parse(roman(t,tn)||'');
+  if(!p){miss.push(t);return}
+  const exact=voicings(p)[0],v=exact||progressionVoicing(p);
+  prog.push(item(p,v,TI));added.push(p.fr);
+ });
  save();showProg();showSearch();
- flash(miss.length?'Aucune position pour : '+miss.join(', ')+'.':'Ajouté à ta suite : '+added.join(', ')+'.');
+ flash((miss.length?'Accords non reconnus : '+miss.join(', ')+'. ':'')+'Progression ajoutée : '+added.length+' accord(s).'+(prog.some(c=>c.approx)?' Certaines positions sont simplifiées et peuvent être ajustées.':''));
 };
 $('#gc-prog').onclick=e=>{
  const mv=e.target.closest('[data-m]'),dp=e.target.closest('[data-c]');
