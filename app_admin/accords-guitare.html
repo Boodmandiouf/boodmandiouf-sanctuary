@@ -211,12 +211,12 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
   .gc-mod.on{display:block}
   .gc-mod[data-mod="suite"] .gc-suite{margin-top:0}
   /* les accordéons deviennent des sections toujours ouvertes */
-  .gc .gc-pgp[hidden]{display:block!important}
+  .gc .gc-pgp[hidden]:not(#gc-analysis-panel):not(#gc-scale-panel){display:block!important}
   .gc-pgp{padding:12px 0 0}
   .gc-pg{margin-top:0}
   .gc-pg+.gc-pg{margin-top:28px}
-  .gc-pgb{pointer-events:none;min-height:0;padding:4px 0 10px;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;background:none;border:0;border-bottom:1px solid rgba(var(--gc-teal-rgb),.3);border-radius:0}
-  .gc-pgb::after{display:none}
+  .gc-pgb:not(#gc-analysis-toggle):not(#gc-scale-toggle){pointer-events:none;min-height:0;padding:4px 0 10px;font-family:'Orbitron',sans-serif;font-size:.9rem;letter-spacing:2px;text-transform:uppercase;background:none;border:0;border-bottom:1px solid rgba(var(--gc-teal-rgb),.3);border-radius:0}
+  .gc-pgb:not(#gc-analysis-toggle):not(#gc-scale-toggle)::after{display:none}
   #gc-roots{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   #gc-roots::-webkit-scrollbar{display:none}
   #gc-roots .gc-chip{flex:none}
@@ -308,6 +308,76 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
 .gc-piano-dot.root{background:#9874d8}
 @media(max-width:480px){.gc-piano-panel{padding:9px 6px}.gc-keys{height:150px}.gc-black{width:3.2%}.gc-white{font-size:.65rem}}
 @media(max-width:999px){#gc-caa{display:block;margin:10px auto 0}#gc-piano-toggle{pointer-events:auto;min-height:44px;padding:10px 12px;border:0;border-radius:0;background:rgba(var(--gc-teal-rgb),.07)}#gc-piano-toggle::after{display:block}#gc-piano-toggle[aria-expanded="true"]::after{transform:rotate(180deg)}}
+
+/* Sur grand écran, les positions d’accord adoptent une grille compacte proche des cartes de la suite. */
+@media (min-width:1000px){
+ /* Cartes de variantes nettement plus grandes sur desktop : diagrammes plus lisibles */
+ #gc-res .gc-grid{grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px;align-items:stretch}
+ #gc-res .gc-v{min-width:0;padding:12px 10px 14px;min-height:285px}
+ #gc-res .gc-v svg{width:100%;max-width:220px;margin:0 auto;padding-top:20px}
+ #gc-res .gc-v b{font-size:1.2rem;margin-top:5px}
+ #gc-res .gc-v span{font-size:.98rem}
+ /* Dans la suite à droite, des cartes aussi grandes et lisibles que les variantes à gauche. */
+ #gc-prog.gc-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;align-items:stretch}
+ #gc-prog .gc-v{min-width:0;padding:10px 9px 12px;min-height:265px}
+ #gc-prog .gc-v svg{width:100%;max-width:200px;margin:0 auto;padding-top:16px}
+ #gc-prog .gc-v b{font-size:1.12rem;margin-top:4px}
+ #gc-prog .gc-v span{font-size:.92rem}
+ .gc-analysis-candidates{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+.gc-analysis-card.is-best{border-color:var(--gc-teal);background:rgba(var(--gc-teal-rgb),.08)}
+/* Extensions cohérentes : variantes, analyse et gammes */
+.gc-variant-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:12px 0}
+.gc-variant-tools .gc-mut{margin:0}
+.gc-vf[aria-pressed="true"]{color:var(--gc-teal);border-color:var(--gc-teal);background:rgba(var(--gc-teal-rgb),.1)}
+.gc-analysis,.gc-scale-tool{margin-top:16px;padding:14px;background:var(--gc-surf);border:1px solid var(--gc-line);border-radius:6px}
+.gc-analysis h4,.gc-scale-tool h4{margin:0 0 8px;color:var(--gc-teal);font-family:'Orbitron',sans-serif;font-size:.82rem;letter-spacing:1px}
+.gc-analysis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin:10px 0}
+.gc-analysis-card{padding:9px;border:1px solid var(--gc-sep);border-radius:5px;background:rgba(var(--gc-teal-rgb),.04)}
+.gc-analysis-card b{display:block;color:var(--gc-hi)}
+.gc-analysis-card small{color:var(--gc-mut)}
+.gc-analysis-list{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+.gc-analysis-list span{padding:5px 8px;border:1px solid var(--gc-bd2);border-radius:4px;font-weight:700}
+.gc-scale-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.gc-scale-controls label{display:block;color:var(--gc-mut);font-size:.8rem}
+.gc-scale-controls select{width:100%;margin-top:4px;padding:8px;background:var(--gc-field);color:var(--gc-tx);border:1px solid var(--gc-line);border-radius:4px;font:inherit}
+.gc-fret-scroll{overflow-x:auto;max-width:100%;padding-bottom:8px;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+.gc-fretboard{min-width:720px;display:grid;grid-template-columns:42px repeat(var(--gc-fret-count,16),minmax(38px,1fr));gap:0}
+.gc-fret-label{display:flex;align-items:center;justify-content:center;color:var(--gc-mut);font-size:.7rem;min-height:34px;border-bottom:1px solid var(--gc-sep)}
+.gc-fret-cell{position:relative;display:flex;align-items:center;justify-content:center;min-height:34px;border-left:1px solid rgba(148,163,184,.28);border-bottom:2px solid rgba(148,163,184,.28)}
+.gc-fret-cell:after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(148,163,184,.25);z-index:0}
+.gc-scale-note{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;font-size:.65rem;font-weight:800;color:var(--gc-ink);background:var(--gc-teal)}
+.gc-scale-note.root{background:#9874d8;color:#fff;box-shadow:0 0 0 2px rgba(152,116,216,.25)}
+.gc-scale-legend{display:flex;gap:12px;flex-wrap:wrap;color:var(--gc-mut);font-size:.78rem;margin-top:8px}
+.gc-scale-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--gc-teal);margin-right:5px}
+.gc-scale-legend i.root{background:#9874d8}
+@media(min-width:1000px){#gc-analysis-toggle{display:none}.gc-analysis #gc-analysis-panel{display:block!important}}
+.gc-fretboard-vertical{width:100%;min-width:560px;grid-template-columns:58px repeat(6,minmax(68px,1fr));grid-template-rows:auto repeat(var(--gc-fret-count),52px);background:linear-gradient(90deg,rgba(148,163,184,.035),rgba(148,163,184,.015));border:1px solid var(--gc-sep);border-radius:8px;overflow:hidden}
+.gc-fretboard-vertical .gc-fret-label{min-height:42px;padding:4px 2px;font-size:.76rem;font-weight:700;white-space:nowrap;background:rgba(148,163,184,.045)}
+.gc-fretboard-vertical .gc-fret-cell{border:0;border-top:3px solid rgba(148,163,184,.48);border-right:2px solid rgba(148,163,184,.28);min-height:52px;padding:3px;position:relative}
+.gc-fretboard-vertical .gc-fret-cell:nth-child(7n){border-right:0}
+.gc-fretboard-vertical .gc-fret-cell:after{display:none}
+.gc-fretboard-vertical .gc-scale-note{width:34px;height:34px;font-size:.76rem;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.gc-fretboard-vertical .gc-scale-note.root{box-shadow:0 0 0 3px rgba(152,116,216,.28),0 1px 4px rgba(0,0,0,.25)}
+.gc-fret-scroll-vertical{width:100%;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch}
+@media(max-width:600px){.gc-scale-controls{grid-template-columns:1fr 1fr}.gc-analysis,.gc-scale-tool{padding:10px}.gc-fretboard-vertical{min-width:500px;grid-template-columns:52px repeat(6,74px);grid-template-rows:auto repeat(var(--gc-fret-count),48px)}.gc-fretboard-vertical .gc-fret-label{font-size:.72rem}.gc-fretboard-vertical .gc-fret-cell{min-height:48px}.gc-fretboard-vertical .gc-scale-note{width:31px;height:31px;font-size:.7rem}.gc-analysis #gc-analysis-panel[hidden],#gc-scale-panel[hidden]{display:none!important}}
+@media(max-width:999px){#gc-analysis-toggle{display:flex;width:100%}}
+
+
+@media(max-width:999px){
+  #gc-analysis-toggle,#gc-scale-toggle{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    width:100%;min-height:52px;padding:12px 10px;
+    pointer-events:auto;white-space:normal;text-align:left;
+    font-size:.82rem;line-height:1.35;letter-spacing:1px;
+    border:1px solid rgba(var(--gc-teal-rgb),.35);border-radius:6px;
+    background:rgba(var(--gc-teal-rgb),.05);
+  }
+  #gc-analysis-toggle::after,#gc-scale-toggle::after{display:block;flex:none}
+  #gc-analysis-toggle[aria-expanded="true"]::after,#gc-scale-toggle[aria-expanded="true"]::after{transform:rotate(180deg)}
+  #gc-analysis-panel[hidden],#gc-scale-panel[hidden]{display:none!important}
+}
+
 </style>
 <script>try{if(localStorage.getItem('gc_theme')==='light')document.documentElement.classList.add('gc-light')}catch(e){}</script>
 </head>
@@ -336,6 +406,7 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
       <div class="gc-chips" id="gc-roots" aria-label="Note"></div>
       <div class="gc-chips" id="gc-chips" aria-label="Type d’accord"></div>
       <div id="gc-res"></div>
+      <div id="gc-scale-tool"></div>
 
 </div>
 <div class="gc-mod" data-mod="key">
@@ -373,6 +444,7 @@ html{font-size:clamp(16px,.55vw + 11px,21px);-webkit-text-size-adjust:100%}
         <div class="gc-tb" id="gc-tb2" hidden><button class="gc-btn" id="gc-pl" aria-pressed="false">▶ Écouter la suite</button><span class="gc-seg" role="group" aria-label="Mode de lecture guitare"><button data-pm="chord" aria-pressed="true">Accord</button><button data-pm="arp" aria-pressed="false">Arpège</button></span></div>
         <p class="gc-note gc-fl" id="gc-tm" role="status"></p>
         <div class="gc-grid" id="gc-prog"></div>
+        <section class="gc-analysis" id="gc-analysis" hidden></section>
       </section>
 
       <div class="gc-pg">
@@ -660,7 +732,7 @@ function svg(v,p,t){
  return s+'</svg>';
 }
 
-let prog=[],cur=null,edit=-1,style='',suiteVis=false,ft;
+let prog=[],cur=null,edit=-1,style='',suiteVis=false,ft,variantFilter='all';
 try{CAPO=+localStorage.getItem('gc_capo')||0;setOpen();prog=JSON.parse(localStorage.getItem('gc_prog')||'[]').map(clean).filter(Boolean)}catch(e){}
 const persist=()=>{try{localStorage.setItem('gc_prog',JSON.stringify(prog));localStorage.setItem('gc_capo',CAPO)}catch(e){}};
 let undo=[],redo=[];const stateStr=()=>JSON.stringify({p:prog,c:CAPO});let snap=stateStr();
@@ -687,19 +759,83 @@ function progressionVoicing(p){
  return {f:[-1,-1,-1,-1,-1,-1],barre:null,approx:true};
 }
 
+
+const SCALE_TYPES={
+ major:{name:'Majeure',iv:[0,2,4,5,7,9,11],degrees:['1','2','3','4','5','6','7']},
+ minor:{name:'Mineure naturelle',iv:[0,2,3,5,7,8,10],degrees:['1','2','b3','4','5','b6','b7']},
+ penta:{name:'Pentatonique majeure',iv:[0,2,4,7,9],degrees:['1','2','3','5','6']},
+ pentam:{name:'Pentatonique mineure',iv:[0,3,5,7,10],degrees:['1','b3','4','5','b7']},
+ blues:{name:'Blues mineure',iv:[0,3,5,6,7,10],degrees:['1','b3','4','b5','5','b7']},
+ dorian:{name:'Dorien',iv:[0,2,3,5,7,9,10],degrees:['1','2','b3','4','5','6','b7']},
+ mixo:{name:'Mixolydien',iv:[0,2,4,5,7,9,10],degrees:['1','2','3','4','5','6','b7']},
+ phrygian:{name:'Phrygien',iv:[0,1,3,5,7,8,10],degrees:['1','b2','b3','4','5','b6','b7']}
+};
+function renderScaleTool(){
+ const host=$('#gc-scale-tool');if(!host)return;
+ const tonic=cur?cur.root:0,rootPc=tonic,kind=host.dataset.kind||'penta',key=+(host.dataset.root||rootPc);
+ const sc=SCALE_TYPES[kind]||SCALE_TYPES.penta,pcs=new Set(sc.iv.map(x=>(key+x)%12));
+ const strings=TUN[TI].p,frets=+(host.dataset.frets||15),orientation=host.dataset.orientation||'vertical';
+ const stringNames=['Mi aigu','Si','Sol','Ré','La','Mi grave'];const stringShort=['Mi','Si','Sol','Ré','La','Mi'];
+ let h='<div class="gc-pg gc-scale-dropdown"><button class="gc-pgb" id="gc-scale-toggle" type="button" aria-expanded="'+(host.dataset.open==='1'?'true':'false')+'" aria-controls="gc-scale-panel"><span>Explorateur de gammes</span></button><div class="gc-pgp" id="gc-scale-panel"'+(host.dataset.open==='1'?'':' hidden')+'><section class="gc-scale-tool"><p class="gc-mut">Repère les notes sur le manche selon l’accordage et le capo sélectionnés.</p><div class="gc-scale-controls"><label>Fondamentale<select id="gc-scale-root">'+TON.map(([n,pc])=>`<option value="${pc}"${pc===key?' selected':''}>${n}</option>`).join('')+'</select></label><label>Gamme<select id="gc-scale-kind">'+Object.entries(SCALE_TYPES).map(([k,v])=>`<option value="${k}"${k===kind?' selected':''}>${v.name}</option>`).join('')+'</select></label><label>Étendue<select id="gc-scale-frets"><option value="12">12 cases</option><option value="15">15 cases</option><option value="20">20 cases</option></select></label><label>Orientation<select id="gc-scale-orientation"><option value="vertical"'+(orientation==='vertical'?' selected':'')+'>Grille (type diagramme)</option><option value="horizontal"'+(orientation==='horizontal'?' selected':'')+'>Manche horizontal</option></select></label></div>';
+ if(orientation==='vertical'){
+  h+='<div class="gc-fret-scroll gc-fret-scroll-vertical"><div class="gc-fretboard gc-fretboard-vertical" style="--gc-fret-count:'+(frets+1)+'"><div class="gc-fret-label">Case</div>';
+  for(let si=5;si>=0;si--)h+='<div class="gc-fret-label" title="'+stringNames[si]+'">'+(orientation==='vertical'?stringShort[si]:stringNames[si])+'</div>';
+  for(let f=0;f<=frets;f++){
+   h+='<div class="gc-fret-label">'+(f===0?'À vide':f)+'</div>';
+   for(let si=5;si>=0;si--){const pc=(strings[si]+CAPO+f)%12,hit=pcs.has(pc),isRoot=pc===key;h+='<div class="gc-fret-cell">'+(hit?'<span class="gc-scale-note'+(isRoot?' root':'')+'" title="'+FR[pc]+' · '+sc.degrees[sc.iv.indexOf((pc-key+12)%12)]+'">'+FR[pc]+'</span>':'')+'</div>';}
+  }
+ }else{
+  h+='<div class="gc-fret-scroll"><div class="gc-fretboard" style="--gc-fret-count:'+(frets+1)+'"><div class="gc-fret-label">Corde</div>';
+  for(let f=0;f<=frets;f++)h+='<div class="gc-fret-label">'+(f===0?'À vide':f)+'</div>';
+  for(let si=5;si>=0;si--){h+='<div class="gc-fret-label">'+stringNames[si]+'</div>';for(let f=0;f<=frets;f++){const pc=(strings[si]+CAPO+f)%12,hit=pcs.has(pc),isRoot=pc===key;h+='<div class="gc-fret-cell">'+(hit?'<span class="gc-scale-note'+(isRoot?' root':'')+'" title="'+FR[pc]+' · '+sc.degrees[sc.iv.indexOf((pc-key+12)%12)]+'">'+FR[pc]+'</span>':'')+'</div>';}}
+ }
+ h+='</div></div><div class="gc-scale-legend"><span><i class="root"></i> Fondamentale</span><span><i></i> Autres notes de la gamme</span></div><p class="gc-mut">'+sc.name+' · '+FR[key]+' · Notes : '+sc.iv.map(x=>FR[(key+x)%12]).join(' – ')+'</p></section></div></div>';
+ host.innerHTML=h;
+ const sel=$('#gc-scale-frets');if(sel)sel.value=host.dataset.frets||'15';
+}
+function analyzeHarmony(){
+ const host=$('#gc-analysis');if(!host)return;
+ if(prog.length<2){host.hidden=true;return}
+ const parsed=prog.map(x=>parse(x.en)).filter(Boolean);if(parsed.length<2){host.hidden=true;return}
+ const modes=[
+  {name:'Majeur',type:'maj',roots:[0,2,4,5,7,9,11],quals:['','m','m','','','m','dim']},
+  {name:'Mineur naturel',type:'min',roots:[0,2,3,5,7,8,10],quals:['m','dim','','m','m','','']}
+ ];
+ const scores=[];
+ for(let tonic=0;tonic<12;tonic++)for(const mode of modes){
+  let score=0;
+  parsed.forEach(p=>{
+   let best=0;
+   mode.roots.forEach((d,i)=>{if((tonic+d)%12===p.root){best=Math.max(best,2);const q=mode.quals[i];if((q==='m'&&p.sfx.startsWith('m')&&!p.sfx.startsWith('maj'))||(q===''&&!p.sfx.startsWith('m')&&!p.sfx.includes('dim'))||(q==='dim'&&p.sfx.includes('dim')))best+=1}});
+   score+=best;
+  });
+  scores.push({tonic,mode:mode.name,score});
+ }
+ scores.sort((a,b)=>b.score-a.score);
+ const candidates=scores.slice(0,4),best=candidates[0];
+ const romans=parsed.map(p=>{
+  const d=(p.root-best.tonic+12)%12,maj=['I','bII','II','bIII','III','IV','#IV','V','bVI','VI','bVII','VII'];
+  let r=maj[d];if(p.sfx.startsWith('m')&&!p.sfx.startsWith('maj'))r=r.toLowerCase();if(p.sfx.includes('dim'))r+='°';if(/7|9|11|13/.test(p.sfx))r+='7';
+  return r;
+ });
+ host.hidden=false;
+ const desktop=window.matchMedia('(min-width:1000px)').matches;const opened=host.dataset.open==='1'||(desktop&&host.dataset.open!=='0');if(desktop&&host.dataset.open===undefined)host.dataset.open='1';
+ host.innerHTML='<button class="gc-pgb" id="gc-analysis-toggle" type="button" aria-expanded="'+(opened?'true':'false')+'" aria-controls="gc-analysis-panel"><span>Voir l’analyse harmonique</span></button><div class="gc-pgp" id="gc-analysis-panel"'+(opened?'':' hidden')+'><p class="gc-mut">Analyse en direct de '+parsed.length+' accord(s) sur '+prog.length+' dans ta suite. Les résultats se recalculent à chaque ajout, retrait ou déplacement. Pour une cadence complète, ajoute 4 accords.</p><div class="gc-analysis-grid gc-analysis-candidates">'+candidates.map((c,i)=>'<div class="gc-analysis-card'+(i===0?' is-best':'')+'"><small>'+(i===0?'Tonalité la plus probable':'Possibilité n°'+(i+1))+'</small><b>'+FR[c.tonic]+' '+c.mode.toLowerCase()+'</b><small>Compatibilité : '+c.score+' points</small></div>').join('')+'</div><b>Lecture des degrés · '+FR[best.tonic]+' '+best.mode.toLowerCase()+'</b><div class="gc-analysis-list">'+parsed.map((p,i)=>'<span>'+p.fr+' · '+romans[i]+'</span>').join('')+'</div><p class="gc-mut">Les points sont un indice de compatibilité, pas une probabilité statistique. Les degrés sont indicatifs : accords empruntés et modulations peuvent changer l’interprétation.</p></div>';
+}
+
 function showSearch(){
  const val=$('#gc-q').value,S=STYLES[style];cur=parse(val);$('#gc-x').hidden=!val;
  $('#gc-sd').hidden=!S;if(S)$('#gc-sd').textContent=S.d+' (repère courant, pas une règle)';
  $('#gc-roots').innerHTML=FR.map((n,i)=>`<button class="gc-chip${cur&&cur.root===i?' on':''}" data-r="${i}">${n}<small>${EN[i]}</small></button>`).join('');
  const chips=$('#gc-chips'),res=$('#gc-res');
  showPg();
- if(!cur){chips.innerHTML='';res.innerHTML=val.trim()?'<p class="gc-note">Accord non reconnu. Exemples : Do, Ré7, Mi9m, A, Em, F#m7, Do/Sol.</p>':'<p class="gc-empty">Choisis une note ou tape un accord pour voir ses positions.</p>';return}
+ if(!cur){chips.innerHTML='';res.innerHTML=val.trim()?'<p class="gc-note">Accord non reconnu. Exemples : Do, Ré7, Mi9m, A, Em, F#m7, Do/Sol.</p>':'<p class="gc-empty">Choisis une note ou tape un accord pour voir ses positions.</p>';renderScaleTool();return}
  chips.innerHTML=(S?S.q:QS).map(q=>`<button class="gc-chip${q===cur.sfx?' on':''}" data-q="${q}">${cur.rf}${q?' '+q:''}</button>`).join('');
  const vs=voicings(cur),tones=cur.pcs.filter(x=>x!==cur.root),nf=x=>(cur.flat?FRb:FR)[x];
  res.innerHTML=`<div class="gc-hd"><div class="gc-nm">${cur.fr}<small>${cur.en}</small></div>${tones.length?`<select id="gc-bs" aria-label="Basse"><option value="">Basse : fondamentale</option>${tones.map(x=>`<option value="${x}"${x===cur.bass?' selected':''}>Basse : ${nf(x)}</option>`).join('')}</select>`:''}</div>`+
   segRow()+'<div id="gc-piano-view"></div>'+(CAPO?`<p class="gc-mut">Capo case ${CAPO} : les cases sont comptées à partir du capo.</p>`:'')+
   (edit>=0?`<p class="gc-note">Choisis la position qui remplacera l’accord n°${edit+1} de ta suite.</p>`:'')+
-  (vs.length?`<div class="gc-grid">${vs.map((v,i)=>`<div class="gc-v" data-i="${i}" tabindex="0" role="button" aria-label="Ajouter ${cur.fr}, position ${i+1}">${v.std?'<i title="Forme classique">★</i>':v.std2?'<i class="g2" title="Forme usuelle">★</i>':''}${svg(v,cur,TI)}<b>${v.pos?'Case '+v.pos:'Position ouverte'}</b><span>${edit>=0?'Remplacer':'Ajouter'}</span><button class="gc-pl" data-pl="${i}" aria-label="Écouter ${cur.fr}, position ${i+1}">▶</button></div>`).join('')}</div>${legend(vs.some(v=>v.std),vs.some(v=>v.std2))}`:'<p class="gc-empty">Aucune position trouvée pour cet accord dans cet accordage.</p>');
+  (vs.length?`<div class="gc-variant-tools"><span class="gc-mut">Variantes :</span><button class="gc-chip gc-vf" data-vf="all" aria-pressed="${variantFilter==='all'}">Toutes</button><button class="gc-chip gc-vf" data-vf="open" aria-pressed="${variantFilter==='open'}">Ouvertes</button><button class="gc-chip gc-vf" data-vf="barre" aria-pressed="${variantFilter==='barre'}">Barrées</button><button class="gc-chip gc-vf" data-vf="mobile" aria-pressed="${variantFilter==='mobile'}">Mobiles</button></div><div class="gc-grid">${vs.map((v,i)=>({v,i})).filter(({v})=>variantFilter==='all'||(variantFilter==='open'?v.f.includes(0):variantFilter==='barre'?!!v.barre:!v.f.includes(0)&&!v.barre)).map(({v,i})=>`<div class="gc-v" data-i="${i}" tabindex="0" role="button" aria-label="Ajouter ${cur.fr}, position ${i+1}">${v.std?'<i title="Forme classique">★</i>':v.std2?'<i class="g2" title="Forme usuelle">★</i>':''}${svg(v,cur,TI)}<b>${v.pos?'Case '+v.pos:'Position ouverte'}</b><span>${v.barre?'Barré':v.f.includes(0)?'Avec cordes à vide':'Position mobile'} · ${edit>=0?'Remplacer':'Ajouter'}</span><button class="gc-pl" data-pl="${i}" aria-label="Écouter ${cur.fr}, position ${i+1}">▶</button></div>`).join('')}</div>${legend(vs.some(v=>v.std),vs.some(v=>v.std2))}`:'<p class="gc-empty">Aucune position trouvée pour cet accord dans cet accordage.</p>');
  renderPiano(cur);
 }
 
@@ -714,6 +850,7 @@ function showProg(){
  $('#gc-ci').textContent=CAPO?'Capo case '+CAPO:'';
  $('#gc-prog').innerHTML=prog.length?prog.map((c,i)=>`<div class="gc-v${i===edit?' ed':''}" data-e="${i}" tabindex="0" role="button" aria-label="Accord ${i+1} : modifier ${c.fr}"><em class="gc-n" aria-hidden="true">${i+1}</em>${svg(c,parse(c.en),c.t||0)}<b>${c.fr}</b><span>${c.en}${c.t?' ('+TUN[c.t].k+')':''}</span>${c.approx?'<small class="gc-mut">Position simplifiée</small>':''}<button class="gc-rm" data-d="${i}" aria-label="Retirer ${c.fr}">×</button><div class="gc-mv"><button data-m="-1"${i===0?' disabled':''} aria-label="Déplacer ${c.fr} vers la gauche">‹</button><button data-c aria-label="Dupliquer ${c.fr}">⧉</button><button data-m="1"${i===prog.length-1?' disabled':''} aria-label="Déplacer ${c.fr} vers la droite">›</button></div></div>`).join(''):'<p class="gc-empty">Ajoute des accords depuis les résultats ou les progressions : ils s’afficheront ici, dans l’ordre.</p>';
  showBar();
+ analyzeHarmony();
 }
 function showBar(){
  TN.textContent=prog.length;TN.hidden=!prog.length;
@@ -836,7 +973,7 @@ function renderPiano(p){
  html+='</div></div><div class="gc-piano-legend"><span><i class="gc-piano-dot"></i> Notes de l’accord</span><span><i class="gc-piano-dot root"></i> Fondamentale</span>'+(p.bass!==null?'<span><i class="gc-piano-dot bass"></i> Basse de l’accord</span>':'')+'</div>'+(PIANO_MODE==='arp'?'<small class="gc-mut">Les numéros indiquent l’ordre ascendant des notes de l’arpège.</small>':'')+'</div></div>';
  host.innerHTML=html;
 }
-root.addEventListener('click',e=>{const toggle=e.target.closest('[data-piano-toggle]');if(toggle){PIANO_OPEN=!PIANO_OPEN;toggle.setAttribute('aria-expanded',String(PIANO_OPEN));const panel=$('#gc-piano-panel');if(panel)panel.hidden=!PIANO_OPEN;return}const b=e.target.closest('[data-piano]');if(b)setPianoMode(b.dataset.piano)});
+root.addEventListener('click',e=>{const vf=e.target.closest('[data-vf]');if(vf){variantFilter=vf.dataset.vf;showSearch();return}const toggle=e.target.closest('[data-piano-toggle]');if(toggle){PIANO_OPEN=!PIANO_OPEN;toggle.setAttribute('aria-expanded',String(PIANO_OPEN));const panel=$('#gc-piano-panel');if(panel)panel.hidden=!PIANO_OPEN;return}const b=e.target.closest('[data-piano]');if(b)setPianoMode(b.dataset.piano)});
 
 const segHTML=()=>`<span class="gc-seg" role="group" aria-label="Mode de lecture"><button data-pm="chord" aria-pressed="${MODE==='chord'}">Accord</button><button data-pm="arp" aria-pressed="${MODE==='arp'}">Arpège</button></span>`;
 const segRow=()=>`<div class="gc-tb"><span class="gc-mut">Écoute guitare :</span>${segHTML()}</div>`;
@@ -988,6 +1125,19 @@ $('#gc-im').onclick=()=>{
  }catch(err){flash('Import impossible : le texte n’est pas un export valide.')}
 };
 $('#gc-st').onchange=e=>{style=e.target.value;showSearch()};
+ root.addEventListener('click',e=>{
+  const scaleBtn=e.target.closest('#gc-scale-toggle');
+  if(scaleBtn){const host=$('#gc-scale-tool'),panel=$('#gc-scale-panel'),open=panel.hidden;panel.hidden=!open;host.dataset.open=open?'1':'0';scaleBtn.setAttribute('aria-expanded',String(open));return}
+  const analysisBtn=e.target.closest('#gc-analysis-toggle');
+  if(analysisBtn){const host=$('#gc-analysis'),panel=$('#gc-analysis-panel'),open=panel.hidden;panel.hidden=!open;host.dataset.open=open?'1':'0';analysisBtn.setAttribute('aria-expanded',String(open));}
+ });
+ root.addEventListener('change',e=>{
+  const host=$('#gc-scale-tool');if(!host)return;
+  if(e.target.id==='gc-scale-root'){host.dataset.root=e.target.value;renderScaleTool()}
+  if(e.target.id==='gc-scale-kind'){host.dataset.kind=e.target.value;renderScaleTool()}
+  if(e.target.id==='gc-scale-frets'){host.dataset.frets=e.target.value;renderScaleTool()}
+  if(e.target.id==='gc-scale-orientation'){host.dataset.orientation=e.target.value;renderScaleTool()}
+ });
 $('#gc-tu').onchange=e=>{TI=+e.target.value;setOpen();showSearch()};
 $('#gc-cp').onchange=e=>{CAPO=+e.target.value;setOpen();revoice(it=>it.en,CAPO?'Suite recalculée pour un capo case '+CAPO+'.':'Suite recalculée sans capo.')};
 $('#gc-tn').onchange=showPg;
