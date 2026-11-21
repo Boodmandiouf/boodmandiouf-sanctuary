@@ -816,6 +816,7 @@ body.light-mode .dev-tab-btn.active {
     color: #fff;
     border-color: var(--accent-red);
 }
+
 /* ==========================================================================
    11. ZONE DE CONTACT & MODALE DE SECURITE
    ========================================================================== */
@@ -1145,6 +1146,38 @@ footer span { color: var(--accent-red); font-weight: 700; }
 }
 .cyber-tool-btn .btn-arrow { transition: transform 0.3s ease; }
 .cyber-tool-btn:hover .btn-arrow { transform: translateX(4px); }
+.cyber-tool-converter-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 15px;
+    background: rgba(223, 22, 43, 0.05);
+    border: 1px solid #ff2a85;
+    color: #ffffff !important;
+    font-family: var(--font-cyber);
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 3px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    /*background: linear-gradient(#14151f, #14151f) padding-box, linear-gradient(90deg, #7c6cff 0%, #b44cff 50%, #ec4899 100%) border-box;*/
+    
+}
+
+.cyber-tool-converter-btn:hover {
+    background: #df162b;
+    color: #ffffff !important;
+    border-color: #df162b;
+    box-shadow: 0 0 12px rgba(223, 22, 43, 0.4);
+}
+
+.cyber-tool-converter-btn .btn-arrow { transition: transform 0.3s ease; }
+.cyber-tool-converter-btn:hover .btn-arrow { transform: translateX(4px); }
 
 .standby-card { opacity: 0.5; border-style: dashed !important; background: rgba(15, 15, 20, 0.4) !important; }
 .standby-card .cyber-tool-icon { background: transparent; border-style: dashed; color: #555; }
@@ -1284,6 +1317,8 @@ body.light-mode .cyber-sub-card-title { color: #df162b; }
 body.light-mode .stack-classification { border-top-color: rgba(0, 0, 0, 0.06); }
 body.light-mode .cyber-tool-btn { background: rgba(223, 22, 43, 0.03); border: 1px solid rgba(223, 22, 43, 0.3); color: #df162b !important; }
 body.light-mode .cyber-tool-btn:hover { background: #df162b; color: #ffffff !important; border-color: #df162b; }
+body.light-mode .cyber-tool-converter-btn { background: rgba(223, 22, 43, 0.03); border: 1px solid rgba(223, 22, 43, 0.3); color: #df162b !important; }
+body.light-mode .cyber-tool-converter-btn:hover { background: #df162b; color: #ffffff !important; border-color: #df162b; }
 
 body.light-mode .standby-card { background: rgba(0, 0, 0, 0.02) !important; border: 1px dashed rgba(0, 0, 0, 0.2) !important; opacity: 0.7; }
 body.light-mode .standby-card .cyber-tool-title { color: #777777 !important; }
