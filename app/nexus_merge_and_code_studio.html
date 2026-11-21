@@ -34,10 +34,34 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js">
   </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/php/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/xml-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchtags.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/foldgutter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/brace-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/comment-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/fold/indent-fold.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/selection/active-line.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/xml-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/css-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/javascript-hint.min.js"></script>
   <style>
     .CodeMirror{height:100%;min-height:500px;border-radius:.75rem;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6}
     .code-editor-shell{height:500px;min-width:0;width:100%}
     .code-search-hit{background:rgba(255,184,0,.28)}
+    .CodeMirror-matchingtag{background:rgba(0,243,255,.18)}
+    .CodeMirror-foldgutter{width:.9em}
+    .CodeMirror-hints{z-index:20000!important;font-family:'JetBrains Mono',monospace;font-size:12px}
     body.code-editor-fullscreen-active{overflow:hidden!important}
     #smartToolbar.code-toolbar-fullscreen{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100vw!important;max-width:none!important;z-index:10001!important;margin:0!important;border-radius:0!important;box-sizing:border-box!important;box-shadow:0 8px 28px rgba(0,0,0,.22)}
     #workspaceContainer.code-workspace-fullscreen{position:fixed!important;top:var(--code-toolbar-height,80px)!important;left:0!important;right:0!important;bottom:0!important;width:100vw!important;height:auto!important;max-width:none!important;max-height:none!important;min-height:0!important;z-index:10000!important;overflow:auto!important;margin:0!important;padding:16px!important;box-sizing:border-box!important;background:var(--bg-main,#f4f6fb)}
@@ -166,6 +190,54 @@
             animation: pulseGlow 3s infinite;
         }
   </style>
+
+<style id="nexus-ux">
+/* ---- Cases à cocher (dégradé bleu→violet, coche blanche animée) ---- */
+input[type=checkbox]:not(.sr-only):not(.peer){-webkit-appearance:none;appearance:none;position:relative;display:inline-block;width:20px;height:20px;border-radius:6px;border:1.5px solid rgba(148,163,184,.6);background:rgba(148,163,184,.12);cursor:pointer;flex-shrink:0;vertical-align:middle;margin:0;transition:border-color .2s,box-shadow .25s,transform .15s,background-color .2s}
+input[type=checkbox]:not(.sr-only):not(.peer)::before{content:"";position:absolute;inset:-1px;border-radius:inherit;background:linear-gradient(135deg,#4f8bff 0%,#8b5cf6 100%);opacity:0;transform:scale(.4);transition:opacity .2s,transform .3s cubic-bezier(.34,1.56,.64,1)}
+input[type=checkbox]:not(.sr-only):not(.peer)::after{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/0 0 no-repeat;transition:background-size .28s cubic-bezier(.34,1.56,.64,1) .05s}
+input[type=checkbox]:not(.sr-only):not(.peer):hover{border-color:#8b5cf6;box-shadow:0 0 0 4px rgba(139,92,246,.18)}
+input[type=checkbox]:not(.sr-only):not(.peer):active{transform:scale(.88)}
+input[type=checkbox]:not(.sr-only):not(.peer):checked{border-color:transparent;box-shadow:0 4px 14px rgba(99,102,241,.5),inset 0 0 0 1px rgba(255,255,255,.28)}
+input[type=checkbox]:not(.sr-only):not(.peer):checked::before{opacity:1;transform:scale(1)}
+input[type=checkbox]:not(.sr-only):not(.peer):checked::after{background-size:72% 72%}
+input[type=checkbox]:not(.sr-only):not(.peer):disabled{opacity:.45;cursor:not-allowed}
+/* ---- Menu des modes : segment avec pastille qui glisse ---- */
+.nexus-tabs{position:relative;display:inline-flex;gap:2px;padding:4px;border-radius:14px;backdrop-filter:blur(8px)}
+.nexus-tabs .mode-tab{position:relative;z-index:1;padding:8px 14px!important;border-radius:10px!important;background:transparent!important;box-shadow:none!important;transform:none!important}
+.nexus-tabs .mode-tab>span:first-child{display:inline-block;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.nexus-tabs .mode-tab:hover>span:first-child,.nexus-tabs .mode-tab.is-active>span:first-child{transform:scale(1.22) rotate(-6deg)}
+.nexus-tabs .mode-tab:not(.is-active):hover{color:#06b6d4}
+.nexus-pill{position:absolute;top:4px;bottom:4px;left:0;border-radius:10px;background:#fff;border:1px solid rgba(6,182,212,.4);box-shadow:0 6px 18px -6px rgba(6,182,212,.45);transition:transform .38s cubic-bezier(.4,0,.2,1),width .38s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.dark .nexus-pill{background:linear-gradient(135deg,rgba(0,243,255,.16),rgba(188,19,254,.2));border-color:rgba(0,243,255,.45);box-shadow:0 6px 20px -6px rgba(0,243,255,.4)}
+/* ---- Boutons, champs, header ---- */
+button,select,summary{transition:transform .15s ease,box-shadow .2s ease,background-color .2s,border-color .2s,color .2s,filter .2s}
+button:not(:disabled):not(.mode-tab):hover{transform:translateY(-1px);box-shadow:0 8px 20px -10px rgba(0,243,255,.55)}
+button:not(:disabled):not(.mode-tab):active{transform:translateY(0) scale(.97);box-shadow:none}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid rgba(139,92,246,.75);outline-offset:2px}
+select,input[type=text],input[type=search],input[type=number],textarea{transition:border-color .2s,box-shadow .2s}
+select:focus,input[type=text]:focus,input[type=search]:focus,input[type=number]:focus{box-shadow:0 0 0 3px rgba(0,243,255,.16)}
+header{transition:box-shadow .3s ease,background-color .3s}
+header.is-scrolled{box-shadow:0 10px 30px -18px rgba(0,0,0,.45)}
+*::-webkit-scrollbar{width:10px;height:10px}*::-webkit-scrollbar-thumb{background:rgba(148,163,184,.4);border-radius:10px;border:2px solid transparent;background-clip:content-box}*::-webkit-scrollbar-thumb:hover{background:rgba(139,92,246,.6);background-clip:content-box}
+@keyframes nxIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fx-in{animation:nxIn .28s ease backwards}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* ---- Barre d'outils : collante, regroupée, champs en pastilles ---- */
+#smartToolbar{position:sticky;top:var(--nx-hd,64px);z-index:30;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(248,250,252,.85)!important;border-radius:16px!important;padding:.6rem .75rem!important;gap:.5rem!important;transition:box-shadow .25s,border-color .25s}
+.dark #smartToolbar{background:rgba(21,25,43,.85)!important}
+#smartToolbar.is-stuck{box-shadow:0 14px 34px -18px rgba(0,0,0,.55);border-color:rgba(139,92,246,.4)!important}
+#smartToolbar label{display:inline-flex;align-items:center;gap:.45rem;padding:.3rem .65rem;border-radius:10px;border:1px solid rgba(148,163,184,.3);background:rgba(148,163,184,.1);font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;transition:border-color .2s,background-color .2s,box-shadow .2s}
+#smartToolbar label:hover{border-color:rgba(6,182,212,.55);background:rgba(6,182,212,.08)}
+#smartToolbar label:has(select){cursor:default}
+#smartToolbar label select{border:0!important;box-shadow:none;padding:.1rem .2rem!important;font-weight:700;cursor:pointer;border-radius:6px!important}
+#smartToolbar label:has(input[type=checkbox]:checked){border-color:rgba(139,92,246,.55);background:linear-gradient(135deg,rgba(79,139,255,.14),rgba(139,92,246,.18))}
+#smartToolbar input[type=text],#smartToolbar input:not([type]),#smartToolbar input[type=search]{border-radius:10px!important;min-width:150px}
+#smartToolbar button{border-radius:10px!important;font-weight:600}
+option{background:#fff;color:#0f172a}.dark option{background:#15192b;color:#e2e8f0}
+</style>
 </head>
 <body class="cyber-grid-bg min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
   <!-- NOTIFICATION TOAST (Remplace alert()) -->
@@ -495,8 +567,7 @@ Côte à côte (A | B)
       </button>
     </div>
     <input type="text" id="pasteFileName" placeholder="Nom du fichier (facultatif : le type et l'onglet sont détectés automatiquement)" class="w-full px-3 py-2 rounded-xl text-xs font-mono bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946] text-slate-800 dark:text-white focus:outline-none focus:border-cyan-500">
-    <textarea id="pasteTextarea" rows="10" placeholder="Collez ici le contenu de vos favoris (HTML ou JSON), votre code source ou votre texte..." class="w-full p-3 rounded-xl text-xs font-mono bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946] text-slate-800 dark:text-white focus:outline-none focus:border-cyan-500">
-    </textarea>
+    <textarea id="pasteTextarea" rows="10" placeholder="Collez ici le contenu de vos favoris (HTML ou JSON), votre code source ou votre texte..." class="w-full p-3 rounded-xl text-xs font-mono bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946] text-slate-800 dark:text-white focus:outline-none focus:border-cyan-500"></textarea>
     <div class="flex justify-end gap-2">
       <button onclick="closePasteModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-[#15192b] text-slate-600 dark:text-slate-300">
         Annuler
@@ -922,13 +993,20 @@ ${escapeHtml(message)}
             const src = side === 'A' ? state.sourceA : state.sourceB;
             src.name = rootFolderName;
             src.files = fileMap;
+            src.rawText = '';
             src.bookmarks = [];
 
             const extractedBookmarks = [];
             const bookmarkExtRegex = /\.(html?|json|csv|txt|md|url|webloc)$/i;
 
             for (const [relPath, entry] of Object.entries(fileMap)) {
-                if (!bookmarkExtRegex.test(entry.name) || entry.size > 15 * 1024 * 1024) continue;
+                if (!bookmarkExtRegex.test(entry.name)) {
+                    if (CODE_TEXT_EXT_REGEX.test(entry.name) && entry.size <= 5 * 1024 * 1024) {
+                        try { entry.textContent = await entry.fileObj.text(); } catch (e) { /* illisible */ }
+                    }
+                    continue;
+                }
+                if (entry.size > 15 * 1024 * 1024) continue;
                 try {
                     const text = await entry.fileObj.text();
                     entry.textContent = text;
@@ -988,11 +1066,13 @@ ${escapeHtml(message)}
         }
 
         function ingestTextSource(side, fileName, text, opts = {}) {
+            text = String(text == null ? '' : text).replace(/^\uFEFF/, '');
             const src = side === 'A' ? state.sourceA : state.sourceB;
             const autoName = !!opts.autoName;
             // Nom provisoire utilisé uniquement pour tester le format favoris (comportement d'origine).
             const probeName = fileName || (side === 'A' ? 'favoris_a.html' : 'favoris_b.html');
             src.rawText = text;
+            src.files = {}; // le contenu collé/importé remplace l'ancien dossier
             src.bookmarks = [];
 
             const parsedBookmarks = parseAnyBookmarksFormat(text, probeName, side, '');
@@ -1347,8 +1427,7 @@ ${lines.length} lignes
 </span>
 </div>
 <pre class="text-[11px] leading-relaxed text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-all">
-  ${escapeHtml(lines.slice(0, 80).join('\n'))}${lines.length > 80 ? '\n... (aperçu tronqué)' : ''}
-</pre>
+${escapeHtml(lines.slice(0, 80).join('\n'))}${lines.length > 80 ? '\n... (aperçu tronqué)' : ''}</pre>
 `;
             }
         }
@@ -1368,7 +1447,9 @@ ${lines.length} lignes
         function renderGlobalHistoryControls() {
             const toolbar = document.getElementById('smartToolbar');
             if (!toolbar) return;
-            toolbar.querySelector('[data-global-history-row]')?.remove();
+            const oldRow = toolbar.querySelector('[data-global-history-row]');
+            let searchRow = oldRow ? oldRow.querySelector('[data-search-row]') : null;
+            if (oldRow) oldRow.remove();
             const controls = document.createElement('div');
             controls.dataset.globalHistoryRow = 'true';
             controls.className = 'flex flex-wrap items-center gap-2 w-full mt-2 pt-2 border-t border-slate-200/80 dark:border-[#232946]';
@@ -1386,6 +1467,10 @@ Aperçu formaté
   ↷ Redo
 </button>
 `;
+            if (state.mode === 'code') {
+                if (!searchRow) { const fi = toolbar.querySelector('#codeFindInput'); searchRow = fi ? fi.parentElement : null; }
+                if (searchRow) { searchRow.dataset.searchRow = '1'; searchRow.classList.remove('mt-2'); searchRow.classList.add('mr-auto'); controls.insertBefore(searchRow, controls.firstChild); }
+            }
             toolbar.appendChild(controls);
         }
 
@@ -2189,8 +2274,7 @@ Doublon
                         </span>
                       </div>
                       <textarea id="mergedTextEditor" oninput="state.diffMerge.manualOverride = this.value; updateDiffMergedCount();" class="w-full h-[500px] p-3.5 rounded-xl font-mono text-xs leading-relaxed bg-slate-900 text-emerald-300 border border-slate-700 dark:border-[#232946] focus:outline-none focus:border-cyan-500">
-                        ${escapeHtml(mergedText)}
-                      </textarea>
+${escapeHtml(mergedText)}</textarea>
                     </div>
                   </div>
                   `;
@@ -2257,7 +2341,7 @@ Doublon
         // MODE CODE : BEAUTIFIER / FORMATTEUR MULTI-LANGAGES
         // ----------------------------------------------------------------------------
         const CODE_LANGUAGES = {
-            html: ['HTML','html','htm','xhtml'], css: ['CSS','css'], js: ['JavaScript','js','mjs','cjs','jsx','ts','tsx'],
+            html: ['HTML (+CSS +JS)','html','htm','xhtml','svg','xml'], css: ['CSS','css'], js: ['JavaScript','js','mjs','cjs','jsx','ts','tsx','json'],
             python: ['Python','py','pyw'], md: ['Markdown','md','markdown'], php: ['PHP','php','phtml'],
             c: ['C','c','h'], cpp: ['C++','cpp','cc','cxx','hpp','hh','hxx']
         };
@@ -2276,7 +2360,8 @@ Doublon
             if(/#include\s*[<"]|\bstd::|\bint\s+main\s*\(/.test(t)) return 'cpp';
             return 'js';
         }
-        const CODE_FILE_EXTS = new Set(['html','htm','xhtml','css','js','mjs','cjs','jsx','ts','tsx','py','pyw','md','markdown','php','phtml','c','h','cpp','cc','cxx','hpp','hh','hxx','json']);
+        const CODE_TEXT_EXT_REGEX = /\.(css|scss|js|mjs|cjs|jsx|ts|tsx|py|pyw|php|phtml|c|h|cpp|cc|cxx|hpp|hh|hxx|xml|svg|yml|yaml)$/i;
+        const CODE_FILE_EXTS = new Set(['svg','xml','html','htm','xhtml','css','js','mjs','cjs','jsx','ts','tsx','py','pyw','md','markdown','php','phtml','c','h','cpp','cc','cxx','hpp','hh','hxx','json']);
         const CODE_EXT_BY_LANG = {html:'html',css:'css',js:'js',python:'py',md:'md',php:'php',c:'c',cpp:'cpp'};
         // Décide si un contenu (hors favoris, déjà testés avant) est du code : extension connue, sinon indices dans le texte.
         function looksLikeCode(fileName, text) {
@@ -2301,8 +2386,33 @@ Doublon
             }
             return false;
         }
-        function getCodeInput(side){ const src=side==='A'?state.sourceA:state.sourceB; if(src.rawText) return src.rawText; const f=Object.values(src.files||{}).find(x=>
-                  typeof x.textContent==='string'); return f?f.textContent:''; }
+        function getCodeFiles(side){
+            const src=side==='A'?state.sourceA:state.sourceB,files=src.files||{};
+            const rank=p=>/(^|\/)index\.html?$/i.test(p)?-1:/\.(x?html?|svg|xml)$/i.test(p)?0:/\.css$/i.test(p)?1:/\.(m?js|cjs|jsx|tsx?)$/i.test(p)?2:3;
+            return Object.keys(files).filter(p=>{const e=(p.match(/\.([A-Za-z0-9]+)$/)||[])[1];return e&&CODE_FILE_EXTS.has(e.toLowerCase())&&typeof files[p].textContent==='string';}).sort((x,y)=>rank(x)-rank(y)||x.localeCompare(y));
+        }
+        function getActiveCodeFile(side){
+            const list=getCodeFiles(side);if(!list.length)return '';
+            const key=side==='A'?'activeFileA':'activeFileB';
+            if(!list.includes(state.codeMerge[key]))state.codeMerge[key]=list[0];
+            return state.codeMerge[key];
+        }
+        function getCodeName(side){const src=side==='A'?state.sourceA:state.sourceB;return getActiveCodeFile(side)||src.name||'';}
+        function getCodeInput(side){
+            const src=side==='A'?state.sourceA:state.sourceB;
+            const af=getActiveCodeFile(side);if(af)return src.files[af].textContent;
+            if(src.rawText)return src.rawText;
+            const f=Object.values(src.files||{}).find(x=>typeof x.textContent==='string');return f?f.textContent:'';
+        }
+        function setCodeInput(side,text){
+            const src=side==='A'?state.sourceA:state.sourceB;
+            const af=getActiveCodeFile(side);if(af)src.files[af].textContent=text;else src.rawText=text;
+        }
+        function selectCodeFile(side,path){
+            state.codeMerge[side==='A'?'activeFileA':'activeFileB']=path;
+            if(side==='A')state.codeMerge.outputA='';else state.codeMerge.outputB='';
+            renderCodeWorkspace();
+        }
         function indentSizeOf(o,def){const v=o&&o.indentSize;const n=Number(v);return(v!==undefined&&v!==null&&Number.isFinite(n)&&n>=0)?n:def;}
         function cmIndentOpts(){const n=indentSizeOf(state.codeMerge,2);const none=n===0;return{indentUnit:none?1:n,tabSize:none?1:n,indentWithTabs:!none&&!!state.codeMerge.useTabs,smartIndent:!none};}
         function makeIndent(level,size,useTabs){ if(!size) return ''; return useTabs?'\t'.repeat(Math.max(0,level)):' '.repeat(Math.max(0,level)*size); }
@@ -2319,63 +2429,118 @@ Doublon
         function formatBracedCode(text,o={}){
             const size=indentSizeOf(o,2),tabs=!!o.useTabs,style=o.style||'standard',src=String(text||'').replace(/\r\n?/g,'\n').trim(); if(!src)return '';
             if(style==='oneLine'||style==='minified')return collapseWhitespacePreserveLiterals(src);
-            let out=[],line='',level=0,quote=null,escaped=false,lineComment=false,blockComment=false;
-            const emit=()=>
-                    {const c=line.trim();if(c)out.push(makeIndent(level,size,tabs)+c);line='';};
+            let out=[],line='',level=0,quote=null,escaped=false,lineComment=false,blockComment=false,pd=0,pstack=[],bl=-1,att=false;
+            const ind=()=>makeIndent(level,size,tabs);
+            const pushLine=c=>{if(bl>=0&&bl===out.length-1&&/^(else|catch|finally)\b/.test(c))out[bl]+=' '+c;else out.push(ind()+c);};
+            const emit=()=>{const c=line.trim();if(c)pushLine(c);line='';};
             for(let i=0;i<src.length;i++){const ch=src[i],nx=src[i+1];
                 if(lineComment){line+=ch;if(ch==='\n'){lineComment=false;emit();}continue;} if(blockComment){line+=ch;if(ch==='*'&&nx==='/'){line+='/';i++;blockComment=false;}continue;}
                 if(quote){line+=ch;if(escaped)escaped=false;else if(ch==='\\')escaped=true;else if(ch===quote)quote=null;continue;}
-                if(ch==='"'||ch==="'"||ch==='`'){quote=ch;line+=ch;continue;} if(ch==='/'&&nx==='/'){line+='//';i++;lineComment=true;continue;} if(ch==='/'&&nx==='*'){line+='/*';i++;blockComment=true;continue;}
-                if(ch==='{'){if(line.trim())out.push(makeIndent(level,size,tabs)+line.trim()+' {');else out.push(makeIndent(level,size,tabs)+'{');line='';level++;}
-                else if(ch==='}'){if(line.trim())emit();level=Math.max(0,level-1);out.push(makeIndent(level,size,tabs)+'}');}
-                else if(ch===';'){if(line.trim()){out.push(makeIndent(level,size,tabs)+line.trim()+';');line='';}}
-                else if(ch==='\n'){if(line.trim())emit();} else line+=ch;
+                if(att){
+                    if(/[ \t]/.test(ch))continue;
+                    if(ch===')'||ch===']'||ch===';'||ch===','||(ch==='('&&/\)$/.test(out[out.length-1]||''))){
+                        out[out.length-1]+=ch; if(ch==='(')pd++; else if(ch===')')pd=Math.max(0,pd-1);
+                        if(ch===';'||ch===',')att=false; continue;
+                    }
+                    att=false;
+                }
+                if(ch==='"'||ch==="'"||ch==='`'){quote=ch;line+=ch;continue;}
+                if(ch==='/'&&nx==='/'){line+='//';i++;lineComment=true;continue;} if(ch==='/'&&nx==='*'){line+='/*';i++;blockComment=true;continue;}
+                if(ch==='{'){const c=line.trim();pushLine(c?c+' {':'{');line='';pstack.push(pd);pd=0;level++;}
+                else if(ch==='}'){if(line.trim())emit();level=Math.max(0,level-1);pd=pstack.length?pstack.pop():0;out.push(ind()+'}');bl=out.length-1;att=true;}
+                else if(ch===';'){if(pd>0)line+=ch;else{const c=line.trim();if(c)pushLine(c+';');line='';}}
+                else if(ch==='('){pd++;line+=ch;}
+                else if(ch===')'){pd=Math.max(0,pd-1);line+=ch;}
+                else if(ch==='\n'){if(line.trim())emit();bl=-1;att=false;} else line+=ch;
             } if(line.trim())emit();
-            let r=out.join('\n').replace(/[ \t]+\n/g,'').replace(/\n{3,}/g,'\n\n');
-            if(style==='compact')r=r.split('\n').map(x=>
-                      x.trimEnd()).filter((x,i,a)=>x.trim()||(a[i-1]&&a[i-1].trim())).join('\n');
+            let r=out.join('\n').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n');
+            if(style==='compact')r=r.split('\n').map(x=>x.trimEnd()).filter((x,i,a)=>x.trim()||(a[i-1]&&a[i-1].trim())).join('\n');
             return r.trim();
         }
-      
 function formatHtmlCode(text, o = {}) {
-    if (o.style === 'oneLine' || o.style === 'minified') {
-        return collapseWhitespacePreserveLiterals(text).replace(/>\s+</g, '><');
-    }
-
-    const size = indentSizeOf(o, 2);
-    const tabs = !!o.useTabs;
-    const source = String(text || '').replace(/>\s+</g, '><');
-    const tokens = source.split(/(<[^>]+>)/g).filter(function (item) {
-    return item.trim() !== '';
-    });
-
-    let level = 0;
-    let out = [];
-
-    const inline = new Set(['a', 'span', 'strong', 'em', 'b', 'i', 'small', 'label', 'code', 'title', 'option']);
-    const voidTags = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
-
-    for (const token of tokens) {
-        const t = token.trim();
-        if (!t) continue;
-
-        if (/^<\//.test(t)) {
-            level = Math.max(0, level - 1);
-        }
-
-        out.push(makeIndent(level, size, tabs) + t);
-
-        if (/^<[A-Za-z]/.test(t) && !/\/>$/.test(t)) {
-            const name = (t.match(/^<\s*([^\s/>]+)/) || [])[1]?.toLowerCase() || '';
-
-            if (!inline.has(name) && !voidTags.has(name)) {
-                level++;
+            const raw = String(text || '').replace(/\r\n?/g, '\n').replace(/^\uFEFF/, '');
+            const size = indentSizeOf(o, 2), tabs = !!o.useTabs;
+            const mini = (o.style === 'oneLine' || o.style === 'minified');
+            const inlineTags = new Set(['a','abbr','b','bdi','bdo','br','button','cite','code','data','dfn','em','font','i','img','input','kbd','label','mark','q','s','samp','small','span','strong','sub','sup','time','u','var','wbr']);
+            const voidTags = new Set(['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']);
+            const optEnd = {li:['li'],p:['p'],option:['option'],dt:['dt','dd'],dd:['dt','dd'],tr:['tr'],td:['td','th'],th:['td','th'],thead:['tbody'],tbody:['thead','tbody']};
+            const tokRe = /<\!--[\s\S]*?-->|<![a-zA-Z][^>]*>|<(script|style|pre|textarea)\b(?:"[^"]*"|'[^']*'|[^>"'])*>[\s\S]*?<\/\1\s*>|<\/?[a-zA-Z][\w:.-]*(?:"[^"]*"|'[^']*'|[^>"'])*>|[^<]+|</gi;
+            const toks = []; let m;
+            while ((m = tokRe.exec(raw)) !== null) {
+                const t = m[0];
+                if (t.startsWith('<\x21--')) toks.push({ t: 'comment', s: t });
+                else if (/^<![a-zA-Z]/.test(t)) toks.push({ t: 'doctype', s: t });
+                else if (m[1]) toks.push({ t: 'raw', s: t, name: m[1].toLowerCase() });
+                else if (/^<\/?[a-zA-Z]/.test(t)) {
+                    const closing = t[1] === '/';
+                    const name = t.match(/^<\/?([a-zA-Z][\w:.-]*)/)[1].toLowerCase();
+                    const selfc = /\/>$/.test(t) || voidTags.has(name);
+                    toks.push({ t: closing ? 'close' : (selfc ? 'void' : 'open'), s: t, name });
+                } else toks.push({ t: 'text', s: t });
             }
+            const splitRaw = t => {
+                const om = /^<[a-zA-Z]+(?:"[^"]*"|'[^']*'|[^>"'])*>/.exec(t.s);
+                const open = om[0], ci = t.s.toLowerCase().lastIndexOf('</' + t.name);
+                return { open, inner: t.s.slice(open.length, ci), close: t.s.slice(ci) };
+            };
+            if (mini) {
+                let r = '';
+                for (const t of toks) {
+                    if (t.t === 'text') r += t.s.trim() ? t.s.replace(/\s+/g, ' ') : (t.s.includes('\n') ? '' : ' ');
+                    else if (t.t === 'raw' && (t.name === 'script' || t.name === 'style')) { const p = splitRaw(t); r += p.open + collapseWhitespacePreserveLiterals(p.inner) + p.close; }
+                    else r += t.s;
+                }
+                return r.trim();
+            }
+            const dedent = inner => {
+                const ls = inner.replace(/\t/g, '  ').split('\n');
+                while (ls.length && !ls[0].trim()) ls.shift();
+                while (ls.length && !ls[ls.length - 1].trim()) ls.pop();
+                const min = ls.filter(x => x.trim()).reduce((a, x) => Math.min(a, x.match(/^ */)[0].length), 1e9);
+                return ls.map(x => x.slice(min === 1e9 ? 0 : min).trimEnd());
+            };
+            const out = [], stack = []; let line = '';
+            const flush = () => { const c = line.trim(); if (c) out.push({ l: stack.length, s: c, k: 'inline' }); line = ''; };
+            for (const t of toks) {
+                if (t.t === 'text') { t.s.split('\n').forEach((pc, i) => { if (i > 0) flush(); line += pc.replace(/[ \t]+/g, ' '); }); continue; }
+                if (t.t === 'comment' || t.t === 'doctype') { flush(); out.push({ l: stack.length, s: t.s.trim(), k: 'other' }); continue; }
+                if (t.t === 'raw') {
+                    flush(); const L = stack.length;
+                    if (t.name === 'pre' || t.name === 'textarea') { out.push({ l: L, s: t.s, k: 'other' }); continue; }
+                    const p = splitRaw(t);
+                    const type = ((p.open.match(/\btype\s*=\s*["']?([^"'\s>]+)/i) || [])[1] || '').toLowerCase();
+                    if (!p.inner.trim()) { out.push({ l: L, s: p.open + p.close, k: 'other' }); continue; }
+                    const isCode = t.name === 'style' || !type || /javascript|ecmascript|module|babel|jsx|typescript/.test(type);
+                    const lines = isCode ? formatBracedCode(p.inner, o).split('\n') : dedent(p.inner);
+                    out.push({ l: L, s: p.open, k: 'other' });
+                    lines.forEach(x => out.push({ l: L + 1, s: x, k: 'code' }));
+                    out.push({ l: L, s: p.close, k: 'other' });
+                    continue;
+                }
+                if (inlineTags.has(t.name)) { line += t.s; continue; }
+                if (t.t === 'open') {
+                    flush();
+                    const top = stack[stack.length - 1];
+                    if (optEnd[t.name] && optEnd[t.name].includes(top)) stack.pop();
+                    out.push({ l: stack.length, s: t.s, k: 'open', name: t.name }); stack.push(t.name);
+                } else if (t.t === 'close') {
+                    flush();
+                    const i = stack.lastIndexOf(t.name); if (i >= 0) stack.length = i;
+                    out.push({ l: stack.length, s: t.s, k: 'close', name: t.name });
+                } else { flush(); out.push({ l: stack.length, s: t.s, k: 'other' }); }
+            }
+            flush();
+            const res = [];
+            for (let i = 0; i < out.length; i++) {
+                const a = out[i], b = out[i + 1], c = out[i + 2];
+                if (a.k === 'open') {
+                    if (b && b.k === 'close' && b.name === a.name && b.l === a.l) { res.push({ ...a, s: a.s + b.s, k: 'merged' }); i += 1; continue; }
+                    if (b && b.k === 'inline' && c && c.k === 'close' && c.name === a.name && c.l === a.l && (a.s.length + b.s.length + c.s.length) <= 120) { res.push({ ...a, s: a.s + b.s + c.s, k: 'merged' }); i += 2; continue; }
+                }
+                res.push(a);
+            }
+            return res.map(x => x.s.trim() === '' ? '' : makeIndent(x.l, size, tabs) + x.s).join('\n').replace(/\n{3,}/g, '\n\n').trim();
         }
-    }
-
-    return out.join('\n').trim();
-}
 
         function formatPythonCode(text,o={}){
             if(o.style==='oneLine'||o.style==='minified')return collapseWhitespacePreserveLiterals(text);
@@ -2388,17 +2553,68 @@ function formatHtmlCode(text, o = {}) {
         function formatMarkdownCode(text,o={}){let r=String(text||'').replace(/\r\n?/g,'\n').split('\n').map(x=>x.trimEnd()).join('\n').replace(/\n{3,}/g,'\n\n').trim();return(o.style==='oneLine'||o.style==='minified')?collapseWhitespacePreserveLiterals(r):r;}
         function beautifyCode(text,lang,o={}){const l=lang==='auto'?detectCodeLanguage('',text):lang;if(l==='html')return formatHtmlCode(text,o);if(l==='python')return formatPythonCode(text,o);if(l==='md')return formatMarkdownCode(text,o);return formatBracedCode(text,o);}
         function syncCodeOption(k,v){state.codeMerge[k]=v;renderCodeWorkspace();}
-        function codeMirrorMode(lang){return ({html:'xml',css:'css',js:'javascript',python:'python',md:'markdown',php:'application/x-httpd-php',c:'text/x-csrc',cpp:'text/x-c++src'})[lang]||'javascript';}
-        function getActiveCodeLanguage(){return state.codeMerge.language==='auto'?detectCodeLanguage(state.sourceA.name,getCodeInput('A')):state.codeMerge.language;}
+        function codeMirrorMode(lang){return ({html:'htmlmixed',css:'css',js:'javascript',python:'python',md:'markdown',php:'application/x-httpd-php',c:'text/x-csrc',cpp:'text/x-c++src'})[lang]||'javascript';}
+        function getEditorValue(side){const cm=side==='A'?state.codeMerge.editorA:state.codeMerge.editorB;return cm?cm.getValue():getCodeInput(side);}
+        function getSideLanguage(side){return state.codeMerge.language==='auto'?detectCodeLanguage(getCodeName(side),getEditorValue(side)):state.codeMerge.language;}
+        function getActiveCodeLanguage(){return getSideLanguage('A');}
+        function describeCodeLanguages(text,lang){
+            const base=(CODE_LANGUAGES[lang]||[String(lang).toUpperCase()])[0].replace(/\s*\(.*\)$/,'');
+            if(lang!=='html')return base;
+            const parts=[base];
+            if(/<style[\s>]|\sstyle\s*=\s*["']/i.test(text))parts.push('CSS');
+            if(/<script[\s>]/i.test(text))parts.push('JS');
+            return parts.join(' + ');
+        }
         function destroyCodeEditors(){['editorA','editorB'].forEach(k=>{if(state.codeMerge[k]){try{state.codeMerge[k].toTextArea();}catch{}state.codeMerge[k]=null;}});}
+        function updateCodeStatus(side){
+            const cm=side==='A'?state.codeMerge.editorA:state.codeMerge.editorB;if(!cm)return;
+            const c=cm.getCursor();
+            const badge=document.getElementById('codeLangBadge'+side);
+            if(badge)badge.textContent=describeCodeLanguages(cm.getValue(),getSideLanguage(side));
+            const st=document.getElementById('codeStatus'+side);
+            if(st)st.textContent='Ln '+(c.line+1)+', Col '+(c.ch+1)+' · '+cm.lineCount()+' lignes';
+        }
+        function buildCmOptions(side){
+            const useTabs=!!state.codeMerge.useTabs&&Number(state.codeMerge.indentSize)!==0;
+            const hasFold=!!(typeof CodeMirror!=='undefined'&&CodeMirror.fold&&CodeMirror.fold.combine&&CodeMirror.fold.xml&&CodeMirror.fold.brace);
+            const opts={mode:codeMirrorMode(getSideLanguage(side)),lineNumbers:true,lineWrapping:false,...cmIndentOpts(),
+                matchBrackets:true,autoCloseBrackets:true,autoCloseTags:true,matchTags:{bothTags:true},styleActiveLine:true,theme:'material-darker',
+                extraKeys:{
+                    'Ctrl-Space':'autocomplete','Cmd-Space':'autocomplete',
+                    'Ctrl-/':'toggleComment','Cmd-/':'toggleComment',
+                    'Ctrl-Q':cm=>{if(cm.foldCode)cm.foldCode(cm.getCursor());},
+                    'Tab':cm=>{if(cm.somethingSelected())cm.indentSelection('add');else if(useTabs)cm.replaceSelection('\t','end');else cm.execCommand('insertSoftTab');},
+                    'Shift-Tab':cm=>cm.indentSelection('subtract'),
+                    'Ctrl-S':()=>downloadCodeOutput(side),'Cmd-S':()=>downloadCodeOutput(side),
+                    'Ctrl-Enter':()=>openCodePreview(side),'Cmd-Enter':()=>openCodePreview(side)
+                }};
+            if(hasFold){opts.foldGutter={rangeFinder:CodeMirror.fold.combine(CodeMirror.fold.xml,CodeMirror.fold.brace,CodeMirror.fold.comment,CodeMirror.fold.indent)};opts.gutters=['CodeMirror-linenumbers','CodeMirror-foldgutter'];}
+            return opts;
+        }
+        function bindCodeEditor(cm,side){
+            cm.on('focus',()=>{lastFocusedCodeEditor=side;});
+            cm.on('change',()=>{
+                const v=cm.getValue();
+                setCodeInput(side,v);
+                if(side==='A')state.codeMerge.outputA='';else state.codeMerge.outputB='';
+                const prev=document.getElementById('codeOutput'+side);if(prev)prev.value=v;
+                clearTimeout(cm.__langTimer);
+                cm.__langTimer=setTimeout(()=>{
+                    if(state.codeMerge.language==='auto'){const mm=codeMirrorMode(getSideLanguage(side));if(cm.getOption('mode')!==mm)cm.setOption('mode',mm);}
+                    updateCodeStatus(side);
+                },300);
+            });
+            cm.on('cursorActivity',()=>updateCodeStatus(side));
+            updateCodeStatus(side);
+        }
         function initCodeEditors(){
             if(typeof CodeMirror==='undefined')return;
             destroyCodeEditors();
-            const lang=getActiveCodeLanguage(), mode=codeMirrorMode(lang);
-            const a=document.getElementById('codeEditorA');
-            if(a){state.codeMerge.editorA=CodeMirror.fromTextArea(a,{mode,lineNumbers:true,lineWrapping:false,...cmIndentOpts(),matchBrackets:true,autoCloseBrackets:true,styleActiveLine:true,theme:'material-darker'});state.codeMerge.editorA.on('focus',()=>{lastFocusedCodeEditor='A';});state.codeMerge.editorA.on('change',cm=>{if(cm.isClean&&cm.isClean()){} state.sourceA.rawText=cm.getValue();state.codeMerge.outputA='';});}
-            const b=document.getElementById('codeEditorB');
-            if(b){state.codeMerge.editorB=CodeMirror.fromTextArea(b,{mode,lineNumbers:true,lineWrapping:false,...cmIndentOpts(),matchBrackets:true,autoCloseBrackets:true,styleActiveLine:true,theme:'material-darker'});state.codeMerge.editorB.on('focus',()=>{lastFocusedCodeEditor='B';});state.codeMerge.editorB.on('change',cm=>{state.sourceB.rawText=cm.getValue();state.codeMerge.outputB='';});}
+            [['A','codeEditorA','editorA'],['B','codeEditorB','editorB']].forEach(([side,id,key])=>{
+                const ta=document.getElementById(id);if(!ta)return;
+                const cm=CodeMirror.fromTextArea(ta,buildCmOptions(side));
+                state.codeMerge[key]=cm;bindCodeEditor(cm,side);
+            });
         }
         function searchReplaceCode(){
             const find=document.getElementById('codeFindInput')?.value||''; const repl=document.getElementById('codeReplaceInput')?.value||'';
@@ -2415,35 +2631,138 @@ function formatHtmlCode(text, o = {}) {
         function runCodePipeline(){
             const opts={clean:document.getElementById('pipeClean')?.checked!==false,format:document.getElementById('pipeFormat')?.checked!==false,diff:document.getElementById('pipeDiff')?.checked===true,exportA:document.getElementById('pipeExport')?.checked===true};
             ['A','B'].forEach(side=>
-                        {let src=getCodeInput(side);if(!src.trim())return;if(opts.clean)src=src.replace(/\r\n?/g,'\n').replace(/[ \t]+$/gm,'').trim();const target=side==='A'?state.sourceA:state.sourceB;target.rawText=src;if(opts.format){const lang=state.codeMerge.language==='auto'?detectCodeLanguage(target.name,src):state.codeMerge.language;const out=beautifyCode(src,lang,{style:state.codeMerge.style,indentSize:state.codeMerge.indentSize,useTabs:state.codeMerge.useTabs});if(side==='A')state.codeMerge.outputA=out;else state.codeMerge.outputB=out;}});
-            if(opts.exportA&&state.codeMerge.outputA)downloadCodeOutput('A');
+                        {let src=getCodeInput(side);if(!src.trim())return;if(opts.clean)src=src.replace(/\r\n?/g,'\n').replace(/[ \t]+$/gm,'').trim();const target=side==='A'?state.sourceA:state.sourceB;setCodeInput(side,src);if(opts.format){const lang=state.codeMerge.language==='auto'?detectCodeLanguage(getCodeName(side),src):state.codeMerge.language;const out=beautifyCode(src,lang,{style:state.codeMerge.style,indentSize:state.codeMerge.indentSize,useTabs:state.codeMerge.useTabs});if(side==='A')state.codeMerge.outputA=out;else state.codeMerge.outputB=out;}});
+            if(opts.exportA&&state.codeMerge.outputA)downloadFormattedOutput('A');
             renderCodeWorkspace();
             if(opts.diff&&getCodeInput('A').trim()&&getCodeInput('B').trim())switchMode('diff');
             else showToast('Pipeline terminé.','success');
         }
         function formatCodeSide(side,styleOverride=null){
             const src=getCodeInput(side);if(!src.trim())return showToast(`Aucun code à formater dans Source ${side}.`,'warn');
-            const lang=state.codeMerge.language==='auto'?detectCodeLanguage((side==='A'?state.sourceA:state.sourceB).name,src):state.codeMerge.language;
+            const lang=state.codeMerge.language==='auto'?detectCodeLanguage(getCodeName(side),src):state.codeMerge.language;
             const formatted=beautifyCode(src,lang,{style:styleOverride||state.codeMerge.style,indentSize:state.codeMerge.indentSize,useTabs:state.codeMerge.useTabs});
             if(side==='A')state.codeMerge.outputA=formatted;else state.codeMerge.outputB=formatted;renderCodeWorkspace();{const st=styleOverride||state.codeMerge.style;showToast(lang==='python'&&Number(state.codeMerge.indentSize)===0&&st!=='oneLine'&&st!=='minified'?"Python : l'indentation fait partie de la syntaxe, elle a été conservée telle quelle.":`Source ${side} formatée en ${lang.toUpperCase()}.`,'success');}
         }
         function setCodeBothOneLine(){formatCodeSide('A','oneLine');if(getCodeInput('B').trim())formatCodeSide('B','oneLine');}
         function toggleFormattedPreview(show){state.codeMerge.showFormattedPreview=!!show;renderCodeWorkspace();renderGlobalHistoryControls();applyCodeEditorFullscreen();}
-        function copyCodeOutput(side='A'){const t=side==='B'?state.codeMerge.outputB:state.codeMerge.outputA;if(!t)return showToast('Aucun résultat à copier.','warn');navigator.clipboard?.writeText(t).then(()=>showToast('Code copié dans le presse-papiers !','success')).catch(()=>showToast('Copie impossible dans ce navigateur.','error'));}
-        function downloadCodeOutput(side='A'){const t=side==='B'?state.codeMerge.outputB:state.codeMerge.outputA;if(!t)return showToast('Aucun résultat à télécharger.','warn');const src=side==='A'?state.sourceA:state.sourceB;const ext=(src.name||'').match(/\.([^.]+)$/)?.[1]||'txt';const base=(src.name||`code_${side}`).replace(/\.[^.]+$/,'');downloadBlob(t,`${base}_formate.${ext}`,'text/plain;charset=utf-8');showToast('Code formaté téléchargé !','success');}
+        function copyTextToClipboard(t){
+            return new Promise((resolve,reject)=>{
+                const fallback=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;top:-1000px;opacity:0';document.body.appendChild(ta);ta.select();const ok=document.execCommand('copy');document.body.removeChild(ta);ok?resolve():reject(new Error('copy'));}catch(e){reject(e);}};
+                if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(resolve).catch(fallback);else fallback();
+            });
+        }
+        function codeFileInfo(side){
+            const name=(getCodeName(side)||'').split('/').pop();
+            const lang=getSideLanguage(side);
+            const ext=(name.match(/\.([A-Za-z0-9]+)$/)||[])[1]||CODE_EXT_BY_LANG[lang]||'txt';
+            const base=(name||('code_'+side.toLowerCase())).replace(/\.[^./\\]+$/,'');
+            return {ext,base};
+        }
+        function copyCodeOutput(side='A'){
+            const t=getEditorValue(side);if(!t.trim())return showToast('Éditeur '+side+' vide.','warn');
+            copyTextToClipboard(t).then(()=>showToast('Éditeur '+side+' copié (avec vos modifications) !','success')).catch(()=>showToast('Copie impossible dans ce navigateur.','error'));
+        }
+        function downloadCodeOutput(side='A'){
+            const t=getEditorValue(side);if(!t.trim())return showToast('Éditeur '+side+' vide.','warn');
+            const {ext,base}=codeFileInfo(side);
+            downloadBlob(t,base+'_modifie.'+ext,'text/plain;charset=utf-8');
+            showToast('Fichier exporté : '+base+'_modifie.'+ext,'success');
+        }
+        async function exportCodeZip(side='A'){
+            if(typeof JSZip==='undefined')return showToast('JSZip indisponible (hors-ligne ?).','error');
+            const src=side==='A'?state.sourceA:state.sourceB,files=src.files||{};
+            const zip=new JSZip();let n=0;
+            for(const p of Object.keys(files)){const e=files[p];if(typeof e.textContent==='string'){zip.file(p,e.textContent);n++;}else if(e.fileObj){zip.file(p,e.fileObj);n++;}}
+            if(!n)return showToast('Aucun fichier à exporter.','warn');
+            const blob=await zip.generateAsync({type:'blob'});
+            downloadBlob(blob,(src.name||'projet')+'_modifie.zip','application/zip');
+            showToast('ZIP exporté avec vos modifications ('+n+' fichiers).','success');
+        }
+        function getFormattedValue(side){const el=document.getElementById('codeOutput'+side);return el?el.value:(side==='B'?state.codeMerge.outputB:state.codeMerge.outputA)||'';}
+        function copyFormattedOutput(side='A'){
+            const t=getFormattedValue(side);if(!t.trim())return showToast('Aperçu vide.','warn');
+            copyTextToClipboard(t).then(()=>showToast('Aperçu '+side+' copié !','success')).catch(()=>showToast('Copie impossible dans ce navigateur.','error'));
+        }
+        function downloadFormattedOutput(side='A'){
+            const t=getFormattedValue(side);if(!t.trim())return showToast('Aucun résultat à télécharger.','warn');
+            const {ext,base}=codeFileInfo(side);
+            downloadBlob(t,base+'_formate.'+ext,'text/plain;charset=utf-8');showToast('Code formaté téléchargé !','success');
+        }
+        function applyFormattedToEditor(side='A'){
+            const t=getFormattedValue(side);const cm=side==='A'?state.codeMerge.editorA:state.codeMerge.editorB;
+            if(!cm||!t.trim())return showToast('Rien à appliquer.','warn');
+            cm.setValue(t);showToast('Version formatée appliquée à l’éditeur '+side+'.','success');
+        }
+        function buildPreviewDocument(side){
+            const other=side==='A'?'B':'A';
+            const src=side==='A'?state.sourceA:state.sourceB,osrc=other==='A'?state.sourceA:state.sourceB;
+            const lang=getSideLanguage(side),code=getEditorValue(side);
+            if(!code.trim())return {error:'Éditeur '+side+' vide.'};
+            const safe=(t,tag)=>t.replace(new RegExp('</'+tag,'gi'),'<\\/'+tag);
+            const notes=[];let html=null,ctxFiles=src.files||{},companions=[];
+            const otherOk=l=>getEditorValue(other).trim()&&getSideLanguage(other)===l;
+            if(lang==='html'){html=code;companions=[other];}
+            else{
+                const pageKey=getCodeFiles(side).find(p=>/\.html?$/i.test(p));
+                if(pageKey){html=src.files[pageKey].textContent;companions=[other];notes.push(pageKey+' utilisé comme page');}
+                else if(otherOk('html')){html=getEditorValue(other);ctxFiles=osrc.files||{};companions=[side];notes.push('HTML de l’éditeur '+other+' utilisé comme page');}
+            }
+            if(html===null){
+                if(lang==='css'){html='<!DOCTYPE html>\n<html lang="fr"><head><meta charset="utf-8"><title>Aperçu CSS</title><style>\n'+safe(code,'style')+'\n</style></head><body><h1>Titre</h1><p>Paragraphe d’exemple avec un <a href="#">lien</a>.</p><button>Bouton</button></body></html>';notes.push('CSS seul : page d’exemple générée');return {html,notes};}
+                if(lang==='js'){html='<!DOCTYPE html>\n<html lang="fr"><head><meta charset="utf-8"><title>Aperçu JS</title></head><body><script>\n'+safe(code,'script')+'\n<\/script></body></html>';notes.push('JS seul : ouvrez la console (F12)');return {html,notes};}
+                return {error:'Aperçu navigateur : HTML, CSS, JS (ou un dossier contenant une page HTML).'};
+            }
+            // CSS / JS locaux référencés (<link href="style.css">, <script src="app.js">) -> intégrés depuis le dossier chargé
+            const keys=Object.keys(ctxFiles);let inl=0;
+            const lookup=ref=>{
+                if(!ref||/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(ref))return null;
+                let clean=ref.split(/[?#]/)[0];try{clean=decodeURIComponent(clean);}catch(e){}
+                clean=clean.replace(/^(?:\.\/|\/)+/,'');const base=clean.split('/').pop();
+                const k=keys.find(p=>p===clean)||keys.find(p=>p.endsWith('/'+clean))||keys.find(p=>p.split('/').pop()===base);
+                return k&&typeof ctxFiles[k].textContent==='string'?ctxFiles[k].textContent:null;
+            };
+            html=html.replace(/<link\b[^>]*>/gi,tag=>{
+                if(!/rel\s*=\s*["']?stylesheet/i.test(tag))return tag;
+                const h=tag.match(/href\s*=\s*["']([^"']+)["']/i);const css=h&&lookup(h[1]);
+                if(css==null)return tag;inl++;return '<style>\n'+safe(css,'style')+'\n</style>';
+            });
+            html=html.replace(/<script\b([^>]*?)\bsrc\s*=\s*["']([^"']+)["']([^>]*)>\s*<\/script>/gi,(mm,a,ref,b)=>{
+                const js=lookup(ref);if(js==null)return mm;inl++;return '<script'+a+b+'>\n'+safe(js,'script')+'\n<\/script>';
+            });
+            if(inl)notes.push(inl+' fichier(s) CSS/JS du dossier intégré(s)');
+            // CSS / JS saisis dans l'autre éditeur
+            const inject=(h,block,where)=>{
+                if(where==='head'){if(/<\/head>/i.test(h))return h.replace(/<\/head>/i,x=>block+'\n'+x);if(/<head[^>]*>/i.test(h))return h.replace(/<head[^>]*>/i,x=>x+'\n'+block);return block+'\n'+h;}
+                if(/<\/body>/i.test(h))return h.replace(/<\/body>/i,x=>block+'\n'+x);return h+'\n'+block;
+            };
+            companions.forEach(cs=>{
+                const t=getEditorValue(cs);if(!t.trim())return;const l=getSideLanguage(cs);
+                if(l==='css'){html=inject(html,'<style>\n'+safe(t,'style')+'\n</style>','head');notes.push('CSS de l’éditeur '+cs+' injecté');}
+                else if(l==='js'){html=inject(html,'<script>\n'+safe(t,'script')+'\n<\/script>','body');notes.push('JS de l’éditeur '+cs+' injecté');}
+            });
+            return {html,notes};
+        }
+        function openCodePreview(side='A'){
+            const r=buildPreviewDocument(side);
+            if(r.error)return showToast(r.error,'warn');
+            const url=URL.createObjectURL(new Blob([r.html],{type:'text/html;charset=utf-8'}));
+            const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';
+            document.body.appendChild(a);a.click();document.body.removeChild(a);
+            setTimeout(()=>URL.revokeObjectURL(url),10*60*1000);
+            showToast(r.notes.length?'Aperçu ouvert · '+r.notes.join(' · '):'Aperçu ouvert dans un nouvel onglet (avec vos modifications).','success');
+        }
         function renderCodeWorkspace(){
             destroyCodeEditors();
             const lang=state.codeMerge.language;
+            const hasB=!!getCodeInput('B').trim();
+            const exBtn='px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946]';
             document.getElementById('exportControls').innerHTML=`
-                        <button onclick="copyCodeOutput('A')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946]">
-                          📋 Copier A
-                        </button>
-                        <button onclick="copyCodeOutput('B')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946]">
-                          📋 Copier B
-                        </button>
-                        <button onclick="downloadCodeOutput('A')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-cyan-600 dark:from-[#00ff9d] dark:to-[#00f3ff] text-slate-950">
-                          ⬇️ Exporter A
-                        </button>
+                        <button onclick="copyCodeOutput('A')" class="${exBtn}" title="Copie le contenu actuel de l'éditeur A, avec vos modifications">📋 Copier A</button>
+                        ${hasB?`<button onclick="copyCodeOutput('B')" class="${exBtn}">📋 Copier B</button>`:''}
+                        <button onclick="openCodePreview('A')" class="${exBtn}" title="Ouvre le HTML dans un nouvel onglet (CSS/JS inclus)">🌐 Aperçu A</button>
+                        ${hasB?`<button onclick="openCodePreview('B')" class="${exBtn}">🌐 Aperçu B</button>`:''}
+                        <button onclick="downloadCodeOutput('A')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-500 to-cyan-600 dark:from-[#00ff9d] dark:to-[#00f3ff] text-slate-950" title="Télécharge le contenu actuel de l'éditeur A">⬇️ Exporter A</button>
+                        ${hasB?`<button onclick="downloadCodeOutput('B')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-purple-500 to-cyan-600 text-white">⬇️ Exporter B</button>`:''}
                         `;
             document.getElementById('smartToolbar').innerHTML=`
                         <div class="flex flex-wrap items-center gap-2 w-full">
@@ -2562,63 +2881,78 @@ Exporter A
   </p>
 </div>
 `;return;}
+            const btnCls='px-2 py-1 rounded-lg text-[10px] font-semibold bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946] hover:border-cyan-500/60';
+            const nameOf=side=>escapeHtml(getCodeName(side)||(side==='A'?state.sourceA:state.sourceB).name||'entrée');
+            const fileTabs=side=>{
+                const list=getCodeFiles(side);if(list.length<2)return '';
+                const af=getActiveCodeFile(side);
+                return `<div class="flex flex-wrap gap-1 max-h-20 overflow-auto">${list.map(p=>`<button data-path="${escapeHtml(p)}" onclick="selectCodeFile('${side}',this.dataset.path)" class="px-2 py-1 rounded-lg text-[10px] font-mono ${p===af?'bg-cyan-500 text-slate-950 font-bold':'bg-slate-100 dark:bg-[#15192b] border border-slate-200 dark:border-[#232946] text-slate-600 dark:text-slate-300'}">${escapeHtml(p)}</button>`).join('')}</div>`;
+            };
+            const edHeader=(side,label,color)=>`
+<div class="flex flex-wrap items-center justify-between gap-2">
+  <div class="flex items-center gap-2 min-w-0">
+    <span class="text-xs font-bold uppercase tracking-wider ${color}">${label}</span>
+    <span id="codeLangBadge${side}" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-500/15 text-cyan-700 dark:text-[#00f3ff]"></span>
+    <span class="text-[10px] text-slate-400 font-mono truncate">${nameOf(side)}</span>
+  </div>
+  <div class="flex flex-wrap items-center gap-1">
+    <button onclick="copyCodeOutput('${side}')" class="${btnCls}" title="Copier le contenu actuel de l'éditeur">📋 Copier</button>
+    <button onclick="downloadCodeOutput('${side}')" class="${btnCls}" title="Exporter le contenu actuel (Ctrl+S)">⬇️ Exporter</button>
+    ${getCodeFiles(side).length>1?`<button onclick="exportCodeZip('${side}')" class="${btnCls}" title="Exporter tous les fichiers du dossier (avec vos modifications)">📦 ZIP</button>`:''}
+    <button onclick="openCodePreview('${side}')" class="${btnCls}" title="Ouvrir dans un nouvel onglet (Ctrl+Entrée)">🌐 Ouvrir</button>
+  </div>
+</div>`;
+            const edFooter=side=>`
+<div class="flex flex-wrap justify-between gap-2 text-[10px] text-slate-400 font-mono">
+  <span id="codeStatus${side}"></span>
+  ${side==='A'?'<span>Ctrl+Espace suggestions · Ctrl+/ commenter · Ctrl+Q plier · Ctrl+S exporter · Ctrl+Entrée aperçu</span>':''}
+</div>`;
+            const prevHeader=(side,label)=>`
+<div class="flex flex-wrap items-center justify-between gap-2">
+  <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#00ff9d]">${label}</span>
+  <div class="flex items-center gap-1">
+    <button onclick="applyFormattedToEditor('${side}')" class="${btnCls}" title="Remplace le contenu de l'éditeur par cette version">⬅ Appliquer à l'éditeur</button>
+    <button onclick="copyFormattedOutput('${side}')" class="${btnCls}">📋 Copier</button>
+    <button onclick="downloadFormattedOutput('${side}')" class="${btnCls}">⬇️</button>
+  </div>
+</div>`;
+            const gridCls=state.codeMerge.showFormattedPreview?'xl:grid-cols-2':'';
             document.getElementById('workspaceContainer').innerHTML=`
-<div class="grid grid-cols-1 ${state.codeMerge.showFormattedPreview?'xl:grid-cols-2':''} gap-4">
-  <div class="flex flex-col gap-2">
-    <div class="flex items-center justify-between">
-      <span class="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-[#00f3ff]">
-      Éditeur A
-    </span>
-    <span class="text-[10px] text-slate-400 font-mono">
-    ${escapeHtml(state.sourceA.name||'entrée')}
-  </span>
-</div>
-<div class="code-editor-shell">
-  <textarea id="codeEditorA">
-    ${escapeHtml(a)}
-  </textarea>
-</div>
-</div>
-${state.codeMerge.showFormattedPreview?`
-<div class="flex flex-col gap-2">
-  <div class="flex items-center justify-between">
-    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#00ff9d]">
-    Aperçu formaté
-  </span>
-  <span class="text-[10px] text-slate-400 font-mono">
-  ${escapeHtml(state.sourceA.name||'sortie')}
-</span>
-</div>
-<textarea id="codeOutputA" oninput="state.codeMerge.outputA=this.value" class="w-full h-[500px] p-3.5 rounded-xl font-mono text-xs leading-relaxed bg-slate-900 text-emerald-300 border border-slate-700">
-  ${escapeHtml(outA)}
-</textarea>
-</div>
-`:''}
+<div class="grid grid-cols-1 ${gridCls} gap-4">
+  <div class="flex flex-col gap-2 min-w-0">
+    ${edHeader('A','Éditeur A','text-cyan-600 dark:text-[#00f3ff]')}
+    ${fileTabs('A')}
+    <div class="code-editor-shell">
+      <textarea id="codeEditorA">
+${escapeHtml(a)}</textarea>
+    </div>
+    ${edFooter('A')}
+  </div>
+  ${state.codeMerge.showFormattedPreview?`
+  <div class="flex flex-col gap-2 min-w-0">
+    ${prevHeader('A','Aperçu formaté')}
+    <textarea id="codeOutputA" oninput="state.codeMerge.outputA=this.value" class="w-full h-[500px] p-3.5 rounded-xl font-mono text-xs leading-relaxed bg-slate-900 text-emerald-300 border border-slate-700">
+${escapeHtml(outA)}</textarea>
+  </div>`:''}
 </div>
 ${b?`
-<div class="mt-4 grid grid-cols-1 ${state.codeMerge.showFormattedPreview?'xl:grid-cols-2':''} gap-4">
-  <div class="flex flex-col gap-2">
-    <span class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-[#bc13fe]">
-    Éditeur B
-  </span>
-  <div class="code-editor-shell">
-    <textarea id="codeEditorB">
-      ${escapeHtml(b)}
-    </textarea>
+<div class="mt-4 grid grid-cols-1 ${gridCls} gap-4">
+  <div class="flex flex-col gap-2 min-w-0">
+    ${edHeader('B','Éditeur B','text-purple-600 dark:text-[#bc13fe]')}
+    ${fileTabs('B')}
+    <div class="code-editor-shell">
+      <textarea id="codeEditorB">
+${escapeHtml(b)}</textarea>
+    </div>
+    ${edFooter('B')}
   </div>
-</div>
-${state.codeMerge.showFormattedPreview?`
-<div class="flex flex-col gap-2">
-  <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-[#00ff9d]">
-  Aperçu B formaté
-</span>
-<textarea id="codeOutputB" oninput="state.codeMerge.outputB=this.value" class="w-full h-[360px] p-3.5 rounded-xl font-mono text-xs leading-relaxed bg-slate-900 text-emerald-300 border border-slate-700">
-  ${escapeHtml(outB)}
-</textarea>
-</div>
-`:''}
-</div>
-`:''}`;
+  ${state.codeMerge.showFormattedPreview?`
+  <div class="flex flex-col gap-2 min-w-0">
+    ${prevHeader('B','Aperçu B formaté')}
+    <textarea id="codeOutputB" oninput="state.codeMerge.outputB=this.value" class="w-full h-[360px] p-3.5 rounded-xl font-mono text-xs leading-relaxed bg-slate-900 text-emerald-300 border border-slate-700">
+${escapeHtml(outB)}</textarea>
+  </div>`:''}
+</div>`:''}`;
             initCodeEditors();
             applyCodeEditorFullscreen();
         }
@@ -2916,6 +3250,52 @@ Bookmarks
             switchMode('bookmarks');
             updateGoToTopVisibility();
         });
-                </script>
+                
+        // ---- UX : menu à pastille, animations d'entrée, raccourcis Alt+1..4 ----
+        (function(){try{
+            const MODES=['bookmarks','diff','folders','code'];
+            const anchor=document.getElementById('modeBtn-code');if(!anchor)return;
+            const bar=anchor.closest('.inline-flex');if(!bar)return;
+            bar.classList.add('nexus-tabs');
+            bar.classList.remove('bg-slate-100','dark:bg-[#15192b]');
+            bar.style.background='rgba(148,163,184,.14)';bar.style.border='1px solid rgba(148,163,184,.28)';
+            const pill=document.createElement('div');pill.className='nexus-pill';bar.insertBefore(pill,bar.firstChild);
+            MODES.forEach((m,i)=>{const b=document.getElementById('modeBtn-'+m);if(b)b.title=b.textContent.trim()+'  (Alt+'+(i+1)+')';});
+            let first=true;
+            const sync=()=>{
+                const cur=document.getElementById('modeBtn-'+state.mode);if(!cur)return;
+                MODES.forEach(m=>{const b=document.getElementById('modeBtn-'+m);if(b)b.classList.toggle('is-active',m===state.mode);});
+                if(first){pill.style.transition='none';}
+                pill.style.width=cur.offsetWidth+'px';pill.style.transform='translateX('+cur.offsetLeft+'px)';
+                if(first){void pill.offsetWidth;pill.style.transition='';first=false;}
+            };
+            const orig=window.switchMode;
+            window.switchMode=function(){const r=orig.apply(this,arguments);sync();return r;};
+            sync();window.addEventListener('resize',sync);window.addEventListener('load',()=>setTimeout(sync,60));
+            document.addEventListener('keydown',e=>{
+                if(!e.altKey||e.ctrlKey||e.metaKey)return;
+                const m=/^Digit([1-4])$/.exec(e.code);if(!m)return;
+                e.preventDefault();window.switchMode(MODES[m[1]-1]);
+            });
+            const wc=document.getElementById('workspaceContainer');
+            if(wc)new MutationObserver(()=>{wc.classList.remove('fx-in');void wc.offsetWidth;wc.classList.add('fx-in');}).observe(wc,{childList:true});
+            const hd=document.querySelector('header');
+            if(hd){const f=()=>hd.classList.toggle('is-scrolled',window.scrollY>8);window.addEventListener('scroll',f,{passive:true});f();}
+        }catch(err){console.warn('UX layer:',err);}})();
+    
+        // ---- Barre d'outils : collante sous le header, ombre au défilement, raccourcis ----
+        (function(){try{
+            const tb=document.getElementById('smartToolbar'),hd=document.querySelector('header');if(!tb)return;
+            const hh=()=>hd?hd.offsetHeight:0;
+            const setVar=()=>document.documentElement.style.setProperty('--nx-hd',hh()+'px');
+            const stuck=()=>tb.classList.toggle('is-stuck',!tb.classList.contains('code-toolbar-fullscreen')&&tb.getBoundingClientRect().top<=hh()+2);
+            setVar();stuck();addEventListener('resize',()=>{setVar();stuck();});addEventListener('load',()=>setTimeout(setVar,60));
+            addEventListener('scroll',stuck,{passive:true});
+            document.addEventListener('keydown',e=>{
+                if(e.ctrlKey&&e.shiftKey&&e.code==='KeyF'){const i=tb.querySelector('input[type=text],input:not([type]),input[type=search]');if(i){e.preventDefault();i.focus();if(i.select)i.select();}}
+                else if(e.key==='Enter'&&e.target&&e.target.id==='codeFindInput'){e.preventDefault();searchCodeOnly();}
+            });
+        }catch(err){console.warn('Toolbar UX:',err);}})();
+    </script>
               </body>
             </html>
