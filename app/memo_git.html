@@ -496,6 +496,39 @@ gh workflow run ci.yml            <span class='c'># lancer un workflow à la mai
 </details>
 
 <details>
+<summary>Taille du dépôt et limites <small>GitHub Pages</small></summary>
+<div class='body'>
+<h3>Les limites</h3>
+<div class='grid'><table>
+<tr><th>Ce qui est limité</th><th>Limite</th></tr>
+<tr><td>Site publié</td><td>1 Go maximum</td></tr>
+<tr><td>Dépôt source</td><td>1 Go recommandé</td></tr>
+<tr><td>Bande passante</td><td>100 Go par mois (limite souple)</td></tr>
+<tr><td>Builds</td><td>10 par heure (souple, sauf workflow Actions perso)</td></tr>
+<tr><td>Déploiement</td><td>interrompu après 10 minutes</td></tr>
+<tr><td>Un fichier</td><td>refusé au push au-dessus de 100 Mo, avertissement dès 50 Mo</td></tr>
+</table></div>
+<h3>Connaître la taille sur GitHub</h3>
+<p>Ouvre cette adresse dans le navigateur et cherche la ligne <code>size</code> :</p>
+<pre><code>https://api.github.com/repos/TON-USER/TON-REPO</code></pre>
+<p>La valeur est en <strong>Ko</strong> : divise par 1024 pour avoir des Mo (exemple : 7931 Ko, soit environ 7,7 Mo). Elle inclut tout l’historique Git.</p>
+<pre><code>gh api repos/TON-USER/TON-REPO --jq .size     <span class='c'># même chose en terminal</span></code></pre>
+<div class='note'>Pour un dépôt privé, utilise <code>gh api</code> ou un token. Le chiffre peut avoir un peu de retard après un push. Si tu publies avec Actions, la taille de l’artefact <code>github-pages</code> dans le résumé du run donne une idée du site publié.</div>
+<h3>Connaître la taille en local</h3>
+<pre><code>du -sh .                    <span class='c'># dossier complet</span>
+du -sh .git                 <span class='c'># historique seul</span>
+git count-objects -vH       <span class='c'># size-pack = taille compressée du dépôt</span>
+du -sh docs/                <span class='c'># le dossier publié (adapte le nom)</span></code></pre>
+<h3>Trouver les plus gros fichiers</h3>
+<pre><code>du -ah . --exclude=.git | sort -rh | head -10     <span class='c'># Linux</span>
+du -ah . | sort -rh | head -10                    <span class='c'># macOS</span></code></pre>
+<p>Y compris ceux supprimés mais encore présents dans l’historique (taille en octets, puis chemin) :</p>
+<pre><code>git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | grep '^blob' | sort -k3 -rn | head -10</code></pre>
+<div class='note'>Un gros fichier supprimé reste dans <code>.git</code>. Pour l’effacer vraiment de l’historique, utilise <code>git filter-repo</code> (voir la section Panique). Pour les gros fichiers à garder, préfère les releases ou Git LFS.</div>
+</div>
+</details>
+
+<details>
 <summary>Commandes utiles <small>bonus</small></summary>
 <div class="body">
 <pre><code>git log --oneline           <span class="c"># historique condensé</span>
