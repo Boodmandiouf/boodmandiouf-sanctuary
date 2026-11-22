@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aide-mémoire Git</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef1f5; --surface:#fff; --ink:#1b2430; --muted:#5a6676; --line:#d5dbe4;
+  --accent:#d6381b; --code-bg:#17202c; --code-ink:#e3eaf3; --code-dim:#8294aa; --tip:#e4edf9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10161e; --surface:#18212c; --ink:#e6ecf3; --muted:#9aa8ba; --line:#2b3746;
+    --accent:#ff6a4d; --code-bg:#0b1118; --code-ink:#e3eaf3; --code-dim:#6f8199; --tip:#1d2a3b; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10161e; --surface:#18212c; --ink:#e6ecf3; --muted:#9aa8ba; --line:#2b3746;
+  --accent:#ff6a4d; --code-bg:#0b1118; --code-ink:#e3eaf3; --code-dim:#6f8199; --tip:#1d2a3b; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:2.5rem 1.1rem 4rem}
+h1{font-size:clamp(2rem,6vw,3rem);line-height:1.05;margin:0 0 .5rem;font-weight:700;letter-spacing:-.02em}
+h1 code{font-family:"Fira Code",ui-monospace,monospace;font-weight:500;color:var(--accent)}
+.lead{color:var(--muted);margin:0 0 1.5rem;max-width:56ch}
+.bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+button{font:inherit;font-size:.9rem;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:.4rem .8rem}
+button:hover{border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:.6rem}
+details[open]{border-color:var(--accent)}
+summary{list-style:none;cursor:pointer;padding:.9rem 1.1rem;font-weight:700;font-size:1.1rem;display:flex;align-items:center;gap:.7rem}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"";width:.55rem;height:.55rem;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg);transition:transform .18s;flex:none}
+details[open]>summary::before{transform:rotate(45deg)}
+summary small{font-weight:400;color:var(--muted);font-size:.85rem;margin-left:auto;text-align:right}
+.body{padding:0 1.1rem 1.1rem}
+.body h3{font-size:1rem;margin:1.2rem 0 .4rem}
+.body p{margin:.4rem 0 .6rem}
+.body ul{margin:.3rem 0 .8rem;padding-left:1.2rem}
+code{font-family:"Fira Code",ui-monospace,Menlo,Consolas,monospace;font-size:.86em}
+:not(pre)>code{background:var(--tip);padding:.1em .35em;border-radius:4px}
+.pre{position:relative;margin:.5rem 0 .9rem}
+pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:6px;padding:.9rem 1rem;overflow-x:auto;font-size:.85rem;line-height:1.55}
+pre code{font-size:inherit}
+.c{color:var(--code-dim)}
+.copy{position:absolute;top:.4rem;right:.4rem;font-size:.75rem;padding:.2rem .5rem;background:transparent;color:var(--code-dim);border-color:#33435a}
+.copy:hover{color:#fff}
+.note{background:var(--tip);border-left:3px solid var(--accent);padding:.6rem .9rem;border-radius:0 6px 6px 0;margin:.7rem 0;font-size:.95rem}
+.grid{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.92rem;margin:.5rem 0}
+th,td{text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+footer{margin-top:2rem;color:var(--muted);font-size:.85rem}
+.search{width:100%;font:inherit;padding:.6rem .8rem;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);margin-bottom:.9rem}
+.toc{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.2rem;padding:0;list-style:none}
+.toc a{display:block;font-size:.85rem;padding:.25rem .65rem;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:var(--surface)}
+.toc a:hover{border-color:var(--accent)}
+#none{display:none;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){summary::before{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<h1>Aide-mémoire <code>git</code></h1>
+<p class="lead">Créer un projet, pousser ses modifications, gérer les branches, le .gitignore, les conflits, et éviter de lancer GitHub Actions.</p>
+<div class="bar">
+  <button id="open">Tout déplier</button>
+  <button id="close">Tout replier</button>
+  <button id="theme">Thème clair / sombre</button>
+</div>
+<input id='q' class='search' type='search' placeholder='Rechercher (ex : reset, stash, tag, gh)' aria-label='Rechercher dans l’aide-mémoire' autocomplete='off'>
+<ul class='toc' id='toc'></ul>
+<p id='none'>Aucun résultat. Essaie un autre mot.</p>
+
+<details>
+<summary>Installation <small>Linux, macOS, Windows</small></summary>
+<div class="body">
+<pre><code>git --version   <span class="c"># vérifier si Git est déjà installé</span></code></pre>
+<h3>macOS</h3>
+<pre><code>xcode-select --install     <span class="c"># outils Apple (inclut git)</span>
+<span class="c"># ou avec Homebrew (version plus récente)</span>
+brew install git</code></pre>
+<h3>Linux</h3>
+<pre><code>sudo apt update &amp;&amp; sudo apt install git   <span class="c"># Debian, Ubuntu</span>
+sudo dnf install git                    <span class="c"># Fedora</span>
+sudo pacman -S git                      <span class="c"># Arch</span></code></pre>
+<h3>Windows</h3>
+<pre><code>winget install --id Git.Git -e</code></pre>
+<h3>Clé SSH (pour ne plus taper de mot de passe)</h3>
+<pre><code>ssh-keygen -t ed25519 -C "ton@email.com"
+cat ~/.ssh/id_ed25519.pub     <span class="c"># à copier dans GitHub &gt; Settings &gt; SSH keys</span>
+pbcopy &lt; ~/.ssh/id_ed25519.pub              <span class="c"># macOS : copie directe</span>
+xclip -sel clip &lt; ~/.ssh/id_ed25519.pub     <span class="c"># Linux (xclip requis)</span>
+ssh -T git@github.com         <span class="c"># tester la connexion</span></code></pre>
+<div class="note">Avec une clé SSH, utilise l’URL <code>git@github.com:user/mon-repo.git</code> au lieu de l’URL https.</div>
+</div>
+</details>
+
+<details open>
+<summary>Configuration initiale <small>une seule fois</small></summary>
+<div class="body">
+<pre><code>git config --global user.name "Ton Nom"
+git config --global user.email "ton@email.com"
+git config --global init.defaultBranch main
+git config --global --list   <span class="c"># vérifier</span></code></pre>
+</div>
+</details>
+
+<details>
+<summary>Créer un projet</summary>
+<div class="body">
+<h3>Depuis un dossier local</h3>
+<pre><code>cd mon-projet
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/user/mon-repo.git
+git push -u origin main</code></pre>
+<h3>Depuis un dépôt distant existant</h3>
+<pre><code>git clone https://github.com/user/mon-repo.git
+cd mon-repo</code></pre>
+<div class="note">Crée d’abord le dépôt vide sur GitHub (sans README) si tu pars d’un dossier local, sinon le premier push sera refusé.</div>
+</div>
+</details>
+
+<details open>
+<summary>Cycle quotidien <small>modifier, commit, push</small></summary>
+<div class="body">
+<pre><code>git status                  <span class="c"># état des fichiers</span>
+git add .                   <span class="c"># tout ajouter</span>
+git add fichier.txt         <span class="c"># ou un seul fichier</span>
+git commit -m "Description du changement"
+git push                    <span class="c"># envoyer sur le dépôt distant</span></code></pre>
+<p>Avant de pousser, récupère les changements des autres :</p>
+<pre><code>git pull</code></pre>
+</div>
+</details>
+
+<details>
+<summary>Éviter GitHub Actions <small>[skip ci]</small></summary>
+<div class="body">
+<p>Ce n’est pas un attribut Git : c’est le <strong>message du commit</strong> qui décide.</p>
+<pre><code>git commit -m "Mise à jour du README [skip ci]"</code></pre>
+<div class="grid"><table>
+<tr><th>Mot-clé reconnu</th></tr>
+<tr><td><code>[skip ci]</code></td></tr>
+<tr><td><code>[ci skip]</code></td></tr>
+<tr><td><code>[no ci]</code></td></tr>
+<tr><td><code>[skip actions]</code></td></tr>
+<tr><td><code>[actions skip]</code></td></tr>
+</table></div>
+<p>Ou avec un trailer, dans le corps du message :</p>
+<pre><code>git commit -m "Changement de doc" -m "skip-checks: true"</code></pre>
+<div class="note">Le mot-clé doit être dans le dernier commit du push. Sans effet sur <code>workflow_dispatch</code> et <code>schedule</code>.</div>
+<h3>Alternative : filtrer dans le workflow</h3>
+<p>Dans <code>.github/workflows/*.yml</code> :</p>
+<pre><code>on:
+  push:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'</code></pre>
+</div>
+</details>
+
+<details>
+<summary>Branches <small>travailler sans risque</small></summary>
+<div class="body">
+<pre><code>git branch                    <span class="c"># lister les branches locales</span>
+git switch -c ma-branche      <span class="c"># créer et basculer</span>
+git push -u origin ma-branche <span class="c"># publier la branche</span>
+git switch main               <span class="c"># revenir sur main</span>
+git merge ma-branche          <span class="c"># fusionner dans main</span>
+git branch -d ma-branche      <span class="c"># supprimer en local</span>
+git push origin --delete ma-branche   <span class="c"># supprimer sur le dépôt</span></code></pre>
+<h3>Flux typique</h3>
+<pre><code>git switch main
+git pull
+git switch -c fix/bug-login
+<span class="c"># ... modifications ...</span>
+git add . &amp;&amp; git commit -m "Corrige le login"
+git push -u origin fix/bug-login
+<span class="c"># puis ouvrir une Pull Request sur GitHub</span></code></pre>
+<h3>Mettre sa branche à jour avec main</h3>
+<pre><code>git switch ma-branche
+git merge main</code></pre>
+</div>
+</details>
+
+<details>
+<summary>.gitignore <small>ne pas suivre certains fichiers</small></summary>
+<div class="body">
+<p>Crée un fichier <code>.gitignore</code> à la racine du projet :</p>
+<pre><code>node_modules/
+dist/
+*.log
+.env
+.DS_Store
+.vscode/
+!important.log   <span class="c"># le ! force l’inclusion</span></code></pre>
+<h3>Règles de motif</h3>
+<ul>
+<li><code>dossier/</code> ignore un dossier entier</li>
+<li><code>*.ext</code> ignore tous les fichiers de cette extension</li>
+<li><code>/fichier</code> ignore seulement à la racine</li>
+<li><code>**/temp</code> ignore à n’importe quelle profondeur</li>
+</ul>
+<h3>Fichier déjà suivi par Git</h3>
+<p>Ajouter une ligne ne suffit pas : il faut le retirer de l’index (le fichier reste sur ton disque).</p>
+<pre><code>git rm --cached fichier.txt
+git rm -r --cached dossier/
+git commit -m "Retire fichier du suivi"</code></pre>
+<pre><code>git check-ignore -v fichier.txt   <span class="c"># pourquoi un fichier est ignoré</span></code></pre>
+<div class="note">Ne commit jamais un <code>.env</code> ou des clés d’API. Si c’est déjà poussé, considère la clé comme compromise et change-la.</div>
+</div>
+</details>
+
+<details>
+<summary>Résoudre un conflit <small>merge ou pull</small></summary>
+<div class="body">
+<p>Un conflit apparaît quand deux personnes modifient les mêmes lignes. Git s’arrête et marque le fichier :</p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ta version
+=======
+la version de l’autre branche
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; ma-branche</code></pre>
+<h3>Étapes</h3>
+<pre><code>git status                    <span class="c"># repérer les fichiers "both modified"</span>
+<span class="c"># 1. ouvrir le fichier, garder ce qu’il faut,</span>
+<span class="c">#    supprimer les lignes &lt;&lt;&lt;&lt;&lt;&lt;&lt; ======= &gt;&gt;&gt;&gt;&gt;&gt;&gt;</span>
+git add fichier.txt           <span class="c"># 2. marquer comme résolu</span>
+git commit                    <span class="c"># 3. finaliser le merge</span></code></pre>
+<h3>Raccourcis</h3>
+<pre><code>git checkout --ours fichier.txt     <span class="c"># garder ta version</span>
+git checkout --theirs fichier.txt   <span class="c"># garder l’autre version</span>
+git merge --abort                   <span class="c"># tout annuler, retour avant le merge</span></code></pre>
+<div class="note">Pour éviter les conflits : <code>git pull</code> souvent, commits petits, branches courtes.</div>
+</div>
+</details>
+
+<details>
+<summary>Annuler une erreur <small>restore, reset, revert, rm</small></summary>
+<div class="body">
+<div class="note">Règle d’or : tant que le commit n’est <strong>pas poussé</strong>, tu peux l’annuler avec <code>reset</code>. Une fois poussé, utilise <code>revert</code>.</div>
+<h3>Avant le commit</h3>
+<pre><code>git restore fichier.txt          <span class="c"># annuler les modifs (PERDUES)</span>
+git restore --staged fichier.txt <span class="c"># retirer du git add, modifs gardées</span></code></pre>
+<h3>Dernier commit pas encore poussé</h3>
+<pre><code>git commit --amend -m "Nouveau message"  <span class="c"># corriger le message</span>
+git reset --soft HEAD~1    <span class="c"># annule le commit, fichiers restent prêts à commit</span>
+git reset HEAD~1           <span class="c"># annule le commit, fichiers modifiés non ajoutés</span>
+git reset --hard HEAD~1    <span class="c"># annule le commit ET supprime les modifs</span></code></pre>
+<h3>Commit déjà poussé</h3>
+<pre><code>git revert &lt;hash&gt;          <span class="c"># crée un commit qui annule l’ancien</span>
+git push</code></pre>
+<p>Si tu es seul sur la branche et tu veux vraiment réécrire l’historique :</p>
+<pre><code>git reset --hard HEAD~1
+git push --force-with-lease</code></pre>
+<div class="note"><code>--force-with-lease</code> est plus sûr que <code>--force</code> : il refuse d’écraser le travail d’un autre. À éviter sur <code>main</code> partagé.</div>
+<h3>Supprimer / retirer des fichiers</h3>
+<pre><code>git rm fichier.txt           <span class="c"># supprime du disque ET du suivi</span>
+git rm --cached fichier.txt  <span class="c"># arrête le suivi, garde le fichier</span>
+git rm -r dossier/           <span class="c"># idem pour un dossier</span>
+git mv ancien.txt nouveau.txt <span class="c"># renommer / déplacer</span>
+git commit -m "Supprime fichier.txt"</code></pre>
+<h3>Nettoyer les fichiers non suivis</h3>
+<pre><code>git clean -n     <span class="c"># simulation : voir ce qui serait supprimé</span>
+git clean -fd    <span class="c"># supprimer fichiers et dossiers non suivis</span></code></pre>
+<h3>J’ai tout cassé : retrouver un commit perdu</h3>
+<pre><code>git reflog                 <span class="c"># historique de tous tes déplacements</span>
+git reset --hard &lt;hash&gt;    <span class="c"># revenir à cet état</span></code></pre>
+<div class="grid"><table>
+<tr><th>Commande</th><th>Touche à</th><th>Danger</th></tr>
+<tr><td><code>restore</code></td><td>fichiers</td><td>perd les modifs</td></tr>
+<tr><td><code>reset --soft</code></td><td>commit</td><td>aucun</td></tr>
+<tr><td><code>reset --hard</code></td><td>commit + fichiers</td><td>perd les modifs</td></tr>
+<tr><td><code>revert</code></td><td>nouveau commit</td><td>aucun</td></tr>
+<tr><td><code>clean -fd</code></td><td>fichiers non suivis</td><td>irréversible</td></tr>
+</table></div>
+</div>
+</details>
+
+<details>
+<summary>Terminal Linux / macOS <small>commandes de base</small></summary>
+<div class="body">
+<pre><code>pwd                    <span class="c"># dossier actuel</span>
+ls -la                 <span class="c"># lister, fichiers cachés inclus (.git, .gitignore)</span>
+cd mon-projet          <span class="c"># entrer dans un dossier</span>
+cd ..                  <span class="c"># remonter d’un niveau</span>
+cd ~                   <span class="c"># dossier personnel</span>
+mkdir -p a/b/c         <span class="c"># créer des dossiers imbriqués</span>
+touch fichier.txt      <span class="c"># créer un fichier vide</span>
+cp a.txt b.txt         <span class="c"># copier</span>
+cp -r dossier/ copie/  <span class="c"># copier un dossier</span>
+mv a.txt b.txt         <span class="c"># renommer / déplacer</span>
+rm fichier.txt         <span class="c"># supprimer (pas de corbeille)</span>
+rm -r dossier/         <span class="c"># supprimer un dossier</span>
+cat fichier.txt        <span class="c"># afficher le contenu</span>
+nano fichier.txt       <span class="c"># éditer (Ctrl+O sauver, Ctrl+X quitter)</span>
+clear                  <span class="c"># nettoyer l’écran</span></code></pre>
+<h3>Différences entre les deux systèmes</h3>
+<div class="grid"><table>
+<tr><th>Action</th><th>macOS</th><th>Linux</th></tr>
+<tr><td>Ouvrir le dossier</td><td><code>open .</code></td><td><code>xdg-open .</code></td></tr>
+<tr><td>Copier dans le presse-papiers</td><td><code>pbcopy &lt; f.txt</code></td><td><code>xclip -sel clip &lt; f.txt</code></td></tr>
+<tr><td>Installer un logiciel</td><td><code>brew install</code></td><td><code>apt</code>, <code>dnf</code>, <code>pacman</code></td></tr>
+<tr><td>Shell par défaut</td><td>zsh</td><td>bash</td></tr>
+</table></div>
+<div class="note"><code>rm</code> supprime définitivement, sans corbeille. Vérifie avec <code>ls</code> avant, surtout avec <code>rm -r</code>.</div>
+</div>
+</details>
+
+<details>
+<summary>Panique ! <small>je me suis trompé</small></summary>
+<div class='body'>
+<h3>J’ai commité sur la mauvaise branche (pas poussé)</h3>
+<pre><code>git switch -c bonne-branche   <span class='c'># garde le commit sur une nouvelle branche</span>
+git switch main
+git reset --hard HEAD~1       <span class='c'># retire le commit de main</span></code></pre>
+<h3>J’ai poussé un mot de passe ou une clé</h3>
+<ul>
+<li><strong>D’abord</strong> : révoque et change la clé. Elle est compromise, même si tu la supprimes ensuite.</li>
+<li>Retire-la de l’historique avec <code>git filter-repo</code> (outil à installer à part), puis force le push.</li>
+</ul>
+<pre><code>git filter-repo --path .env --invert-paths
+git push --force-with-lease origin main</code></pre>
+<h3>Annuler un merge</h3>
+<pre><code>git merge --abort               <span class='c'># merge en cours (conflits)</span>
+git reset --hard ORIG_HEAD      <span class='c'># merge fini, pas poussé</span>
+git revert -m 1 &lt;hash-du-merge&gt; <span class='c'># merge déjà poussé</span></code></pre>
+<h3>Un rebase ou un pull a mal tourné</h3>
+<pre><code>git rebase --abort
+git reflog                      <span class='c'># retrouver l’état d’avant</span>
+git reset --hard HEAD@{1}</code></pre>
+<h3>Je suis en « detached HEAD »</h3>
+<pre><code>git switch -c sauvegarde        <span class='c'># garde ton travail sur une branche</span></code></pre>
+<div class='note'>Presque rien n’est perdu tant que c’est commité : <code>git reflog</code> garde la trace pendant environ 90 jours.</div>
+</div>
+</details>
+
+<details>
+<summary>Cherry-pick et stash <small>récupérer, mettre de côté</small></summary>
+<div class='body'>
+<h3>cherry-pick : copier un commit d’une autre branche</h3>
+<pre><code>git log --oneline autre-branche   <span class='c'># repérer le hash</span>
+git switch main
+git cherry-pick &lt;hash&gt;
+git cherry-pick h1 h2 h3          <span class='c'># plusieurs commits</span>
+git cherry-pick h1^..h3           <span class='c'># une plage</span>
+git cherry-pick --continue        <span class='c'># après un conflit résolu</span>
+git cherry-pick --abort</code></pre>
+<h3>stash : mettre des modifs de côté</h3>
+<pre><code>git stash push -m 'travail en cours'
+git stash push -u -m 'avec fichiers non suivis'
+git stash list
+git stash show -p stash@{0}       <span class='c'># voir le contenu</span>
+git stash pop                     <span class='c'># appliquer et supprimer</span>
+git stash apply stash@{1}         <span class='c'># appliquer et garder</span>
+git stash drop stash@{0}
+git stash clear                   <span class='c'># tout supprimer</span></code></pre>
+</div>
+</details>
+
+<details>
+<summary>Rebase <small>historique propre</small></summary>
+<div class='body'>
+<h3>Remettre sa branche à jour sur main</h3>
+<pre><code>git switch ma-branche
+git fetch origin
+git rebase origin/main
+<span class='c'># conflit : corriger, git add, puis</span>
+git rebase --continue
+git rebase --abort                <span class='c'># ou tout annuler</span>
+git push --force-with-lease       <span class='c'># obligatoire si déjà poussée</span></code></pre>
+<h3>Fusionner et nettoyer ses derniers commits</h3>
+<pre><code>git rebase -i HEAD~3</code></pre>
+<p>Git ouvre un éditeur : remplace <code>pick</code> au début de chaque ligne par l’action voulue.</p>
+<div class='grid'><table>
+<tr><th>Action</th><th>Effet</th></tr>
+<tr><td><code>pick</code></td><td>garder le commit tel quel</td></tr>
+<tr><td><code>reword</code></td><td>changer le message</td></tr>
+<tr><td><code>squash</code></td><td>fusionner avec le précédent, en gardant les messages</td></tr>
+<tr><td><code>fixup</code></td><td>fusionner avec le précédent, message jeté</td></tr>
+<tr><td><code>drop</code></td><td>supprimer le commit</td></tr>
+</table></div>
+<pre><code>git pull --rebase                 <span class='c'># pull sans commit de merge</span></code></pre>
+<div class='note'>Ne rebase jamais une branche que d’autres utilisent : tu réécris l’historique.</div>
+</div>
+</details>
+
+<details>
+<summary>Tags et releases <small>versions</small></summary>
+<div class='body'>
+<pre><code>git tag v1.0.0                              <span class='c'># tag léger</span>
+git tag -a v1.0.0 -m 'Première version'     <span class='c'># tag annoté (recommandé)</span>
+git tag                                     <span class='c'># lister</span>
+git push origin v1.0.0                      <span class='c'># pousser un tag</span>
+git push origin --tags                      <span class='c'># pousser tous les tags</span>
+git tag -d v1.0.0                           <span class='c'># supprimer en local</span>
+git push origin --delete v1.0.0             <span class='c'># supprimer sur GitHub</span>
+git switch --detach v1.0.0                  <span class='c'># consulter cette version</span></code></pre>
+<h3>Créer une release GitHub</h3>
+<pre><code>gh release create v1.0.0 --generate-notes</code></pre>
+<p>Ou depuis le site : Releases, puis « Draft a new release ». Pour lancer un workflow à chaque tag :</p>
+<pre><code>on:
+  push:
+    tags: ['v*']</code></pre>
+</div>
+</details>
+
+<details>
+<summary>Fork et Pull Request <small>contribuer à un autre projet</small></summary>
+<div class='body'>
+<pre><code><span class='c'># 1. Fork sur GitHub (bouton Fork), puis :</span>
+git clone https://github.com/toi/projet.git
+cd projet
+git remote add upstream https://github.com/auteur/projet.git
+git remote -v                     <span class='c'># origin = ton fork, upstream = l’original</span>
+
+<span class='c'># 2. Travailler sur une branche</span>
+git switch -c ma-contribution
+<span class='c'># ... modifications, add, commit ...</span>
+git push -u origin ma-contribution
+<span class='c'># 3. Ouvrir la Pull Request depuis GitHub</span></code></pre>
+<h3>Synchroniser son fork</h3>
+<pre><code>git fetch upstream
+git switch main
+git merge upstream/main           <span class='c'># ou : git rebase upstream/main</span>
+git push origin main</code></pre>
+<pre><code>gh repo fork --clone              <span class='c'># fork + clone en une commande</span></code></pre>
+</div>
+</details>
+
+<details>
+<summary>Workflow GitHub Actions <small>exemple complet</small></summary>
+<div class='body'>
+<p>Fichier <code>.github/workflows/ci.yml</code> :</p>
+<pre><code>name: CI
+on:
+  push:
+    branches: [main, develop]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: ${{ !contains(github.event.head_commit.message, '[skip build]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm test</code></pre>
+<ul>
+<li><code>branches</code> limite aux branches voulues (<code>branches-ignore</code> pour exclure).</li>
+<li><code>paths-ignore</code> ne lance rien si seuls des fichiers .md ou docs/ changent.</li>
+<li><code>if</code> saute le job quand le message contient <code>[skip build]</code>, un mot-clé à toi.</li>
+<li><code>workflow_dispatch</code> permet de le lancer à la main.</li>
+</ul>
+<div class='note'><code>[skip ci]</code> marche sans rien écrire dans le fichier. La condition <code>if</code> n’est utile que pour un mot-clé personnalisé. Sur une pull request, le message de commit n’est pas lu par cette condition : le job se lance.</div>
+</div>
+</details>
+
+<details>
+<summary>GitHub CLI <small>gh</small></summary>
+<div class='body'>
+<pre><code>brew install gh                   <span class='c'># macOS</span>
+sudo apt install gh               <span class='c'># Debian, Ubuntu (ou dépôt officiel GitHub)</span>
+gh auth login                     <span class='c'># se connecter</span></code></pre>
+<h3>Dépôts et Pull Requests</h3>
+<pre><code>gh repo create mon-repo --public --source=. --remote=origin --push
+gh repo clone user/repo
+gh pr create --fill               <span class='c'># PR avec titre et description du commit</span>
+gh pr list
+gh pr checkout 42                 <span class='c'># récupérer la PR n°42</span>
+gh pr merge 42 --squash</code></pre>
+<h3>Actions</h3>
+<pre><code>gh run list                       <span class='c'># derniers runs</span>
+gh run watch                      <span class='c'># suivre un run en direct</span>
+gh run view --log-failed          <span class='c'># logs des étapes en échec</span>
+gh workflow run ci.yml            <span class='c'># lancer un workflow à la main</span></code></pre>
+</div>
+</details>
+
+<details>
+<summary>Commandes utiles <small>bonus</small></summary>
+<div class="body">
+<pre><code>git log --oneline           <span class="c"># historique condensé</span>
+git diff                    <span class="c"># modifs non commitées</span>
+git restore fichier.txt     <span class="c"># annuler les modifs d’un fichier</span>
+git restore --staged f.txt  <span class="c"># retirer du prochain commit</span>
+git commit --amend          <span class="c"># modifier le dernier commit</span>
+git stash                   <span class="c"># mettre de côté</span>
+git stash pop               <span class="c"># récupérer</span>
+git revert &lt;hash&gt;           <span class="c"># annuler un commit publié</span></code></pre>
+</div>
+</details>
+
+<footer>Astuce : clique sur « Copier » dans un bloc de code pour le récupérer.</footer>
+</main>
+<script>
+(function(){
+  var all=document.querySelectorAll('details');
+  document.getElementById('open').onclick=function(){all.forEach(function(d){d.open=true})};
+  document.getElementById('close').onclick=function(){all.forEach(function(d){d.open=false})};
+  document.getElementById('theme').onclick=function(){
+    var r=document.documentElement,dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    r.dataset.theme=dark?'light':'dark';
+  };
+  var q=document.getElementById('q'),toc=document.getElementById('toc'),none=document.getElementById('none');
+  var norm=function(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')};
+  var calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  all.forEach(function(d,i){
+    d.id='s'+i;
+    var s=d.querySelector('summary'),li=document.createElement('li'),a=document.createElement('a');
+    a.href='#s'+i;a.textContent=s.childNodes[0].textContent.trim();
+    a.onclick=function(e){e.preventDefault();d.open=true;d.scrollIntoView({behavior:calm?'auto':'smooth',block:'start'})};
+    li.appendChild(a);toc.appendChild(li);
+    d._t=norm(d.textContent);
+  });
+  q.oninput=function(){
+    var v=norm(q.value.trim()),n=0;
+    all.forEach(function(d,i){
+      var ok=!v||d._t.indexOf(v)>-1;
+      d.hidden=!ok;toc.children[i].hidden=!ok;
+      if(ok)n++;
+      if(v&&ok)d.open=true;
+    });
+    none.style.display=n?'none':'block';
+  };
+  document.querySelectorAll('pre').forEach(function(pre){
+    var w=document.createElement('div');w.className='pre';
+    pre.parentNode.insertBefore(w,pre);w.appendChild(pre);
+    var b=document.createElement('button');b.className='copy';b.textContent='Copier';
+    b.onclick=function(){
+      var t=pre.innerText;
+      var done=function(){b.textContent='Copié';setTimeout(function(){b.textContent='Copier'},1500)};
+      try{navigator.clipboard.writeText(t).then(done,function(){})}catch(e){}
+    };
+    w.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>
