@@ -2,7 +2,7 @@
 <html lang="fr" class="dark">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>
     Nexus Merge and Code Studio — Comparateur & Fusionneur de Favoris, Fichiers & Dossiers — Editeur/Indentation Code Online
   </title>
@@ -237,6 +237,55 @@ header.is-scrolled{box-shadow:0 10px 30px -18px rgba(0,0,0,.45)}
 #smartToolbar input[type=text],#smartToolbar input:not([type]),#smartToolbar input[type=search]{border-radius:10px!important;min-width:150px}
 #smartToolbar button{border-radius:10px!important;font-weight:600}
 option{background:#fff;color:#0f172a}.dark option{background:#15192b;color:#e2e8f0}
+
+/* ===== Couche mobile (<768px) : barre du bas, header compact, stats & outils repliables ===== */
+#nxMenuBtn,#nxStatsToggle,#nxToolsToggle,#nxBottomNav{display:none}
+@media (max-width:767px){
+  html,body{max-width:100%}
+  body{overflow-x:clip;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+
+  /* Header compact : logo + titre + bouton menu ; actions secondaires dans le menu */
+  header{position:static!important;padding:.5rem .75rem!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .nx-hd-inner{flex-wrap:wrap!important;flex-direction:row!important;align-items:center!important;gap:.5rem!important}
+  .nx-hd-brand{flex:1 1 0;min-width:0}
+  .nx-hd-brand p{display:none}
+  .nx-hd-brand h1{font-size:15px!important;line-height:1.15!important}
+  .nx-hd-brand>div:first-child{width:34px;height:34px;flex:none}
+  .nx-hd-actions{display:none!important;flex:1 0 100%;order:3;padding-top:.25rem;gap:.4rem!important}
+  header.nx-menu-open .nx-hd-actions{display:flex!important}
+  .nx-hd-actions>*{flex:1 1 auto;justify-content:center}
+  #nxMenuBtn{display:inline-flex;align-items:center;justify-content:center;flex:none;width:40px;height:40px;border-radius:12px;border:1px solid rgba(148,163,184,.4);background:rgba(148,163,184,.12);color:inherit}
+  header.nx-menu-open #nxMenuBtn{border-color:#06b6d4;background:rgba(6,182,212,.14)}
+
+  /* Barre de navigation du bas (zone du pouce) */
+  #nxBottomNav{display:block;position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(255,255,255,.94);border-top:1px solid rgba(148,163,184,.35);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .dark #nxBottomNav{background:rgba(7,8,15,.94);border-top-color:#232946}
+  #nxBottomNav .nexus-tabs{display:grid!important;grid-template-columns:repeat(4,1fr);gap:0;width:100%;padding:4px 6px;border:0!important;border-radius:0;background:transparent!important}
+  #nxBottomNav .nexus-tabs .mode-tab{flex-direction:column;justify-content:center;gap:2px!important;min-height:52px;padding:6px 2px!important;font-size:10.5px;line-height:1.1}
+  #nxBottomNav .nexus-tabs .mode-tab>span:first-child{font-size:18px;line-height:1}
+  body.code-editor-fullscreen-active #nxBottomNav{display:none}
+
+  /* Statistiques repliables */
+  #statsSection{padding-top:.5rem!important}
+  #nxStatsToggle,#nxToolsToggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:.5rem;padding:.55rem .75rem;border-radius:12px;border:1px solid rgba(148,163,184,.35);background:rgba(148,163,184,.1);font-size:12px;font-weight:600;text-align:left;color:inherit}
+  #nxStatsToggle .nx-sum{flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:11px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+  .nx-chev{display:inline-block;transition:transform .2s}
+  #statsSection.nx-open #nxStatsToggle .nx-chev,body.nx-tools-open #nxToolsToggle .nx-chev{transform:rotate(180deg)}
+  #statsSection #nxStatsGrid{display:none}
+  #statsSection.nx-open #nxStatsGrid{display:grid;margin-top:.625rem}
+  #nxStatsGrid>div{flex-wrap:wrap;gap:.25rem}
+  #statDedupBadge{white-space:normal}
+
+  /* Barre d'outils repliable, non collante */
+  body:not(.nx-tools-open) #smartToolbar:not(.code-toolbar-fullscreen){display:none!important}
+  #smartToolbar:not(.code-toolbar-fullscreen){position:static!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  #smartToolbar.code-toolbar-fullscreen{max-height:42vh;overflow-y:auto}
+  body.code-editor-fullscreen-active #nxToolsToggle{display:none}
+
+  /* Éléments flottants au-dessus de la barre du bas */
+  #goToTopBtn{bottom:calc(76px + env(safe-area-inset-bottom,0px))!important;right:14px!important}
+  #toastContainer{bottom:calc(72px + env(safe-area-inset-bottom,0px))!important;left:12px!important;right:12px!important;max-width:none!important}
+}
 </style>
 </head>
 <body class="cyber-grid-bg min-h-screen flex flex-col font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200">
@@ -3296,6 +3345,62 @@ Bookmarks
                 else if(e.key==='Enter'&&e.target&&e.target.id==='codeFindInput'){e.preventDefault();searchCodeOnly();}
             });
         }catch(err){console.warn('Toolbar UX:',err);}})();
+    
+        // ---- Couche mobile : barre de navigation du bas, menu header, stats & outils repliables ----
+        (function(){try{
+            const mq=window.matchMedia('(max-width:767px)');
+            const tabs=document.querySelector('.nexus-tabs')||(document.getElementById('modeBtn-code')||{closest:()=>null}).closest('.inline-flex');
+            const layoutBtn=document.getElementById('layoutToggleBtn');
+            if(!tabs||!layoutBtn)return;
+            const actions=tabs.parentElement,inner=actions.parentElement,brand=inner.firstElementChild,header=inner.closest('header');
+            if(!header||brand===actions)return;
+            inner.classList.add('nx-hd-inner');brand.classList.add('nx-hd-brand');actions.classList.add('nx-hd-actions');
+
+            // Bouton menu (burger) pour les actions secondaires : disposition, démo, reset, thème
+            const menuBtn=document.createElement('button');
+            menuBtn.id='nxMenuBtn';menuBtn.type='button';menuBtn.setAttribute('aria-label','Menu');menuBtn.setAttribute('aria-expanded','false');
+            menuBtn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+            inner.insertBefore(menuBtn,actions);
+            const setMenu=o=>{header.classList.toggle('nx-menu-open',o);menuBtn.setAttribute('aria-expanded',String(o));};
+            menuBtn.addEventListener('click',()=>setMenu(!header.classList.contains('nx-menu-open')));
+            actions.addEventListener('click',e=>{if(mq.matches&&e.target.closest('button'))setTimeout(()=>setMenu(false),0);});
+
+            // Onglets de mode : déplacés dans une barre fixe en bas sur mobile, remis en place sur ordinateur
+            const nav=document.createElement('nav');nav.id='nxBottomNav';nav.setAttribute('aria-label','Modes');document.body.appendChild(nav);
+            const ph=document.createComment('nx-tabs');actions.insertBefore(ph,tabs);
+            const place=()=>{
+                if(mq.matches){if(tabs.parentElement!==nav)nav.appendChild(tabs);}
+                else{setMenu(false);if(tabs.parentElement!==actions)ph.parentNode.insertBefore(tabs,ph.nextSibling);}
+                requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
+            };
+            (mq.addEventListener?mq.addEventListener('change',place):mq.addListener(place));
+            place();
+
+            // Statistiques repliables, résumé sur une ligne quand c'est replié
+            const sA=document.getElementById('statTotalA');
+            const sec=sA&&sA.closest('section');
+            if(sec&&sec.firstElementChild){
+                sec.id='statsSection';const grid=sec.firstElementChild;grid.id='nxStatsGrid';
+                const tg=document.createElement('button');tg.id='nxStatsToggle';tg.type='button';tg.setAttribute('aria-expanded','false');
+                tg.innerHTML='<span>📊 Stats</span><span class="nx-sum"></span><span class="nx-chev">▾</span>';
+                sec.insertBefore(tg,grid);
+                const val=id=>{const e=document.getElementById(id);return e?e.textContent.trim():'0';};
+                const upd=()=>{tg.querySelector('.nx-sum').textContent='A '+val('statTotalA')+' · B '+val('statTotalB')+' · ∩ '+val('statCommon')+' · Fusion '+val('statMerged');};
+                upd();new MutationObserver(upd).observe(grid,{subtree:true,childList:true,characterData:true});
+                const setStats=o=>{sec.classList.toggle('nx-open',o);tg.setAttribute('aria-expanded',String(o));};
+                try{setStats(localStorage.getItem('nx_stats_open')==='1');}catch(e){}
+                tg.addEventListener('click',()=>{const o=!sec.classList.contains('nx-open');setStats(o);try{localStorage.setItem('nx_stats_open',o?'1':'0');}catch(e){}});
+            }
+
+            // Barre d'outils repliable (replié par défaut sur mobile)
+            const tb=document.getElementById('smartToolbar');
+            if(tb&&tb.parentNode){
+                const tt=document.createElement('button');tt.id='nxToolsToggle';tt.type='button';tt.setAttribute('aria-expanded','false');
+                tt.innerHTML='<span>⚙️ Outils &amp; réglages</span><span class="nx-chev">▾</span>';
+                tb.parentNode.insertBefore(tt,tb);
+                tt.addEventListener('click',()=>{const o=document.body.classList.toggle('nx-tools-open');tt.setAttribute('aria-expanded',String(o));});
+            }
+        }catch(err){console.warn('Mobile UX:',err);}})();
     </script>
               </body>
             </html>
