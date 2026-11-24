@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JUSTICE DRUM LAB — Guide Interactif & Simulateur Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            amber: {
+              450: '#f59e0b',
+              550: '#d97706',
+            },
+            studio: {
+              bg: '#0b0c0e',
+              card: '#131519',
+              panel: '#1a1d23',
+              border: '#272b33',
+              gold: '#eab308',
+              glow: 'rgba(234, 179, 8, 0.25)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+    /* Custom Studio Sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 6px;
+      border-radius: 999px;
+      background: #272b33;
+    }
+    html:not(.dark) input[type="range"]::-webkit-slider-runnable-track {
+      background: #d1d5db;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -5px;
+      background-color: #eab308;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
+      border: 2px solid #0b0c0e;
+      transition: transform 0.1s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+    .gold-glow {
+      box-shadow: 0 0 24px rgba(234, 179, 8, 0.18);
+    }
+    .cross-emblem {
+      filter: drop-shadow(0 0 12px rgba(234, 179, 8, 0.5));
+    }
+    @keyframes pulse-pad {
+      0% { transform: scale(0.96); }
+      100% { transform: scale(1); }
+    }
+    .pad-hit {
+      animation: pulse-pad 0.15s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-studio-bg dark:text-gray-100 min-h-screen antialiased selection:bg-yellow-500 selection:text-black">
+
+  <!-- TOP STICKY CONSOLE BAR -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/90 dark:bg-studio-bg/90 border-b border-gray-200 dark:border-studio-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand / Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-yellow-500/10 border border-yellow-500/40 flex items-center justify-center cross-emblem">
+          <svg class="w-5 h-5 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10.5 2h3v6.5H20v3h-6.5V22h-3V11.5H4v-3h6.5V2z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold tracking-tight text-base sm:text-lg uppercase">Justice Drum Lab</h1>
+            <span class="hidden sm:inline-block text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-yellow-500/15 text-yellow-600 dark:text-yellow-400 border border-yellow-500/30">Ableton Live Edition • WebAudio</span>
+          </div>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Layering, Micro-Timing, NY Compression, Bass Mono, Groove & Chaîne Ableton Live</p>
+        </div>
+      </div>
+
+      <!-- Master Audio Transport & A/B Switch -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        
+        <!-- A/B Preset Comparison -->
+        <div class="flex items-center bg-gray-200 dark:bg-studio-panel p-1 rounded-xl border border-gray-300 dark:border-studio-border">
+          <button id="btn-preset-clean" onclick="applyPreset('clean')" class="px-2.5 py-1.5 text-xs font-semibold rounded-lg transition text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white">
+            A : Son Clean
+          </button>
+          <button id="btn-preset-justice" onclick="applyPreset('justice')" class="px-2.5 py-1.5 text-xs font-bold rounded-lg transition bg-yellow-500 text-black shadow">
+            B : Son Justice
+          </button>
+        </div>
+
+        <!-- BPM Control -->
+        <div class="flex items-center gap-1.5 bg-gray-200 dark:bg-studio-panel px-2.5 py-1.5 rounded-xl border border-gray-300 dark:border-studio-border">
+          <span class="text-[10px] font-mono uppercase text-gray-500 dark:text-gray-400">BPM</span>
+          <input type="number" id="input-bpm" min="80" max="160" value="120" onchange="updateBpm()" class="w-12 bg-transparent font-mono text-xs font-bold text-yellow-500 focus:outline-none text-center" />
+        </div>
+
+        <!-- Play / Stop Loop -->
+        <button id="btn-play-loop" onclick="toggleLoop()" class="flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs sm:text-sm bg-yellow-500 hover:bg-yellow-400 text-black shadow-lg shadow-yellow-500/20 transition active:scale-95">
+          <span id="play-icon">▶</span>
+          <span id="play-text">Écouter la Boucle</span>
+        </button>
+
+        <!-- BPM Control -->
+        <div class="flex items-center gap-1.5 bg-gray-200 dark:bg-studio-panel px-2.5 py-1.5 rounded-xl border border-gray-300 dark:border-studio-border">
+          <span class="text-[11px] font-mono text-gray-500 dark:text-gray-400">BPM</span>
+          <input type="number" id="input-bpm" value="120" min="90" max="145" onchange="updateBpm()" class="w-12 bg-transparent font-mono text-xs font-bold text-center focus:outline-none text-yellow-600 dark:text-yellow-400" />
+        </div>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" title="Changer le thème clair/sombre" class="p-2 rounded-xl bg-gray-200 dark:bg-studio-panel border border-gray-300 dark:border-studio-border text-gray-700 dark:text-gray-300 hover:border-yellow-500 transition">
+          <svg id="theme-icon-sun" class="w-4 h-4 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <svg id="theme-icon-moon" class="w-4 h-4 block dark:hidden text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Trigger Pads & Live Step Sequencer Bar -->
+    <div class="bg-gray-100 dark:bg-studio-card border-t border-gray-200 dark:border-studio-border">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+        
+        <!-- Manual Trigger Pads -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[11px] font-mono uppercase text-gray-500 dark:text-gray-400 mr-1">Pads :</span>
+          <button id="pad-kick" onclick="triggerManualKick()" class="px-3 py-1.5 rounded-lg bg-white dark:bg-studio-panel border border-gray-300 dark:border-studio-border hover:border-yellow-500 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+            <span class="w-2 h-2 rounded-full bg-yellow-500"></span> Kick
+          </button>
+          <button id="pad-snare" onclick="triggerManualSnare()" class="px-3 py-1.5 rounded-lg bg-white dark:bg-studio-panel border border-gray-300 dark:border-studio-border hover:border-yellow-500 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span> Snare (3 Couches)
+          </button>
+          <button id="pad-hat" onclick="triggerManualHat()" class="px-3 py-1.5 rounded-lg bg-white dark:bg-studio-panel border border-gray-300 dark:border-studio-border hover:border-yellow-500 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+            <span class="w-2 h-2 rounded-full bg-sky-400"></span> Hi-Hat
+          </button>
+          <button id="pad-fill" onclick="triggerManualFill()" class="px-3 py-1.5 rounded-lg bg-yellow-500/15 dark:bg-yellow-500/20 border border-yellow-500/40 hover:border-yellow-500 text-yellow-700 dark:text-yellow-300 text-xs font-bold flex items-center gap-1.5 transition active:scale-95">
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span> Fill / Ghost Roll
+          </button>
+        </div>
+
+        <!-- 16-Step Visual Beat Indicator -->
+        <div class="flex items-center gap-1" id="step-leds">
+          <span class="text-[11px] font-mono text-gray-500 dark:text-gray-400 mr-1 hidden md:inline">16 Pas :</span>
+          <!-- 16 LEDs generated via JS -->
+        </div>
+
+        <!-- Music Bus & Auto-Fills Toggles -->
+        <div class="flex flex-wrap items-center gap-3">
+          <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium select-none">
+            <input type="checkbox" id="toggle-auto-fills" checked class="accent-yellow-500 w-3.5 h-3.5 rounded" />
+            <span>Ghost Notes & Fills</span>
+          </label>
+          <label class="flex items-center gap-1.5 cursor-pointer text-xs font-medium select-none">
+            <input type="checkbox" id="toggle-bass" checked class="accent-yellow-500 w-3.5 h-3.5 rounded" />
+            <span>Bus Musique (Basse + Accord)</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+
+    <!-- INTRO BANNER -->
+    <section class="rounded-2xl p-6 sm:p-8 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border gold-glow">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+        <div class="lg:col-span-2 space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/30">
+            <span>PHILOSOPHIE DU SON • ÈRE « CROSS » & « AUDIO, VIDEO, DISCO »</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            Pourquoi les batteries de Justice claquent-elles autant ?
+          </h2>
+          <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+            Contrairement à l'électro moderne très propre, Xavier de Rosnay et Gaspard Augé créent <strong>l'illusion d'un groupe de funk/rock enregistré dans un garage puis poussé dans le rouge sur une console analogique</strong>. Utilise les contrôles interactifs ci-dessous : chaque bouton modifie le synthétiseur audio en temps réel dans ton navigateur.
+          </p>
+        </div>
+        <div class="bg-gray-100 dark:bg-studio-panel rounded-xl p-4 border border-gray-200 dark:border-studio-border space-y-2.5 text-xs">
+          <div class="font-bold uppercase tracking-wider text-yellow-600 dark:text-yellow-400 font-mono">Les 4 Piliers Secrets</div>
+          <div class="flex items-start gap-2">
+            <span class="font-mono font-bold text-yellow-500">01.</span>
+            <span><strong>Layering :</strong> Empiler 3 sons différents pour créer une seule caisse claire géante.</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="font-mono font-bold text-yellow-500">02.</span>
+            <span><strong>Micro-décalage (Flam) :</strong> Décaler les couches de quelques millisecondes.</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="font-mono font-bold text-yellow-500">03.</span>
+            <span><strong>Saturation & NY Comp :</strong> Écraser tout le kit en parallèle + clipping analogique.</span>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="font-mono font-bold text-yellow-500">04.</span>
+            <span><strong>Sidechain & Stéréo :</strong> Bass Mono sous 140 Hz, espace stéréo large et pompage extrême.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEDICATED ABLETON LIVE WORKFLOW BANNER / TABS -->
+    <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border-2 border-yellow-500/40 space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-studio-border pb-4">
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-1 rounded-lg bg-black text-white dark:bg-white dark:text-black font-mono font-extrabold text-xs tracking-wider">ABLETON LIVE</span>
+          <div>
+            <h3 class="text-lg sm:text-xl font-bold">Architecture du Template & Pense-Bête Natif Ableton</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Clique sur une piste ou un bus pour voir la chaîne exacte des effets natifs Ableton Live à insérer.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="selectAbletonTab('rack')" id="ab-tab-rack" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500 text-black">1. Drum Rack & Micro-Timing</button>
+          <button onclick="selectAbletonTab('snarefx')" id="ab-tab-snarefx" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300">2. Chaîne Snare & Stéréo</button>
+          <button onclick="selectAbletonTab('drumbus')" id="ab-tab-drumbus" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300">3. Drum Bus & NY Parallel</button>
+          <button onclick="selectAbletonTab('musicbus')" id="ab-tab-musicbus" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300">4. Bus Musique & Sidechain</button>
+        </div>
+      </div>
+
+      <div id="ableton-workflow-content" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <!-- Populated dynamically via JS -->
+      </div>
+    </section>
+
+    <!-- STEP 1 & 2: LAYERING, MICRO-TIMING & TRANSIENT / DETUNE -->
+    <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 dark:border-studio-border pb-4">
+        <div>
+          <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Étapes 1 & 2 • Architecture de la Snare & Kick</span>
+          <h3 class="text-xl font-bold mt-0.5">Layering, Micro-Timing (Track Delay), Transient & Detune</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="hidden sm:inline-block text-[11px] font-mono px-2.5 py-1 rounded bg-gray-100 dark:bg-studio-panel border border-gray-300 dark:border-studio-border text-gray-600 dark:text-gray-300">
+            Ableton : Drum Rack + Track Delay (D)
+          </span>
+          <button onclick="triggerManualSnare()" class="px-4 py-2 rounded-xl bg-yellow-500/15 hover:bg-yellow-500/25 text-yellow-600 dark:text-yellow-400 border border-yellow-500/40 text-xs font-bold transition">
+            🔊 Écouter la Snare
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Controls: 3 Layers + Offsets + Transient/Detune -->
+        <div class="lg:col-span-7 space-y-3.5">
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            Sur Ableton, sépare chaque couche sur sa propre piste (ou chaîne de <strong>Drum Rack</strong>) et utilise le <strong>Track Delay</strong> en millisecondes. Ajoute un léger <strong>Detune</strong> sur le Rimshot et sculpte l'attaque avec un <strong>Transient Shaper</strong> (ou l'enveloppe Pitch/Amp de <em>Simpler</em>).
+          </p>
+
+          <!-- Layer 3: Clap Pre-delay -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 font-bold text-sm cursor-pointer">
+                <input type="checkbox" id="layer-clap" checked class="accent-yellow-500 w-4 h-4" onchange="drawTimeline()" />
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span>Couche 3 : Clap / Bruit Blanc (Largeur stéréo fouettée)</span>
+              </label>
+              <span id="val-clap-offset" class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-500">-18 ms (Avant)</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[11px] font-mono text-gray-500">-30ms</span>
+              <input type="range" id="slider-clap-offset" min="-30" max="0" value="-18" class="w-full" oninput="updateTimingUI()" />
+              <span class="text-[11px] font-mono text-gray-500">0ms</span>
+            </div>
+          </div>
+
+          <!-- Layer 1: Wood Body (Anchor 0ms) -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border flex items-center justify-between">
+            <label class="flex items-center gap-2.5 font-bold text-sm cursor-pointer">
+              <input type="checkbox" id="layer-wood" checked class="accent-yellow-500 w-4 h-4" onchange="drawTimeline()" />
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+              <span>Couche 1 : Snare Bois Vintage (Coffre 200 Hz • Mono)</span>
+            </label>
+            <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-yellow-500/15 text-yellow-500">0 ms (Grille)</span>
+          </div>
+
+          <!-- Layer 2: Metallic Rimshot Delay -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="flex items-center gap-2.5 font-bold text-sm cursor-pointer">
+                <input type="checkbox" id="layer-metal" checked class="accent-yellow-500 w-4 h-4" onchange="drawTimeline()" />
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+                <span>Couche 2 : Rimshot Métallique (Claquement sec)</span>
+              </label>
+              <span id="val-metal-offset" class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-rose-500/15 text-rose-400">+8 ms (Après)</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[11px] font-mono text-gray-500">0ms</span>
+              <input type="range" id="slider-metal-offset" min="0" max="25" value="8" class="w-full" oninput="updateTimingUI()" />
+              <span class="text-[11px] font-mono text-gray-500">+25ms</span>
+            </div>
+          </div>
+
+          <!-- NEW: Transient Attack & Secondary Layer Detune -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-1.5">
+              <div class="flex justify-between text-xs font-bold">
+                <span>Transient Attack (Clac)</span>
+                <span id="val-transient" class="font-mono text-yellow-500">+65 %</span>
+              </div>
+              <input type="range" id="slider-transient" min="0" max="100" value="65" class="w-full" oninput="updateSnareCharacterUI()" />
+              <p class="text-[10px] text-gray-500">Ableton : <em>Drum Buss (Transient)</em> ou <em>Simpler Pitch Env</em></p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-1.5">
+              <div class="flex justify-between text-xs font-bold">
+                <span>Detune / Chorus Couche 2</span>
+                <span id="val-detune" class="font-mono text-rose-400">+14 cents</span>
+              </div>
+              <input type="range" id="slider-detune" min="0" max="35" value="14" class="w-full" oninput="updateSnareCharacterUI()" />
+              <p class="text-[10px] text-gray-500">Ableton : <em>Simpler Detune</em> ou <em>Chorus-Ensemble</em> léger</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visualizer: Micro-Timing Oscilloscope Timeline -->
+        <div class="lg:col-span-5 flex flex-col justify-between rounded-xl bg-gray-950 border border-gray-800 p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-gray-400 uppercase">Chronologie des transitoires (ms)</span>
+            <span class="text-[11px] font-mono text-yellow-400">Zoom : ±35 ms</span>
+          </div>
+          <canvas id="canvas-timeline" class="w-full h-56 rounded-lg bg-black/60"></canvas>
+          <p class="text-xs text-gray-400 mt-3 leading-relaxed">
+            💡 <strong>Astuce Ableton Live :</strong> Clique sur le petit bouton <code class="px-1 py-0.5 bg-gray-800 rounded text-yellow-400">D</code> en bas à droite de la vue Session/Arrangement pour afficher les <strong>Track Delays</strong> et tape directement <code class="text-emerald-400">-18.0 ms</code> sur la piste Clap et <code class="text-rose-400">+8.0 ms</code> sur le Rimshot !
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: DYNAMICS, VELOCITY & GROOVE (HUMANIZE) + STEREO / MONO LOW-END -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- VELOCITY & GROOVE (HUMANIZE) -->
+      <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border flex flex-col justify-between space-y-5">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Dynamique & Feeling Funk</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-100 dark:bg-studio-panel border border-gray-300 dark:border-studio-border">Ableton : Velocity + Groove Pool</span>
+          </div>
+          <h3 class="text-xl font-bold">Humanize : Vélocité & Groove / Swing</h3>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            Une batterie Justice n'a jamais toutes ses notes à 127. Varier la vélocité des hi-hats et ghost notes + ajouter un léger swing donne le rebond « groupe live dans un garage ».
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Velocity Humanize -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span>Variation de Vélocité (Hi-Hats & Ghost Notes)</span>
+              <span id="val-humanize" class="font-mono text-yellow-500">45 %</span>
+            </div>
+            <input type="range" id="slider-humanize" min="0" max="100" value="45" class="w-full" oninput="updateGrooveUI()" />
+            <p class="text-[11px] text-gray-500 dark:text-gray-400">Ableton : Effet MIDI <strong>Velocity</strong> (Random = 18 à 25) avant le Drum Rack.</p>
+          </div>
+
+          <!-- Swing / Groove -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span>Groove / Swing 16e (Décalage des doubles-croches)</span>
+              <span id="val-swing" class="font-mono text-yellow-500">24 %</span>
+            </div>
+            <input type="range" id="slider-swing" min="0" max="60" value="24" class="w-full" oninput="updateGrooveUI()" />
+            <p class="text-[11px] text-gray-500 dark:text-gray-400">Ableton : Glisse un groove <strong>MPC 16 Swing-54</strong> ou <strong>Logic 16A</strong> depuis le Groove Pool sur tes clips MIDI.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEREO WIDTH & MONO LOW-END -->
+      <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border flex flex-col justify-between space-y-5">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Image Stéréo & Assise</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-100 dark:bg-studio-panel border border-gray-300 dark:border-studio-border">Ableton : Utility (Bass Mono)</span>
+          </div>
+          <h3 class="text-xl font-bold">Gestion Stéréo / Mono & Low-End</h3>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            Le Kick et le corps de la Snare doivent rester <strong>strictement Mono sous 140 Hz</strong> pour un impact maximal en club, tandis que le Clap, le Slapback et la Gated Reverb s'ouvrent largement sur les côtés.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Stereo Width on Clap/FX -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span>Ouverture Stéréo (Clap, Slapback & Gated Reverb)</span>
+              <span id="val-stereo-width" class="font-mono text-emerald-400">135 % (Large)</span>
+            </div>
+            <input type="range" id="slider-stereo-width" min="0" max="160" value="135" class="w-full" oninput="updateStereoUI()" />
+            <p class="text-[11px] text-gray-500 dark:text-gray-400">Ableton : <strong>Utility</strong> avec Width à 130–150 % sur le retour de réverbe/clap.</p>
+          </div>
+
+          <!-- Bass Mono Toggle -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border flex items-center justify-between gap-3">
+            <div>
+              <div class="text-xs font-bold">Utility : Bass Mono activé (&lt; 140 Hz)</div>
+              <div class="text-[11px] text-gray-500 dark:text-gray-400">Recentre toutes les basses fréquences du Drum Bus au milieu du mix.</div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="toggle-bass-mono" checked class="sr-only peer" />
+              <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
+            </label>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- STEP 3 & 4: EQ EXPLORER & GATED REVERB / SLAPBACK -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- STEP 3: EQ SCULPTING -->
+      <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border flex flex-col justify-between space-y-5">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Étape 3 • EQ Eight Ableton</span>
+            <label class="flex items-center gap-2 text-xs font-bold cursor-pointer bg-gray-100 dark:bg-studio-panel px-3 py-1 rounded-lg border border-gray-300 dark:border-studio-border">
+              <input type="checkbox" id="toggle-eq" checked class="accent-yellow-500 w-3.5 h-3.5" />
+              <span>EQ Actif</span>
+            </label>
+          </div>
+          <h3 class="text-xl font-bold">Sculpter la place & l'agressivité</h3>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            Sur <strong>EQ Eight</strong>, nettoie les fréquences « carton » (300-400 Hz) pour laisser respirer la basse saturée, et booste le mordant.
+          </p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 border-b border-gray-200 dark:border-studio-border pb-2">
+          <button onclick="selectEqTab('kick')" id="tab-eq-kick" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500 text-black">Kick</button>
+          <button onclick="selectEqTab('snare')" id="tab-eq-snare" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300">Snare</button>
+          <button onclick="selectEqTab('hat')" id="tab-eq-hat" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300">Hi-Hats</button>
+        </div>
+
+        <!-- EQ Curve Canvas -->
+        <div class="rounded-xl bg-gray-950 border border-gray-800 p-3">
+          <canvas id="canvas-eq" class="w-full h-36"></canvas>
+        </div>
+
+        <!-- EQ Details Box -->
+        <div id="eq-details" class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border text-xs space-y-1.5">
+          <!-- Filled dynamically by JS -->
+        </div>
+      </section>
+
+      <!-- STEP 4: SLAPBACK DELAY & GATED REVERB -->
+      <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border flex flex-col justify-between space-y-5">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Étape 4 • Delay & Reverb + Gate</span>
+            <label class="flex items-center gap-2 text-xs font-bold cursor-pointer bg-gray-100 dark:bg-studio-panel px-3 py-1 rounded-lg border border-gray-300 dark:border-studio-border">
+              <input type="checkbox" id="toggle-space" checked class="accent-yellow-500 w-3.5 h-3.5" onchange="updateSpaceParams()" />
+              <span>Effets Actifs</span>
+            </label>
+          </div>
+          <h3 class="text-xl font-bold">Slapback Delay & Gated Reverb</h3>
+          <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            Dans Ableton : utilise <strong>Delay</strong> (mode <em>Time</em>, L/R déliés à 42 ms / 54 ms, Feedback 0 %) et <strong>Reverb</strong> suivie d'un plugin <strong>Gate</strong> (Hold 180 ms, Release 15 ms).
+          </p>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- Slapback Delay Control -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span>1. Slapback Delay (Temps & Mix Wet)</span>
+              <span id="val-slapback" class="font-mono text-yellow-500">48 ms • Mix 32%</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-mono text-gray-500">Temps (30–75 ms)</span>
+                <input type="range" id="slider-slapback" min="30" max="75" value="48" class="w-full" oninput="updateSpaceParams()" />
+              </div>
+              <div>
+                <span class="text-[10px] font-mono text-gray-500">Mix Slapback (%)</span>
+                <input type="range" id="slider-slapback-mix" min="0" max="70" value="32" class="w-full" oninput="updateSpaceParams()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Gated Reverb Control -->
+          <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+            <div class="flex justify-between text-xs font-bold">
+              <span>2. Gated Reverb (Coupure Gate & Mix Wet)</span>
+              <span id="val-gate" class="font-mono text-yellow-500">190 ms • Mix 38%</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-mono text-gray-500">Gate Hold (100–320 ms)</span>
+                <input type="range" id="slider-gate" min="100" max="320" value="190" class="w-full" oninput="updateSpaceParams()" />
+              </div>
+              <div>
+                <span class="text-[10px] font-mono text-gray-500">Mix Reverb (%)</span>
+                <input type="range" id="slider-reverb-mix" min="0" max="80" value="38" class="w-full" oninput="updateSpaceParams()" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-xs text-yellow-700 dark:text-yellow-300">
+          🎛️ <strong>Astuce Ableton :</strong> Mets un <strong>EQ Eight</strong> avant la Reverb avec un coupe-bas à <strong>250 Hz</strong> et un coupe-haut à <strong>8 kHz</strong> pour éviter que la réverbe ne bave dans les graves.
+        </div>
+      </section>
+    </div>
+
+    <!-- STEP 5 & 6: DRUM BUS (GLUE + NY PARALLEL + SATURATION/CLIP) & SIDECHAIN -->
+    <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border space-y-6">
+      <div class="border-b border-gray-200 dark:border-studio-border pb-4">
+        <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Étapes 5 & 6 • Le Secret Final du Mixage Ableton</span>
+        <h3 class="text-xl font-bold mt-0.5">Drum Bus (Glue + NY Parallel Compression + Saturation) & Sidechain</h3>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- STEP 5: DRUM BUS + NY PARALLEL COMPRESSION -->
+        <div class="p-5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-base">Étape 5 : Groupe Drum Bus + NY Compression</h4>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-500">Glue Comp + Saturator</span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+            Sur ton groupe <strong>Drums</strong> : 1) <strong>Glue Compressor</strong> (Attack 20-30 ms, Release Auto/.1s, Ratio 4:1) pour souder ; 2) Un rack parallèle <strong>NY Compression</strong> ultra-écrasé mélangé dessous ; 3) <strong>Saturator</strong> (Analog Clip) + Clipper à -2 dB.
+          </p>
+
+          <!-- Comp Attack & Release -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span>Attack Glue</span>
+                <span id="val-comp-att" class="font-mono text-yellow-500">25 ms</span>
+              </div>
+              <input type="range" id="slider-comp-att" min="1" max="40" value="25" class="w-full" oninput="updateBusParams()" />
+            </div>
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-semibold">
+                <span>Release Glue</span>
+                <span id="val-comp-rel" class="font-mono text-yellow-500">80 ms</span>
+              </div>
+              <input type="range" id="slider-comp-rel" min="30" max="200" value="80" class="w-full" oninput="updateBusParams()" />
+            </div>
+          </div>
+
+          <!-- NEW: NY PARALLEL COMPRESSION -->
+          <div class="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 space-y-1.5">
+            <div class="flex justify-between text-xs font-bold text-yellow-600 dark:text-yellow-400">
+              <span>⚡ Compression Parallèle (NY Smash Blend)</span>
+              <span id="val-ny-comp" class="font-mono">38 %</span>
+            </div>
+            <input type="range" id="slider-ny-comp" min="0" max="100" value="38" class="w-full" oninput="updateBusParams()" />
+            <p class="text-[10px] text-gray-600 dark:text-gray-400">
+              Ableton : Crée un <strong>Audio Effect Rack</strong> à 2 chaînes (Dry 0 dB + Smash : Glue Comp Attack 0.1 ms, Ratio 10:1, -18 dB GR + Saturator) et dose la chaîne Smash.
+            </p>
+          </div>
+
+          <!-- Saturation Drive -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-semibold">
+              <span>Saturator (Analog Clip) & Hard Clipper (-2 dB)</span>
+              <span id="val-drive" class="font-mono text-yellow-500">65 %</span>
+            </div>
+            <input type="range" id="slider-drive" min="0" max="100" value="65" class="w-full" oninput="updateBusParams()" />
+          </div>
+
+          <!-- Live VU / Gain Reduction Meter -->
+          <div class="pt-1 space-y-1.5">
+            <div class="flex justify-between text-[11px] font-mono text-gray-500">
+              <span>SORTIE DRUM BUS (HARD CLIPPER -2 dBFS)</span>
+              <span id="vu-db-label" class="text-yellow-500 font-bold">-2.0 dBFS</span>
+            </div>
+            <div class="w-full h-3.5 rounded-full bg-gray-900 overflow-hidden p-0.5 border border-gray-700">
+              <div id="vu-meter-bar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 via-yellow-400 to-red-500 transition-all duration-75" style="width: 15%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: SIDECHAIN PUMPING -->
+        <div class="p-5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-base">Étape 6 : Le Sidechain (Bus Musique)</h4>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-sky-500/20 text-sky-400">Compressor Sidechain</span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+            Sur ton groupe <strong>Musique</strong> (Basse + Synthés + Guitares) : place deux <strong>Compressor</strong> Ableton en série (ou <em>Shaper</em>). Le premier réagit au <strong>Kick</strong> (100%), le second à la <strong>Snare</strong> (~50%).
+          </p>
+
+          <!-- Sidechain Amount Slider -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-semibold">
+              <span>Réduction Kick Sidechain</span>
+              <span id="val-sidechain" class="font-mono text-sky-400">-10 dB (Extrême)</span>
+            </div>
+            <input type="range" id="slider-sidechain" min="0" max="100" value="85" class="w-full" oninput="updateSidechainUI()" />
+          </div>
+
+          <!-- Snare Sidechain Influence -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-semibold">
+              <span>Influence de la Snare sur le Sidechain</span>
+              <span id="val-snare-sc" class="font-mono text-sky-400">55 %</span>
+            </div>
+            <input type="range" id="slider-snare-sc" min="0" max="100" value="55" class="w-full" oninput="updateSidechainUI()" />
+          </div>
+
+          <!-- Live Sidechain Oscilloscope -->
+          <div class="rounded-xl bg-gray-950 border border-gray-800 p-2.5">
+            <div class="flex justify-between text-[10px] font-mono text-gray-400 mb-1">
+              <span>ENVELOPPE DE VOLUME DU BUS MUSIQUE</span>
+              <span id="sc-release-label" class="text-sky-400">Release : 125 ms (Calé BPM)</span>
+            </div>
+            <canvas id="canvas-sidechain" class="w-full h-24"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTERACTIVE ABLETON LIVE TEMPLATE CHECKLIST -->
+    <section class="rounded-2xl p-6 bg-white dark:bg-studio-card border border-gray-200 dark:border-studio-border space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono font-bold uppercase text-yellow-600 dark:text-yellow-400">Aide-mémoire Template Ableton Live</span>
+          <h3 class="text-lg font-bold">Checklist pas-à-pas pour monter ton projet dans Ableton</h3>
+        </div>
+        <span id="checklist-progress" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-yellow-500/15 text-yellow-500">0 / 8 étapes validées</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm" id="checklist-container">
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>1. Drum Rack Vintage :</strong> Charger un Kick rond (TR-707/LinnDrum) + une Snare acoustique funk années 70 + un Clap + un Rimshot métallique.</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>2. Track Delay (D) :</strong> Activer les retards de piste en ms : Clap à <code>-18 ms</code>, Snare Bois à <code>0 ms</code>, Rimshot à <code>+8 ms</code> (+ Detune +14 ct).</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>3. Humanize & Groove Pool :</strong> Ajouter l'effet MIDI <em>Velocity</em> (Random ~20) et glisser un swing 16e depuis le <em>Groove Pool</em> sur les Hi-Hats/Ghost notes.</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>4. EQ Eight par piste :</strong> Kick (creux -6 dB à 350 Hz), Snare (coupe-bas 100 Hz, boost +5 dB à 200 Hz), Hats (coupe-bas 400 Hz).</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>5. Slapback & Gated Reverb :</strong> Sur la Snare, <em>Delay</em> (48 ms, Feedback 0%) + <em>Reverb</em> coupée net par un <em>Gate</em> (Hold 190 ms) + <em>Utility</em> Width 135%.</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>6. Drum Bus & NY Parallel :</strong> Grouper toutes les pistes Drums $\rightarrow$ <em>Glue Compressor</em> (Attack 25 ms, Ratio 4:1) + Rack parallèle NY ultra-compressé (~35%).</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>7. Bass Mono & Clipping :</strong> Sur le Drum Bus : <em>Utility</em> (Bass Mono &lt; 140 Hz) $\rightarrow$ <em>Saturator</em> (Analog Clip) $\rightarrow$ <em>Limiter</em> (-2 dB).</span>
+        </label>
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border cursor-pointer hover:border-yellow-500/50 transition">
+          <input type="checkbox" class="daw-check accent-yellow-500 w-4 h-4 mt-0.5" onchange="updateChecklist()" />
+          <span><strong>8. Sidechain Bus Musique :</strong> Sur le groupe Basse/Synthés : <em>Compressor</em> (Sidechain Kick, Attack 0.1 ms, Release calé tempo) + 2e Compressor (Snare 50%).</span>
+        </label>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-gray-200 dark:border-studio-border py-6 text-center text-xs text-gray-500 dark:text-gray-400">
+    Synthétiseur audio temps réel propulsé par Web Audio API • Optimisé pour un workflow Ableton Live.
+  </footer>
+
+  <!-- JAVASCRIPT: WEB AUDIO SYNTHESIS ENGINE + VISUALIZERS -->
+  <script>
+    // ==========================================
+    // 1. STATE & CONFIGURATION
+    // ==========================================
+    let audioCtx = null;
+    let isPlaying = false;
+    let currentStep = 0;
+    let stepTimer = null;
+    let bpm = 120;
+
+    // Audio Nodes
+    let drumBusInput = null;
+    let drumDryGain = null;
+    let drumParallelComp = null;
+    let drumParallelShaper = null;
+    let drumParallelGain = null;
+    let drumCompressor = null;
+    let drumShaper = null;
+    let drumClipper = null;
+    let drumAnalyser = null;
+
+    let musicBusGain = null;
+    let sidechainHistory = new Array(100).fill(1.0);
+    let currentMusicDuck = 1.0;
+
+    let currentEqTab = 'kick';
+    let currentAbletonTab = 'rack';
+
+    // ==========================================
+    // 2. INITIALIZE WEB AUDIO ENGINE
+    // ==========================================
+    function initAudio() {
+      if (audioCtx) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return;
+      }
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+
+      // --- DRUM BUS CHAIN WITH PARALLEL NY COMPRESSION ---
+      // drumBusInput splits into:
+      //   Path A (Dry/Main): drumDryGain -> drumCompressor (Glue)
+      //   Path B (NY Smash): drumParallelComp (Extreme) -> drumParallelShaper -> drumParallelGain -> drumCompressor
+      // Then drumCompressor -> drumShaper (Saturator) -> drumClipper (-2dB) -> drumAnalyser -> Destination
+
+      drumBusInput = audioCtx.createGain();
+      drumBusInput.gain.value = 0.88;
+
+      drumDryGain = audioCtx.createGain();
+      drumDryGain.gain.value = 0.85;
+
+      // NY Parallel Smash Chain
+      drumParallelComp = audioCtx.createDynamicsCompressor();
+      drumParallelComp.threshold.value = -34;
+      drumParallelComp.knee.value = 2;
+      drumParallelComp.ratio.value = 14;
+      drumParallelComp.attack.value = 0.001; // 1ms fast smash
+      drumParallelComp.release.value = 0.055; // 55ms fast pump
+
+      drumParallelShaper = audioCtx.createWaveShaper();
+      drumParallelShaper.curve = makeSaturationCurve(0.45);
+      drumParallelShaper.oversample = '2x';
+
+      drumParallelGain = audioCtx.createGain();
+      drumParallelGain.gain.value = 0.35;
+
+      // Main Glue Compressor
+      drumCompressor = audioCtx.createDynamicsCompressor();
+      drumCompressor.threshold.value = -16;
+      drumCompressor.knee.value = 6;
+      drumCompressor.ratio.value = 5;
+      drumCompressor.attack.value = 0.025; // 25ms slow attack
+      drumCompressor.release.value = 0.08; // 80ms release
+
+      // Master Saturator & Hard Clipper (-2dB)
+      drumShaper = audioCtx.createWaveShaper();
+      drumShaper.oversample = '4x';
+
+      drumClipper = audioCtx.createWaveShaper();
+      drumClipper.curve = makeHardClipCurve(0.794); // -2.0 dBFS ceiling
+
+      drumAnalyser = audioCtx.createAnalyser();
+      drumAnalyser.fftSize = 256;
+
+      // Routing
+      drumBusInput.connect(drumDryGain);
+      drumDryGain.connect(drumCompressor);
+
+      drumBusInput.connect(drumParallelComp);
+      drumParallelComp.connect(drumParallelShaper);
+      drumParallelShaper.connect(drumParallelGain);
+      drumParallelGain.connect(drumCompressor);
+
+      drumCompressor.connect(drumShaper);
+      drumShaper.connect(drumClipper);
+      drumClipper.connect(drumAnalyser);
+      drumAnalyser.connect(audioCtx.destination);
+
+      // --- MUSIC BUS (BASS + SYNTH CHORD FOR SIDECHAIN DEMO) ---
+      musicBusGain = audioCtx.createGain();
+      musicBusGain.gain.value = 0.34;
+      musicBusGain.connect(audioCtx.destination);
+
+      updateBusParams();
+    }
+
+    function makeSaturationCurve(amount) {
+      const k = amount * 22;
+      const n_samples = 44100;
+      const curve = new Float32Array(n_samples);
+      for (let i = 0; i < n_samples; ++i) {
+        const x = (i * 2) / n_samples - 1;
+        curve[i] = k === 0 ? x : ((1 + k) * x) / (1 + k * Math.abs(x));
+      }
+      return curve;
+    }
+
+    function makeHardClipCurve(limit = 0.794) {
+      const n_samples = 44100;
+      const curve = new Float32Array(n_samples);
+      for (let i = 0; i < n_samples; ++i) {
+        const x = (i * 2) / n_samples - 1;
+        curve[i] = Math.max(-limit, Math.min(limit, x));
+      }
+      return curve;
+    }
+
+    // Helper: create StereoPanner safely
+    function createWidthPanner(panValue) {
+      if (audioCtx.createStereoPanner) {
+        const p = audioCtx.createStereoPanner();
+        const widthFactor = parseFloat(document.getElementById('slider-stereo-width').value) / 100;
+        p.pan.value = Math.max(-1, Math.min(1, panValue * widthFactor));
+        return p;
+      }
+      return audioCtx.createGain();
+    }
+
+    // ==========================================
+    // 3. DRUM & SYNTH SOUND GENERATORS
+    // ==========================================
+    function triggerSidechain(strength = 1.0) {
+      if (!audioCtx || !musicBusGain) return;
+      const sliderVal = parseFloat(document.getElementById('slider-sidechain').value) / 100;
+      const duckDepth = Math.min(1, sliderVal * strength);
+      if (duckDepth <= 0.01) return;
+
+      const now = audioCtx.currentTime;
+      const baseGain = 0.34;
+      const minGain = Math.max(0.008, baseGain * (1 - duckDepth * 0.94));
+      // Release scaled with BPM (quarter-note / eighth-note feel)
+      const releaseSec = Math.max(0.08, (60 / bpm) * 0.32);
+
+      musicBusGain.gain.cancelScheduledValues(now);
+      musicBusGain.gain.setValueAtTime(musicBusGain.gain.value, now);
+      musicBusGain.gain.linearRampToValueAtTime(minGain, now + 0.003); // 3ms instant attack
+      musicBusGain.gain.exponentialRampToValueAtTime(baseGain, now + releaseSec);
+
+      currentMusicDuck = 1 - duckDepth * 0.92;
+    }
+
+    // SYNTHESIZE KICK (2 Layers: Sub/707 Body + Beater Click, Strictly Mono)
+    function playKick(timeOffset = 0, velocity = 1.0) {
+      initAudio();
+      const now = audioCtx.currentTime + timeOffset;
+      const eqOn = document.getElementById('toggle-eq').checked;
+
+      // Layer 1: Sub / Vintage Body (Mono)
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(148, now);
+      osc.frequency.exponentialRampToValueAtTime(52, now + 0.055);
+      osc.frequency.exponentialRampToValueAtTime(38, now + 0.28);
+
+      gain.gain.setValueAtTime(1.08 * velocity, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+      // Layer 2: Beater Attack Click
+      const clickOsc = audioCtx.createOscillator();
+      const clickGain = audioCtx.createGain();
+      clickOsc.type = 'triangle';
+      clickOsc.frequency.setValueAtTime(920, now);
+      clickOsc.frequency.exponentialRampToValueAtTime(125, now + 0.025);
+      clickGain.gain.setValueAtTime((eqOn ? 0.58 : 0.2) * velocity, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+
+      // EQ Scoop at 350Hz (removes boxiness)
+      const scoopFilter = audioCtx.createBiquadFilter();
+      scoopFilter.type = 'peaking';
+      scoopFilter.frequency.value = 350;
+      scoopFilter.Q.value = 1.5;
+      scoopFilter.gain.value = eqOn ? -6 : 0;
+
+      osc.connect(scoopFilter);
+      scoopFilter.connect(gain);
+      gain.connect(drumBusInput);
+
+      clickOsc.connect(clickGain);
+      clickGain.connect(drumBusInput);
+
+      osc.start(now);
+      osc.stop(now + 0.34);
+      clickOsc.start(now);
+      clickOsc.stop(now + 0.04);
+
+      if (velocity > 0.7) {
+        triggerSidechain(1.0);
+        flashPad('pad-kick');
+      }
+    }
+
+    // SYNTHESIZE SNARE (3 Layers + Micro-timing + Transient + Detune + Stereo Slapback/Gated Reverb)
+    function playSnare(timeOffset = 0, velocity = 1.0) {
+      initAudio();
+      const baseTime = audioCtx.currentTime + timeOffset + 0.035; // +35ms buffer for pre-delay
+
+      const useWood = document.getElementById('layer-wood').checked;
+      const useMetal = document.getElementById('layer-metal').checked;
+      const useClap = document.getElementById('layer-clap').checked;
+
+      const clapOffsetSec = parseFloat(document.getElementById('slider-clap-offset').value) / 1000;
+      const metalOffsetSec = parseFloat(document.getElementById('slider-metal-offset').value) / 1000;
+      const transientBoost = parseFloat(document.getElementById('slider-transient').value) / 100;
+      const detuneCents = parseFloat(document.getElementById('slider-detune').value);
+
+      const eqOn = document.getElementById('toggle-eq').checked;
+      const spaceOn = document.getElementById('toggle-space').checked;
+      const slapbackSec = parseFloat(document.getElementById('slider-slapback').value) / 1000;
+      const slapbackMix = parseFloat(document.getElementById('slider-slapback-mix').value) / 100;
+      const gateSec = parseFloat(document.getElementById('slider-gate').value) / 1000;
+      const reverbMix = parseFloat(document.getElementById('slider-reverb-mix').value) / 100;
+      const bassMono = document.getElementById('toggle-bass-mono').checked;
+
+      // Snare Sub-Bus
+      const snareBus = audioCtx.createGain();
+      snareBus.gain.value = 0.95 * velocity;
+
+      // EQ Eight Emulation
+      const hp = audioCtx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.value = eqOn ? 105 : 20;
+
+      const bodyBoost = audioCtx.createBiquadFilter();
+      bodyBoost.type = 'peaking';
+      bodyBoost.frequency.value = 200;
+      bodyBoost.Q.value = 1.4;
+      bodyBoost.gain.value = eqOn ? 5 : 0;
+
+      const highBoost = audioCtx.createBiquadFilter();
+      highBoost.type = 'highshelf';
+      highBoost.frequency.value = 5500;
+      highBoost.gain.value = eqOn ? 4.5 + transientBoost * 3 : 0;
+
+      snareBus.connect(hp);
+      hp.connect(bodyBoost);
+      bodyBoost.connect(highBoost);
+      highBoost.connect(drumBusInput);
+
+      // --- SPACE FX (STEREO SLAPBACK + GATED REVERB) ---
+      if (spaceOn && velocity > 0.45) {
+        // 1. Stereo Haas Slapback Delay (L & R slightly offset for wide garage wall)
+        if (slapbackMix > 0.01) {
+          const delayL = audioCtx.createDelay();
+          const delayR = audioCtx.createDelay();
+          delayL.delayTime.value = Math.max(0.015, slapbackSec - 0.006);
+          delayR.delayTime.value = slapbackSec + 0.006;
+
+          const panL = createWidthPanner(-0.75);
+          const panR = createWidthPanner(0.75);
+          const wetGain = audioCtx.createGain();
+          wetGain.gain.value = slapbackMix * 0.9;
+
+          const fxHp = audioCtx.createBiquadFilter();
+          fxHp.type = 'highpass';
+          fxHp.frequency.value = bassMono ? 180 : 60;
+
+          highBoost.connect(fxHp);
+          fxHp.connect(delayL);
+          fxHp.connect(delayR);
+          delayL.connect(panL);
+          delayR.connect(panR);
+          panL.connect(wetGain);
+          panR.connect(wetGain);
+          wetGain.connect(drumBusInput);
+        }
+
+        // 2. Stereo Gated Reverb
+        if (reverbMix > 0.01) {
+          const revLength = Math.max(0.08, gateSec);
+          const revBuffer = audioCtx.createBuffer(2, audioCtx.sampleRate * revLength, audioCtx.sampleRate);
+          for (let ch = 0; ch < 2; ch++) {
+            const revData = revBuffer.getChannelData(ch);
+            for (let i = 0; i < revData.length; i++) {
+              const progress = i / revData.length;
+              const gateEnv = progress < 0.84 ? 1.0 - progress * 0.22 : Math.max(0, (1 - progress) * 6);
+              revData[i] = (Math.random() * 2 - 1) * gateEnv;
+            }
+          }
+          const revNoise = audioCtx.createBufferSource();
+          revNoise.buffer = revBuffer;
+
+          const revHp = audioCtx.createBiquadFilter();
+          revHp.type = 'highpass';
+          revHp.frequency.value = bassMono ? 240 : 120;
+
+          const revBp = audioCtx.createBiquadFilter();
+          revBp.type = 'bandpass';
+          revBp.frequency.value = 1750;
+          revBp.Q.value = 0.65;
+
+          const revGain = audioCtx.createGain();
+          revGain.gain.setValueAtTime(reverbMix * 1.1 * velocity, baseTime);
+          revGain.gain.setValueAtTime(0.001, baseTime + revLength);
+
+          revNoise.connect(revHp);
+          revHp.connect(revBp);
+          revBp.connect(revGain);
+          revGain.connect(drumBusInput);
+          revNoise.start(baseTime);
+        }
+      }
+
+      // --- LAYER 3: STEREO CLAP / WHITE NOISE (Pre-delayed!) ---
+      if (useClap) {
+        const tClap = baseTime + clapOffsetSec;
+        const clapDur = 0.14;
+        const buf = audioCtx.createBuffer(2, audioCtx.sampleRate * clapDur, audioCtx.sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+          const data = buf.getChannelData(ch);
+          for (let i = 0; i < data.length; i++) {
+            const t = i / audioCtx.sampleRate;
+            const burst = (t < 0.012 || (t > 0.018 && t < 0.032) || t > 0.036) ? 1 : 0.2;
+            data[i] = (Math.random() * 2 - 1) * burst * Math.exp(-t * 21);
+          }
+        }
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buf;
+
+        const bp = audioCtx.createBiquadFilter();
+        bp.type = 'bandpass';
+        bp.frequency.value = 1400;
+        bp.Q.value = 1.05;
+
+        const g = audioCtx.createGain();
+        g.gain.value = 0.78 * (0.8 + transientBoost * 0.4);
+
+        noise.connect(bp);
+        bp.connect(g);
+        g.connect(snareBus);
+        noise.start(tClap);
+      }
+
+      // --- LAYER 1: VINTAGE WOOD BODY (0ms Anchor, Mono) ---
+      if (useWood) {
+        const tWood = baseTime;
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'triangle';
+        // Transient pitch punch scales with transientBoost
+        osc.frequency.setValueAtTime(220 + transientBoost * 75, tWood);
+        osc.frequency.exponentialRampToValueAtTime(145, tWood + 0.065);
+        osc.frequency.exponentialRampToValueAtTime(95, tWood + 0.18);
+
+        g.gain.setValueAtTime(0.95 * (0.85 + transientBoost * 0.3), tWood);
+        g.gain.exponentialRampToValueAtTime(0.001, tWood + 0.19);
+
+        const wireDur = 0.18;
+        const wBuf = audioCtx.createBuffer(1, audioCtx.sampleRate * wireDur, audioCtx.sampleRate);
+        const wData = wBuf.getChannelData(0);
+        for (let i = 0; i < wData.length; i++) {
+          wData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.065));
+        }
+        const wSrc = audioCtx.createBufferSource();
+        wSrc.buffer = wBuf;
+        const wGain = audioCtx.createGain();
+        wGain.gain.value = 0.55;
+
+        osc.connect(g);
+        g.connect(snareBus);
+        wSrc.connect(wGain);
+        wGain.connect(snareBus);
+
+        osc.start(tWood);
+        osc.stop(tWood + 0.2);
+        wSrc.start(tWood);
+      }
+
+      // --- LAYER 2: METALLIC RIMSHOT (Delayed + Detune/Chorus!) ---
+      if (useMetal) {
+        const tMetal = baseTime + metalOffsetSec;
+        const freqs = [330, 515, 790];
+        freqs.forEach((f, idx) => {
+          const osc = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          osc.type = idx === 0 ? 'square' : 'sine';
+          osc.detune.value = idx % 2 === 0 ? detuneCents : -detuneCents;
+          osc.frequency.setValueAtTime(f, tMetal);
+          osc.frequency.exponentialRampToValueAtTime(f * 0.72, tMetal + 0.07);
+
+          g.gain.setValueAtTime(0.24 * (0.8 + transientBoost * 0.4), tMetal);
+          g.gain.exponentialRampToValueAtTime(0.001, tMetal + 0.08);
+
+          osc.connect(g);
+          g.connect(snareBus);
+          osc.start(tMetal);
+          osc.stop(tMetal + 0.085);
+        });
+      }
+
+      if (velocity > 0.7) {
+        const snareScStrength = parseFloat(document.getElementById('slider-snare-sc').value) / 100;
+        triggerSidechain(snareScStrength);
+        flashPad('pad-snare');
+      }
+    }
+
+    // SYNTHESIZE HI-HAT / CYMBAL
+    function playHat(open = false, velocity = 1.0, timeOffset = 0) {
+      initAudio();
+      const now = audioCtx.currentTime + timeOffset;
+      const eqOn = document.getElementById('toggle-eq').checked;
+      const dur = open ? 0.19 : 0.055;
+
+      const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * dur, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * (open ? 0.065 : 0.018)));
+      }
+      const src = audioCtx.createBufferSource();
+      src.buffer = buf;
+
+      const hp = audioCtx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.value = eqOn ? 420 : 120;
+
+      const shelf = audioCtx.createBiquadFilter();
+      shelf.type = 'highshelf';
+      shelf.frequency.value = 10000;
+      shelf.gain.value = eqOn ? 4.5 : 0;
+
+      const panner = createWidthPanner(open ? 0.25 : -0.2);
+      const g = audioCtx.createGain();
+      g.gain.value = (open ? 0.28 : 0.22) * velocity;
+
+      src.connect(hp);
+      hp.connect(shelf);
+      shelf.connect(panner);
+      panner.connect(g);
+      g.connect(drumBusInput);
+      src.start(now);
+
+      if (velocity > 0.65) flashPad('pad-hat');
+    }
+
+    // SYNTHESIZE MUSIC BUS: FRENCH TOUCH BASS + SAW CHORD PAD
+    function playMusicStep(step16) {
+      if (!document.getElementById('toggle-bass').checked) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+
+      // 1. Slap Saw/Square Bassline on 8th notes
+      if (step16 % 2 === 0) {
+        const idx = step16 / 2;
+        const notes = [41.20, 41.20, 49.00, 55.00, 41.20, 61.74, 55.00, 49.00];
+        const freq = notes[idx % notes.length];
+
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        osc1.type = 'sawtooth';
+        osc2.type = 'square';
+        osc1.frequency.setValueAtTime(freq, now);
+        osc2.frequency.setValueAtTime(freq * 2, now);
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(900, now);
+        filter.frequency.exponentialRampToValueAtTime(280, now + 0.22);
+        filter.Q.value = 3.5;
+
+        const env = audioCtx.createGain();
+        env.gain.setValueAtTime(0.75, now);
+        env.gain.exponentialRampToValueAtTime(0.18, now + 0.24);
+
+        osc1.connect(filter);
+        osc2.connect(filter);
+        filter.connect(env);
+        env.connect(musicBusGain);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.25);
+        osc2.stop(now + 0.25);
+      }
+
+      // 2. Sustained French House Brass/String Synth Chord on step 0 & 8 (makes Sidechain pumping super obvious!)
+      if (step16 === 0 || step16 === 8) {
+        const chordFreqs = step16 === 0 ? [164.81, 196.00, 246.94, 329.63] : [146.83, 196.00, 246.94, 293.66];
+        const stepDur = (60 / bpm) * 2;
+        chordFreqs.forEach((f, i) => {
+          const osc = audioCtx.createOscillator();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(f, now);
+          osc.detune.value = (i - 1.5) * 9;
+
+          const lp = audioCtx.createBiquadFilter();
+          lp.type = 'lowpass';
+          lp.frequency.value = 2100;
+
+          const pan = createWidthPanner((i % 2 === 0 ? -0.45 : 0.45));
+          const g = audioCtx.createGain();
+          g.gain.setValueAtTime(0.14, now);
+          g.gain.setValueAtTime(0.14, now + stepDur * 0.85);
+          g.gain.exponentialRampToValueAtTime(0.001, now + stepDur);
+
+          osc.connect(lp);
+          lp.connect(pan);
+          pan.connect(g);
+          g.connect(musicBusGain);
+
+          osc.start(now);
+          osc.stop(now + stepDur + 0.02);
+        });
+      }
+    }
+
+    // ==========================================
+    // 4. 16-STEP SEQUENCER WITH SWING, HUMANIZE & FILLS
+    // ==========================================
+    function toggleLoop() {
+      initAudio();
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('btn-play-loop');
+      const icon = document.getElementById('play-icon');
+      const text = document.getElementById('play-text');
+
+      if (isPlaying) {
+        currentStep = 0;
+        icon.textContent = '⏹';
+        text.textContent = 'Stopper';
+        btn.classList.replace('bg-yellow-500', 'bg-red-500');
+        btn.classList.replace('hover:bg-yellow-400', 'hover:bg-red-400');
+        btn.classList.replace('text-black', 'text-white');
+        runStep();
+        const sixteenthMs = (60 / bpm / 4) * 1000;
+        stepTimer = setInterval(runStep, sixteenthMs);
+      } else {
+        clearInterval(stepTimer);
+        icon.textContent = '▶';
+        text.textContent = 'Écouter la Boucle';
+        btn.classList.replace('bg-red-500', 'bg-yellow-500');
+        btn.classList.replace('hover:bg-red-400', 'hover:bg-yellow-400');
+        btn.classList.replace('text-white', 'text-black');
+        updateStepLeds(-1);
+      }
+    }
+
+    function updateBpm() {
+      const val = parseInt(document.getElementById('input-bpm').value, 10);
+      bpm = Math.max(90, Math.min(145, isNaN(val) ? 120 : val));
+      document.getElementById('input-bpm').value = bpm;
+      const releaseMs = Math.round(((60 / bpm) * 0.32) * 1000);
+      document.getElementById('sc-release-label').textContent = `Release : ${releaseMs} ms (Calé ${bpm} BPM)`;
+
+      if (isPlaying) {
+        clearInterval(stepTimer);
+        const sixteenthMs = (60 / bpm / 4) * 1000;
+        stepTimer = setInterval(runStep, sixteenthMs);
+      }
+    }
+
+    function runStep() {
+      updateStepLeds(currentStep);
+      playMusicStep(currentStep);
+
+      const humanize = parseFloat(document.getElementById('slider-humanize').value) / 100;
+      const swing = parseFloat(document.getElementById('slider-swing').value) / 100;
+      const autoFills = document.getElementById('toggle-auto-fills').checked;
+
+      // Swing delays odd 16th steps slightly
+      const sixteenthSec = 60 / bpm / 4;
+      const swingOffset = (currentStep % 2 === 1) ? swing * sixteenthSec * 0.45 : 0;
+
+      // Humanize velocity jitter
+      const randVel = (base) => Math.max(0.2, Math.min(1.0, base - humanize * 0.28 * Math.random()));
+
+      // Main 4/4 Electro-Funk Pattern (16 sixteenth-note steps)
+      // Kicks on 0, 4, 8, 12 (+ occasional funk syncopation on 14 if autoFills)
+      if (currentStep % 4 === 0) {
+        playKick(0, 1.0);
+      } else if (autoFills && currentStep === 14) {
+        playKick(swingOffset, randVel(0.55));
+      }
+
+      // Main Snares on 4 & 12
+      if (currentStep === 4 || currentStep === 12) {
+        playSnare(0, 1.0);
+      } else if (autoFills && (currentStep === 7 || currentStep === 9 || currentStep === 15)) {
+        // Funky Ghost Notes!
+        playSnare(swingOffset, randVel(0.32));
+      }
+
+      // 16th-note Hi-Hats with Open Hats on offbeats (2, 6, 10, 14)
+      const isOffbeat8th = currentStep % 4 === 2;
+      if (isOffbeat8th) {
+        playHat(true, randVel(0.92), 0);
+      } else if (currentStep % 2 === 1) {
+        playHat(false, randVel(0.52), swingOffset);
+      }
+
+      currentStep = (currentStep + 1) % 16;
+    }
+
+    function triggerManualKick() { playKick(0, 1.0); }
+    function triggerManualSnare() { playSnare(0, 1.0); }
+    function triggerManualHat() { playHat(false, 1.0, 0); }
+
+    function triggerManualFill() {
+      initAudio();
+      const sixteenth = 60 / bpm / 4;
+      playSnare(0, 0.35);
+      playSnare(sixteenth * 1, 0.55);
+      playSnare(sixteenth * 2, 0.78);
+      playSnare(sixteenth * 3, 1.0);
+      flashPad('pad-fill');
+    }
+
+    function flashPad(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('pad-hit');
+      void el.offsetWidth;
+      el.classList.add('pad-hit');
+    }
+
+    // ==========================================
+    // 5. PRESET A/B (CLEAN VS JUSTICE)
+    // ==========================================
+    function applyPreset(mode) {
+      const btnClean = document.getElementById('btn-preset-clean');
+      const btnJustice = document.getElementById('btn-preset-justice');
+
+      if (mode === 'clean') {
+        btnClean.className = 'px-2.5 py-1.5 text-xs font-bold rounded-lg transition bg-yellow-500 text-black shadow';
+        btnJustice.className = 'px-2.5 py-1.5 text-xs font-semibold rounded-lg transition text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white';
+
+        document.getElementById('layer-wood').checked = true;
+        document.getElementById('layer-metal').checked = false;
+        document.getElementById('layer-clap').checked = false;
+        document.getElementById('slider-clap-offset').value = 0;
+        document.getElementById('slider-metal-offset').value = 0;
+        document.getElementById('slider-transient').value = 0;
+        document.getElementById('slider-detune').value = 0;
+        document.getElementById('slider-humanize').value = 0;
+        document.getElementById('slider-swing').value = 0;
+        document.getElementById('slider-stereo-width').value = 100;
+        document.getElementById('toggle-eq').checked = false;
+        document.getElementById('toggle-space').checked = false;
+        document.getElementById('slider-comp-att').value = 5;
+        document.getElementById('slider-comp-rel').value = 100;
+        document.getElementById('slider-ny-comp').value = 0;
+        document.getElementById('slider-drive').value = 0;
+        document.getElementById('slider-sidechain').value = 0;
+        document.getElementById('slider-snare-sc').value = 0;
+      } else {
+        btnJustice.className = 'px-2.5 py-1.5 text-xs font-bold rounded-lg transition bg-yellow-500 text-black shadow';
+        btnClean.className = 'px-2.5 py-1.5 text-xs font-semibold rounded-lg transition text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white';
+
+        document.getElementById('layer-wood').checked = true;
+        document.getElementById('layer-metal').checked = true;
+        document.getElementById('layer-clap').checked = true;
+        document.getElementById('slider-clap-offset').value = -18;
+        document.getElementById('slider-metal-offset').value = 8;
+        document.getElementById('slider-transient').value = 65;
+        document.getElementById('slider-detune').value = 14;
+        document.getElementById('slider-humanize').value = 45;
+        document.getElementById('slider-swing').value = 24;
+        document.getElementById('slider-stereo-width').value = 135;
+        document.getElementById('toggle-eq').checked = true;
+        document.getElementById('toggle-space').checked = true;
+        document.getElementById('slider-slapback').value = 48;
+        document.getElementById('slider-slapback-mix').value = 32;
+        document.getElementById('slider-gate').value = 190;
+        document.getElementById('slider-reverb-mix').value = 38;
+        document.getElementById('slider-comp-att').value = 25;
+        document.getElementById('slider-comp-rel').value = 80;
+        document.getElementById('slider-ny-comp').value = 38;
+        document.getElementById('slider-drive').value = 65;
+        document.getElementById('slider-sidechain').value = 85;
+        document.getElementById('slider-snare-sc').value = 55;
+      }
+
+      updateTimingUI();
+      updateSnareCharacterUI();
+      updateGrooveUI();
+      updateStereoUI();
+      updateSpaceParams();
+      updateBusParams();
+      updateSidechainUI();
+    }
+
+    // ==========================================
+    // 6. UI, ABLETON TABS & VISUALIZERS
+    // ==========================================
+    const ABLETON_TABS = {
+      rack: [
+        {
+          title: '1. Drum Rack / Simpler (Samples)',
+          badge: 'Instrument',
+          text: 'Charge un Kick rond (TR-707/LinnDrum) + un clic acoustique. Pour la Snare : empile 3 Simpler sur des pistes séparées (Snare Bois, Clap, Rimshot) et utilise le Pitch Envelope de Simpler (+12 st sur 15 ms) pour l’attaque.'
+        },
+        {
+          title: '2. Track Delay en Millisecondes',
+          badge: 'Timing',
+          text: 'Clique sur le bouton « D » en bas à droite de la table de mixage Ableton. Règle la piste Clap à -18.0 ms (elle frappe avant la grille) et le Rimshot à +8.0 ms (effet Flam immédiat).'
+        },
+        {
+          title: '3. Velocity & Groove Pool',
+          badge: 'Humanize',
+          text: 'Insère l’effet MIDI Velocity (Random = 20) sur les Hi-Hats et Ghost Notes, puis glisse un fichier « MPC 16 Swing-54 » depuis le Groove Pool sur ton clip MIDI.'
+        }
+      ],
+      snarefx: [
+        {
+          title: '1. EQ Eight + Chorus / Detune',
+          badge: 'Sculpting',
+          text: 'Sur le Rimshot : Simpler Detune à +14 cents (ou Chorus-Ensemble à 15% Dry/Wet). Sur le groupe Snare : EQ Eight avec coupe-bas à 100 Hz et boost +5 dB à 200 Hz.'
+        },
+        {
+          title: '2. Delay (Slapback Haas)',
+          badge: 'Espace court',
+          text: 'Insère le plugin natif Delay sur un Send ou en parallèle : passe en mode Time (désactive Sync), délie L et R (42 ms à gauche, 54 ms à droite), Feedback à 0 %.'
+        },
+        {
+          title: '3. Reverb + Gate + Utility',
+          badge: 'Gated Reverb',
+          text: 'Chaîne dans l’ordre : EQ Eight (HP 250 Hz) -> Reverb (Decay 1.6 s) -> Gate (Threshold -24 dB, Hold 190 ms, Release 15 ms) -> Utility (Width à 135 %).'
+        }
+      ],
+      drumbus: [
+        {
+          title: '1. Glue Compressor (Principal)',
+          badge: 'Cohésion',
+          text: 'Sur le groupe Drums : Glue Compressor avec Attack = 30 ms (laisse passer le transitoire), Release = .1s (80 ms), Ratio = 4:1, Threshold réglé pour -4 à -6 dB de Gain Reduction.'
+        },
+        {
+          title: '2. Audio Effect Rack (NY Parallel)',
+          badge: 'Compression Parallèle',
+          text: 'Crée un Rack avec 2 chaînes : « Dry » à 0 dB et « NY Smash » contenant un Glue Compressor poussé à fond (Attack 0.1 ms, Ratio 10:1, -18 dB GR) + Saturator, dosé à -10 dB sous le Dry.'
+        },
+        {
+          title: '3. Utility Bass Mono + Saturator',
+          badge: 'Punch & Clipping',
+          text: 'En fin de Drum Bus : Utility avec « Bass Mono » activé sous 140 Hz -> Saturator (mode Analog Clip, Drive +4 dB) -> Limiter (Ceiling -2.0 dB).'
+        }
+      ],
+      musicbus: [
+        {
+          title: '1. Groupe « Musique »',
+          badge: 'Routing',
+          text: 'Regroupe toutes tes pistes de Basse, Synthés, Guitares et Nappes dans un seul Bus (Ctrl+G / Cmd+G) pour que le pompage soit unifié.'
+        },
+        {
+          title: '2. Compressor Sidechain (Kick)',
+          badge: 'Pompage 100%',
+          text: 'Déploie le triangle du Compressor natif -> active Sidechain -> Audio From : Kick (Post FX). Attack = 0.10 ms, Ratio = 8:1, Release calé au tempo (~120 ms), GR = -10 dB.'
+        },
+        {
+          title: '3. 2e Compressor Sidechain (Snare)',
+          badge: 'Pompage 50%',
+          text: 'Duplique le Compressor juste après et choisis la Snare comme source Sidechain avec un Threshold plus doux (-4 à -6 dB de GR) pour que la caisse claire fasse aussi respirer les synthés.'
+        }
+      ]
+    };
+
+    function selectAbletonTab(tab) {
+      currentAbletonTab = tab;
+      ['rack', 'snarefx', 'drumbus', 'musicbus'].forEach(t => {
+        const btn = document.getElementById(`ab-tab-${t}`);
+        if (!btn) return;
+        btn.className = t === tab
+          ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500 text-black'
+          : 'px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white';
+      });
+
+      const container = document.getElementById('ableton-workflow-content');
+      container.innerHTML = ABLETON_TABS[tab].map(card => `
+        <div class="p-4 rounded-xl bg-gray-50 dark:bg-studio-panel border border-gray-200 dark:border-studio-border space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-bold text-sm text-gray-900 dark:text-white">${card.title}</span>
+            <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-yellow-500/15 text-yellow-600 dark:text-yellow-400 border border-yellow-500/30">${card.badge}</span>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 leading-relaxed">${card.text}</p>
+        </div>
+      `).join('');
+    }
+
+    function updateTimingUI() {
+      const clapVal = document.getElementById('slider-clap-offset').value;
+      const metalVal = document.getElementById('slider-metal-offset').value;
+      document.getElementById('val-clap-offset').textContent = `${clapVal} ms ${clapVal < 0 ? '(Avant)' : ''}`;
+      document.getElementById('val-metal-offset').textContent = `+${metalVal} ms ${metalVal > 0 ? '(Après)' : ''}`;
+      drawTimeline();
+    }
+
+    function updateSnareCharacterUI() {
+      const tr = document.getElementById('slider-transient').value;
+      const dt = document.getElementById('slider-detune').value;
+      document.getElementById('val-transient').textContent = `+${tr} %`;
+      document.getElementById('val-detune').textContent = `+${dt} cents`;
+    }
+
+    function updateGrooveUI() {
+      const hum = document.getElementById('slider-humanize').value;
+      const sw = document.getElementById('slider-swing').value;
+      document.getElementById('val-humanize').textContent = `${hum} %`;
+      document.getElementById('val-swing').textContent = `${sw} %`;
+    }
+
+    function updateStereoUI() {
+      const w = parseInt(document.getElementById('slider-stereo-width').value, 10);
+      const tag = w < 90 ? '(Étroit)' : w > 115 ? '(Large)' : '(Normal)';
+      document.getElementById('val-stereo-width').textContent = `${w} % ${tag}`;
+    }
+
+    function updateSpaceParams() {
+      const slap = document.getElementById('slider-slapback').value;
+      const slapMix = document.getElementById('slider-slapback-mix').value;
+      const gate = document.getElementById('slider-gate').value;
+      const revMix = document.getElementById('slider-reverb-mix').value;
+      document.getElementById('val-slapback').textContent = `${slap} ms • Mix ${slapMix}%`;
+      document.getElementById('val-gate').textContent = `${gate} ms • Mix ${revMix}%`;
+    }
+
+    function updateBusParams() {
+      const att = parseFloat(document.getElementById('slider-comp-att').value);
+      const rel = parseFloat(document.getElementById('slider-comp-rel').value);
+      const ny = parseFloat(document.getElementById('slider-ny-comp').value);
+      const drive = parseFloat(document.getElementById('slider-drive').value);
+
+      document.getElementById('val-comp-att').textContent = `${att} ms`;
+      document.getElementById('val-comp-rel').textContent = `${rel} ms`;
+      document.getElementById('val-ny-comp').textContent = `${ny} %`;
+      document.getElementById('val-drive').textContent = `${drive} %`;
+
+      if (drumCompressor && drumShaper && drumParallelGain && drumDryGain) {
+        drumCompressor.attack.value = att / 1000;
+        drumCompressor.release.value = rel / 1000;
+        drumParallelGain.gain.value = (ny / 100) * 0.75;
+        drumDryGain.gain.value = 0.92 - (ny / 100) * 0.22; // Keep perceived volume balanced
+        drumShaper.curve = makeSaturationCurve(drive / 100);
+      }
+    }
+
+    function updateSidechainUI() {
+      const val = parseInt(document.getElementById('slider-sidechain').value, 10);
+      const snareVal = parseInt(document.getElementById('slider-snare-sc').value, 10);
+      const db = Math.round((val / 100) * -12);
+      const label = val === 0 ? '0 dB (Désactivé)' : val > 70 ? `${db} dB (Extrême)` : `${db} dB (Modéré)`;
+      document.getElementById('val-sidechain').textContent = label;
+      document.getElementById('val-snare-sc').textContent = `${snareVal} %`;
+    }
+
+    function updateChecklist() {
+      const boxes = document.querySelectorAll('.daw-check');
+      const checked = Array.from(boxes).filter(b => b.checked).length;
+      document.getElementById('checklist-progress').textContent = `${checked} / ${boxes.length} étapes validées`;
+    }
+
+    function initStepLeds() {
+      const container = document.getElementById('step-leds');
+      for (let i = 0; i < 16; i++) {
+        const dot = document.createElement('div');
+        dot.id = `led-${i}`;
+        const isBeat = i % 4 === 0;
+        dot.className = `w-2.5 h-3.5 rounded-sm ${isBeat ? 'bg-gray-400 dark:bg-gray-700' : 'bg-gray-300 dark:bg-gray-800'} border border-gray-400 dark:border-gray-700 transition-all duration-75`;
+        dot.title = `Pas ${i + 1}`;
+        container.appendChild(dot);
+      }
+    }
+
+    function updateStepLeds(activeIndex) {
+      for (let i = 0; i < 16; i++) {
+        const led = document.getElementById(`led-${i}`);
+        if (!led) continue;
+        const isBeat = i % 4 === 0;
+        if (i === activeIndex) {
+          led.className = 'w-2.5 h-3.5 rounded-sm bg-yellow-400 border border-yellow-200 shadow-[0_0_8px_#eab308] scale-110 transition-all duration-75';
+        } else {
+          led.className = `w-2.5 h-3.5 rounded-sm ${isBeat ? 'bg-gray-400 dark:bg-gray-700' : 'bg-gray-300 dark:bg-gray-800'} border border-gray-400 dark:border-gray-700 transition-all duration-75`;
+        }
+      }
+    }
+
+    // --- CANVAS 1: MICRO-TIMING VISUALIZER ---
+    function drawTimeline() {
+      const canvas = document.getElementById('canvas-timeline');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const w = rect.width;
+      const h = rect.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const centerX = w / 2;
+      const pxPerMs = (w * 0.8) / 70;
+
+      ctx.strokeStyle = '#1f2937';
+      ctx.lineWidth = 1;
+      for (let ms = -30; ms <= 30; ms += 10) {
+        const x = centerX + ms * pxPerMs;
+        ctx.beginPath();
+        ctx.moveTo(x, 12);
+        ctx.lineTo(x, h - 22);
+        ctx.stroke();
+
+        ctx.fillStyle = '#6b7280';
+        ctx.font = '10px JetBrains Mono';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${ms > 0 ? '+' + ms : ms}ms`, x, h - 7);
+      }
+
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(centerX, 8);
+      ctx.lineTo(centerX, h - 22);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      const useClap = document.getElementById('layer-clap').checked;
+      const useWood = document.getElementById('layer-wood').checked;
+      const useMetal = document.getElementById('layer-metal').checked;
+      const clapMs = parseFloat(document.getElementById('slider-clap-offset').value);
+      const metalMs = parseFloat(document.getElementById('slider-metal-offset').value);
+
+      function drawWave(offsetMs, yRow, color, label, active) {
+        const startX = centerX + offsetMs * pxPerMs;
+        ctx.globalAlpha = active ? 1.0 : 0.2;
+        ctx.fillStyle = color;
+        ctx.strokeStyle = color;
+
+        ctx.beginPath();
+        ctx.moveTo(startX, yRow);
+        ctx.lineTo(startX + 6, yRow - 20);
+        ctx.lineTo(startX + 18, yRow + 14);
+        ctx.lineTo(startX + 35, yRow - 8);
+        ctx.lineTo(startX + 65, yRow);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(startX, yRow, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = 'bold 11px Inter';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${label} (${offsetMs > 0 ? '+' + offsetMs : offsetMs}ms)`, Math.min(w - 115, Math.max(8, startX + 8)), yRow - 12);
+        ctx.globalAlpha = 1.0;
+      }
+
+      drawWave(clapMs, h * 0.24, '#34d399', 'Clap', useClap);
+      drawWave(0, h * 0.52, '#eab308', 'Bois', useWood);
+      drawWave(metalMs, h * 0.78, '#fb7185', 'Métal', useMetal);
+    }
+
+    // --- CANVAS 2: EQ EXPLORER ---
+    const EQ_PRESETS = {
+      kick: {
+        title: 'EQ Eight sur Kick :',
+        cut: 'Filtre Coupe-bas (x4) sous 30 Hz + cloche -6 dB vers 350 Hz (supprime le son « carton »).',
+        boost: 'Boost +3 dB à 65 Hz (poids grave) et +4 dB à 2,5 kHz (clic de la batte).',
+        points: [
+          { x: 0.05, y: 0.85 }, { x: 0.18, y: 0.30 }, { x: 0.42, y: 0.78 },
+          { x: 0.68, y: 0.25 }, { x: 0.95, y: 0.55 }
+        ]
+      },
+      snare: {
+        title: 'EQ Eight sur Snare :',
+        cut: 'Filtre Coupe-bas radical sous 100 Hz (laisse toute la place au Kick).',
+        boost: 'Boost +5 dB à 200 Hz (le coffre en bois) et High-Shelf +4,5 dB à 5,5 kHz (le timbre agressif).',
+        points: [
+          { x: 0.05, y: 0.95 }, { x: 0.28, y: 0.20 }, { x: 0.52, y: 0.55 },
+          { x: 0.80, y: 0.22 }, { x: 0.96, y: 0.22 }
+        ]
+      },
+      hat: {
+        title: 'EQ Eight sur Hi-Hats & Cymbales :',
+        cut: 'Filtre Coupe-bas sous 400 Hz pour éliminer toute résonance grave.',
+        boost: 'High-Shelf +4,5 dB au-dessus de 10 kHz pour le côté brillant et métallique.',
+        points: [
+          { x: 0.05, y: 0.95 }, { x: 0.38, y: 0.90 }, { x: 0.55, y: 0.50 },
+          { x: 0.82, y: 0.24 }, { x: 0.96, y: 0.20 }
+        ]
+      }
+    };
+
+    function selectEqTab(tab) {
+      currentEqTab = tab;
+      ['kick', 'snare', 'hat'].forEach(t => {
+        const btn = document.getElementById(`tab-eq-${t}`);
+        btn.className = t === tab
+          ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500 text-black'
+          : 'px-3 py-1.5 rounded-lg text-xs font-bold bg-gray-100 dark:bg-studio-panel text-gray-600 dark:text-gray-300';
+      });
+
+      const info = EQ_PRESETS[tab];
+      document.getElementById('eq-details').innerHTML = `
+        <div class="font-bold text-yellow-600 dark:text-yellow-400">${info.title}</div>
+        <div>✂️ <strong>Couper :</strong> ${info.cut}</div>
+        <div>⚡ <strong>Booster :</strong> ${info.boost}</div>
+      `;
+      drawEqCurve();
+    }
+
+    function drawEqCurve() {
+      const canvas = document.getElementById('canvas-eq');
+      if (!canvas) return;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const w = rect.width;
+      const h = rect.height;
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, h * 0.5);
+      ctx.lineTo(w, h * 0.5);
+      ctx.stroke();
+
+      const labels = ['50Hz', '200Hz', '500Hz', '2kHz', '10kHz'];
+      ctx.fillStyle = '#6b7280';
+      ctx.font = '10px JetBrains Mono';
+      labels.forEach((lbl, idx) => {
+        ctx.fillText(lbl, (w / 5) * idx + 12, h - 6);
+      });
+
+      const pts = EQ_PRESETS[currentEqTab].points;
+      ctx.strokeStyle = '#eab308';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      pts.forEach((p, idx) => {
+        const px = p.x * w;
+        const py = p.y * (h - 18);
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+
+      ctx.lineTo(pts[pts.length - 1].x * w, h - 18);
+      ctx.lineTo(pts[0].x * w, h - 18);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(234, 179, 8, 0.14)';
+      ctx.fill();
+    }
+
+    // --- ANIMATION LOOP: VU METER & SIDECHAIN OSCILLOSCOPE ---
+    function animateMeters() {
+      if (drumAnalyser) {
+        const data = new Uint8Array(drumAnalyser.frequencyBinCount);
+        drumAnalyser.getByteTimeDomainData(data);
+        let peak = 0;
+        for (let i = 0; i < data.length; i++) {
+          const v = Math.abs(data[i] - 128) / 128;
+          if (v > peak) peak = v;
+        }
+        const pct = Math.min(100, Math.round(peak * 140));
+        document.getElementById('vu-meter-bar').style.width = `${Math.max(4, pct)}%`;
+        const dbDisplay = peak > 0.01 ? Math.min(-2.0, 20 * Math.log10(peak)).toFixed(1) : '-∞';
+        document.getElementById('vu-db-label').textContent = `${dbDisplay} dBFS`;
+      }
+
+      currentMusicDuck += (1.0 - currentMusicDuck) * 0.085;
+      sidechainHistory.push(currentMusicDuck);
+      sidechainHistory.shift();
+
+      const scCanvas = document.getElementById('canvas-sidechain');
+      if (scCanvas) {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = scCanvas.getBoundingClientRect();
+        if (scCanvas.width !== rect.width * dpr) {
+          scCanvas.width = rect.width * dpr;
+          scCanvas.height = rect.height * dpr;
+        }
+        const ctx = scCanvas.getContext('2d');
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        const w = rect.width;
+        const h = rect.height;
+        ctx.clearRect(0, 0, w, h);
+
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        sidechainHistory.forEach((val, i) => {
+          const x = (i / (sidechainHistory.length - 1)) * w;
+          const y = h - val * (h - 14) - 6;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      requestAnimationFrame(animateMeters);
+    }
+
+    // ==========================================
+    // 7. THEME TOGGLE & BOOTSTRAP
+    // ==========================================
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      drawTimeline();
+      drawEqCurve();
+    }
+
+    window.addEventListener('resize', () => {
+      drawTimeline();
+      drawEqCurve();
+    });
+
+    window.onload = () => {
+      initStepLeds();
+      selectAbletonTab('rack');
+      updateTimingUI();
+      updateSnareCharacterUI();
+      updateGrooveUI();
+      updateStereoUI();
+      updateSpaceParams();
+      updateSidechainUI();
+      selectEqTab('kick');
+      animateMeters();
+    };
+  </script>
+</body>
+</html>
